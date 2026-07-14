@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/components/FacultyCard.tsx", "src/components/FacultyCard.tsx"  ],
   "exclude": ["node_modules"]
 }

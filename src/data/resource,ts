@@ -1,0 +1,37 @@
+export const resources = [
+  {
+    program: "bachelor-of-accountancy",
+    year: "year-1",
+    semester: "semester-1",
+    category: "lecture-notes",
+    title: "Introduction to Accounting",
+    file: "/files/introduction-to-accounting.pdf",
+  },
+
+  {
+    program: "bachelor-of-accountancy",
+    year: "year-1",
+    semester: "semester-1",
+    category: "tutorials",
+    title: "Accounting Tutorial Week 1",
+    file: "/files/accounting-tutorial-week-1.pdf",
+  },
+
+  {
+    program: "bachelor-of-accountancy",
+    year: "year-1",
+    semester: "semester-1",
+    category: "mid-semester-exams",
+    title: "Mid Semester Examination 2025",
+    file: "/files/accounting-mid-sem-2025.pdf",
+  },
+
+  {
+    program: "bachelor-of-accountancy",
+    year: "year-1",
+    semester: "semester-1",
+    category: "end-of-semester-exams",
+    title: "Final Examination 2025",
+    file: "/files/accounting-final-2025.pdf",
+  },
+];
