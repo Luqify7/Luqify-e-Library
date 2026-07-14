@@ -23,6 +23,8 @@ export default async function ResourcePage({
         <h1 className="text-3xl font-bold text-red-600">
           Programme Not Found
         </h1>
+        import AIStudyCard from "@/components/AIStudyCard";
+        <AIStudyCard />
       </main>
     );
   }
