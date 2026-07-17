@@ -1,87 +1,22 @@
-import { resources } from "@/data/resources";
+import SearchBar from "@/components/SearchBar";
 
-export default async function SearchPage({
-  searchParams,
-}: {
-  searchParams: Promise<{
-    q?: string;
-  }>;
-}) {
-  const { q } = await searchParams;
-
-  const query = q?.toLowerCase() || "";
-
-  const results = resources.filter((item) =>
-    item.title.toLowerCase().includes(query)
-  );
-
+export default function SearchPage() {
   return (
-    <main className="min-h-screen bg-slate-50 p-10">
+    <main className="min-h-screen bg-[#FAF7F0] px-6 py-20 dark:bg-slate-950">
 
-      <h1 className="text-5xl font-black text-blue-900">
-        Search Results
-      </h1>
+      <div className="mx-auto max-w-3xl">
 
-      <p className="mt-3 text-slate-500">
-        Showing results for:
-        <span className="font-bold">
-          {" "}
-          {q}
-        </span>
-      </p>
+        <h1 className="text-4xl font-black">
+          Search Luqify e-Library
+        </h1>
 
+        <p className="mt-3 text-slate-500">
+          Find courses, lecture notes, tutorials and past papers.
+        </p>
 
-      <div className="mt-10 space-y-5">
-
-        {results.length === 0 ? (
-
-          <div className="bg-white p-6 rounded-2xl shadow-md">
-            <p className="text-slate-500">
-              No resources found.
-            </p>
-          </div>
-
-        ) : (
-
-          results.map((item) => (
-
-            <div
-              key={item.title}
-              className="
-                bg-white
-                p-6
-                rounded-2xl
-                shadow-md
-                hover:shadow-lg
-                transition
-              "
-            >
-
-              <h2 className="text-xl font-bold text-slate-800">
-                📄 {item.title}
-              </h2>
-
-              <p className="text-sm text-slate-500 mt-2 capitalize">
-                {item.category.replaceAll("-", " ")}
-              </p>
-
-              <a
-                href={item.file}
-                className="
-                  inline-block
-                  mt-4
-                  text-blue-600
-                  hover:underline
-                "
-              >
-                Open Resource →
-              </a>
-
-            </div>
-
-          ))
-
-        )}
+        <div className="mt-10">
+          <SearchBar />
+        </div>
 
       </div>
 

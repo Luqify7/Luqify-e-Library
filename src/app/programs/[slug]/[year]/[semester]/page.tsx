@@ -1,8 +1,7 @@
-import SearchBar from "@/components/SearchBar";
-import { faculties } from "@/data/faculties";
-import { resources } from "@/data/resources";
+import Link from "next/link";
+import { courses } from "@/data/courses";
 
-export default async function ResourcePage({
+export default async function SemesterPage({
   params,
 }: {
   params: Promise<{
@@ -11,82 +10,48 @@ export default async function ResourcePage({
     semester: string;
   }>;
 }) {
+
   const { slug, year, semester } = await params;
 
-  const program = faculties
-    .flatMap((faculty) => faculty.programs)
-    .find((item) => item.slug === slug);
-
-  if (!program) {
-    return (
-      <main className="min-h-screen flex items-center justify-center">
-        <h1 className="text-3xl font-bold text-red-600">
-          Programme Not Found
-        </h1>
-        import AIStudyCard from "@/components/AIStudyCard";
-        <AIStudyCard />
-      </main>
-    );
-  }
-
-  const filteredResources = resources.filter(
-    (item) =>
-      item.program === slug &&
-      item.year === year &&
-      item.semester === semester
+  const semesterCourses = courses.filter(
+    (course) =>
+      course.program === slug &&
+      course.year === year &&
+      course.semester === semester
   );
 
-  return (
-    <main className="min-h-screen p-10 bg-slate-50">
 
-      <h1 className="text-5xl font-black capitalize text-blue-900">
-        {program.name}
+  return (
+    <main className="mx-auto max-w-5xl px-6 py-10">
+
+      <h1 className="text-3xl font-bold capitalize">
+        {semester.replaceAll("-", " ")}
       </h1>
 
-      <div className="mt-8">
-        <SearchBar />
-      </div>
-
-      <p className="text-slate-500 mt-4 capitalize">
-        {year.replace("-", " ")} • {semester.replace("-", " ")}
+      <p className="mt-2 text-slate-500">
+        Select a course
       </p>
 
 
-      <div className="mt-10 space-y-5">
+      <div className="mt-8 grid gap-4 md:grid-cols-2">
 
-        {filteredResources.length === 0 ? (
+        {semesterCourses.length > 0 ? (
 
-          <div className="p-6 bg-white border rounded-xl">
-            <p className="text-slate-500">
-              No resources uploaded yet.
-            </p>
-          </div>
+          semesterCourses.map((course)=>(
+            <Link
+              key={course.slug}
+              href={`/programs/${slug}/${year}/${semester}/${course.slug}`}
+              className="rounded-2xl border p-6 transition hover:bg-slate-50 dark:hover:bg-slate-800"
+            >
+              📚 {course.name}
+            </Link>
+          ))
 
         ) : (
 
-          filteredResources.map((item) => (
-            <div
-              key={item.title}
-              className="p-6 bg-white border rounded-xl hover:shadow-lg transition"
-            >
-
-              <h3 className="text-xl font-bold text-slate-800">
-                📄 {item.title}
-              </h3>
-
-              <p className="text-sm text-slate-500 capitalize mt-2">
-                {item.category.replaceAll("-", " ")}
-              </p>
-
-              <a
-                href={item.file}
-                className="text-blue-600 hover:underline mt-3 inline-block"
-              >
-                Open Resource →
-              </a>
-
-            </div>
-          ))
+          <p className="text-slate-500">
+            No courses uploaded yet
+          </p>
 
         )}
 

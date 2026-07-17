@@ -14,53 +14,92 @@ export default async function ProgramPage({
 
   if (!program) {
     return (
-      <main className="min-h-screen flex items-center justify-center">
-        <h1 className="text-3xl font-bold">
+      <main className="flex min-h-screen items-center justify-center bg-[#FAF7F0]">
+        <h1 className="text-3xl font-black text-[#3B2412]">
           Programme Not Found
         </h1>
       </main>
     );
   }
 
+  const years = [
+    {
+      year: "Year 1",
+      slug: "year-1",
+      icon: "🌱",
+    },
+    {
+      year: "Year 2",
+      slug: "year-2",
+      icon: "📚",
+    },
+    {
+      year: "Year 3",
+      slug: "year-3",
+      icon: "🎓",
+    },
+  ];
+
   return (
-    <main className="min-h-screen p-10">
+    <main className="min-h-screen bg-[#FAF7F0] px-6 py-16 text-[#3B2412] dark:bg-slate-950 dark:text-white">
 
-      <h1 className="text-5xl font-black text-slate-900">
-        {program.name}
-      </h1>
+      {/* Header */}
+      <section className="mx-auto max-w-7xl">
 
-      <div className="grid md:grid-cols-3 gap-6 mt-10">
+        <span className="rounded-full border border-[#C9A96E] bg-[#fff8ea] px-4 py-2 text-sm font-semibold text-[#3B2412] dark:bg-slate-900 dark:text-[#C9A96E]">
+          📖 Programme Library
+        </span>
 
-        <Link
-          href={`/programs/${program.slug}/year-1`}
-          className="p-6 rounded-xl shadow bg-white hover:shadow-lg"
-        >
-          <h2 className="text-2xl font-bold">
-            Year 1
-          </h2>
-        </Link>
+        <h1 className="mt-8 text-5xl font-black">
+          {program.name}
+        </h1>
+
+      </section>
 
 
-        <Link
-          href={`/programs/${program.slug}/year-2`}
-          className="p-6 rounded-xl shadow bg-white hover:shadow-lg"
-        >
-          <h2 className="text-2xl font-bold">
-            Year 2
-          </h2>
-        </Link>
+      {/* Academic Years */}
+      <section className="mx-auto mt-14 grid max-w-7xl gap-8 md:grid-cols-3">
 
+        {years.map((item) => (
 
-        <Link
-          href={`/programs/${program.slug}/year-3`}
-          className="p-6 rounded-xl shadow bg-white hover:shadow-lg"
-        >
-          <h2 className="text-2xl font-bold">
-            Year 3
-          </h2>
-        </Link>
+          <Link
+            key={item.slug}
+            href={`/programs/${program.slug}/${item.slug}`}
+            className="
+              group
+              rounded-[2rem]
+              border
+              border-[#e8dcc8]
+              bg-white
+              p-8
+              shadow-sm
+              transition
+              hover:-translate-y-2
+              hover:border-[#C9A96E]
+              hover:shadow-xl
 
-      </div>
+              dark:border-slate-800
+              dark:bg-slate-900
+            "
+          >
+
+            <div className="text-5xl">
+              {item.icon}
+            </div>
+
+            <h2 className="mt-6 text-3xl font-black text-[#3B2412] dark:text-white">
+              {item.year}
+            </h2>
+
+            <div className="mt-6 font-bold text-[#C9A96E]">
+              Enter Library →
+            </div>
+
+          </Link>
+
+        ))}
+
+      </section>
 
     </main>
   );
