@@ -17,7 +17,7 @@ export default function Hero() {
 
           <span className="rounded-full border border-[#C9A96E] bg-[#fff8ea] px-4 py-2 text-sm font-semibold text-[#3B2412] dark:bg-slate-900 dark:text-[#C9A96E]">
 
-            📖 Welcome to Luqify e-Library
+          Welcome to Luqify e-Library
 
           </span>
 
