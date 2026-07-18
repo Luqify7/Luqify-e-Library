@@ -9,6 +9,8 @@ import Founder from "@/components/Founder";
 import Footer from "@/components/Footer";
 import LT7Icon from "@/components/LT7Icon";
 
+import { BookOpen, FileText, PlayCircle } from "lucide-react";
+
 
 export default function Home() {
   return (
@@ -50,14 +52,14 @@ export default function Home() {
 
 
             <ResourceCard
-              icon="📝"
+              icon="📄"
               title="Past Papers"
               description="Prepare using previous examination papers."
             />
 
 
             <ResourceCard
-              icon="✏️"
+              icon="▶️"
               title="Tutorials"
               description="Practice questions and academic exercises."
             />
