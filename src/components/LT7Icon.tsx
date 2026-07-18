@@ -20,7 +20,7 @@ export default function LT7Icon({
       className="flex items-center justify-center"
     >
       <Image
-        src="/lt7-icon.png"
+        src="/images/lt7-icon.png"
         alt="LT7 Icon"
         width={size}
         height={size}
