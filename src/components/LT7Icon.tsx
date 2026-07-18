@@ -20,12 +20,13 @@ export default function LT7Icon({
       className="flex items-center justify-center"
     >
       <Image
-        src="/images/lt7-icon.png"
-        alt="LT7 Icon"
-        width={size}
-        height={size}
-        priority
-      />
+  src="/images/lt7-icon.png"
+  alt="LT7 Icon"
+  width={size}
+  height={size}
+  priority
+  className="brightness-0 invert"
+/>
     </div>
   );
 }
