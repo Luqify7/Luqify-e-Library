@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { GraduationCap, BookOpen, ChevronRight } from "lucide-react";
 
 type FacultyCardProps = {
   faculty: {
@@ -24,106 +25,109 @@ export default function FacultyCard({ faculty }: FacultyCardProps) {
         shadow-sm
         transition-all
         duration-300
-
-        hover:-translate-y-2
-        hover:border-[#C9A96E]
+        hover:-translate-y-1
         hover:shadow-xl
 
-        dark:border-slate-800
+        dark:border-slate-700
         dark:bg-slate-900
-        dark:hover:border-[#C9A96E]
       "
     >
 
       {/* Faculty Header */}
-      <div className="flex items-start justify-between">
+      <div className="flex items-center gap-5">
+
+        <div
+          className="
+            flex
+            h-16
+            w-16
+            items-center
+            justify-center
+            rounded-2xl
+            bg-slate-800
+            text-white
+          "
+        >
+          <GraduationCap size={30} />
+        </div>
+
 
         <div>
-
           <h2
             className="
-              text-3xl
+              text-2xl
               font-black
-              text-[#3B2412]
-
+              text-slate-900
               dark:text-white
             "
           >
             {faculty.name}
           </h2>
 
-
           <p
             className="
-              mt-3
-              text-[#6b5845]
-
+              mt-1
+              text-sm
+              text-slate-500
               dark:text-slate-400
             "
           >
-            {faculty.programs.length} Programmes Available
+            {faculty.programs.length} Programs Available
           </p>
-
-        </div>
-
-
-        <div
-          className="
-            rounded-2xl
-            bg-[#FAF7F0]
-            p-4
-            text-3xl
-
-            dark:bg-slate-800
-          "
-        >
-          🎓
         </div>
 
       </div>
 
 
-
-
-      {/* Program Shelf */}
+      {/* Programme List */}
       <div className="mt-8 space-y-3">
 
-        {faculty.programs.slice(0, 3).map((program) => (
+        {faculty.programs.map((program) => (
 
-          <div
+          <Link
             key={program.slug}
+            href={`/programs/${program.slug}`}
             className="
+              flex
+              items-center
+              justify-between
               rounded-2xl
-              border
-              border-[#e8dcc8]
               bg-[#FAF7F0]
               px-5
               py-4
-              text-[#3B2412]
-
+              font-semibold
+              text-slate-700
               transition-all
+              duration-300
+              hover:bg-[#f2eadc]
 
-              group-hover:border-[#C9A96E]
-
-              dark:border-slate-700
               dark:bg-slate-800
               dark:text-slate-200
+              dark:hover:bg-slate-700
             "
           >
 
-            📖 {program.name}
+            <div className="flex items-center gap-3">
 
-          </div>
+              <BookOpen size={18} />
+
+              <span>
+                {program.name}
+              </span>
+
+            </div>
+
+
+            <ChevronRight size={18} />
+
+          </Link>
 
         ))}
 
       </div>
 
 
-
-
-
-      {/* Button */}
+      {/* Faculty Link */}
       <Link
         href={`/faculties/${faculty.slug}`}
         className="
@@ -133,16 +137,18 @@ export default function FacultyCard({ faculty }: FacultyCardProps) {
           gap-2
           font-bold
           text-[#C9A96E]
-
           transition-all
           duration-300
-
           hover:gap-4
         "
       >
-        Explore Faculty →
-      </Link>
+        <span>
+          Explore Faculty
+        </span>
 
+        <ChevronRight size={18} />
+
+      </Link>
 
     </div>
   );

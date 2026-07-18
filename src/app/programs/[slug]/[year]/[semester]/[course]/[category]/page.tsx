@@ -1,3 +1,4 @@
+import { FileText } from "lucide-react";
 import { resources } from "@/data/resources";
 
 export default async function CategoryPage({
@@ -25,124 +26,250 @@ export default async function CategoryPage({
   );
 
 
+
   return (
-    <main className="mx-auto max-w-5xl px-6 py-10">
+    <main
+      className="
+        min-h-screen
+        bg-[#FAF7F0]
+        px-6
+        py-16
+        text-[#3B2412]
+
+        dark:bg-slate-950
+        dark:text-white
+      "
+    >
+
+      <section className="mx-auto max-w-6xl">
 
 
-      <h1 className="text-3xl font-black capitalize">
-        {category.replaceAll("-", " ")}
-      </h1>
+        {/* Header */}
+        <div className="flex items-center gap-5">
 
 
-      <p className="mt-2 text-slate-500">
-        Available learning materials
-      </p>
+          <div
+            className="
+              flex
+              h-16
+              w-16
+              items-center
+              justify-center
+              rounded-2xl
+              bg-slate-800
+              text-white
+            "
+          >
+            <FileText size={30} />
+          </div>
 
 
+          <div>
 
-      {categoryResources.length > 0 ? (
-
-        <div className="mt-8 grid gap-6 md:grid-cols-2">
-
-
-          {categoryResources.map((item)=>(
-
-            <div
-              key={item.title}
+            <p
               className="
-                rounded-3xl
-                border
-                bg-white
-                p-6
-                shadow-sm
-                transition
-                hover:shadow-lg
-                dark:border-slate-800
-                dark:bg-slate-900
+                text-sm
+                font-bold
+                text-[#C9A96E]
               "
             >
+              Resource Library
+            </p>
 
 
-              <div className="text-4xl">
-                📄
-              </div>
+            <h1
+              className="
+                mt-2
+                text-4xl
+                font-black
+                capitalize
+                md:text-5xl
+              "
+            >
+              {category.replaceAll("-", " ")}
+            </h1>
+
+
+            <p
+              className="
+                mt-3
+                text-slate-500
+                dark:text-slate-400
+              "
+            >
+              Available learning materials
+            </p>
+
+
+          </div>
+
+
+        </div>
 
 
 
-              <h2 className="mt-4 text-xl font-bold capitalize">
-                {item.title}
-              </h2>
+        {/* Resources */}
+        {categoryResources.length > 0 ? (
+
+          <section
+            className="
+              mt-12
+              grid
+              gap-8
+              md:grid-cols-2
+            "
+          >
+
+            {categoryResources.map((item) => (
+
+              <div
+                key={item.title}
+                className="
+                  rounded-[2.5rem]
+                  border
+                  border-[#e8dcc8]
+                  bg-white
+                  p-8
+                  shadow-sm
+                  transition-all
+                  duration-300
+                  hover:-translate-y-2
+                  hover:shadow-xl
+
+                  dark:border-slate-700
+                  dark:bg-slate-900
+                "
+              >
 
 
-
-              <p className="mt-2 text-sm text-slate-500">
-                PDF Document
-              </p>
-
-
-
-              <div className="mt-6 flex gap-3">
-
-
-                <a
-                  href={item.file}
-                  target="_blank"
+                <div
                   className="
-                    rounded-xl
-                    bg-[#3B2412]
-                    px-5
-                    py-2
-                    font-semibold
-                    text-white
-                    transition
-                    hover:bg-[#C9A96E]
-                  "
-                >
-                  Open PDF
-                </a>
-
-
-
-                <a
-                  href={item.file}
-                  download
-                  className="
-                    rounded-xl
-                    border
-                    border-[#C9A96E]
-                    px-5
-                    py-2
-                    font-semibold
+                    flex
+                    h-14
+                    w-14
+                    items-center
+                    justify-center
+                    rounded-2xl
+                    bg-[#FAF7F0]
                     text-[#3B2412]
-                    transition
-                    hover:bg-[#C9A96E]
-                    hover:text-white
+
+                    dark:bg-slate-800
+                    dark:text-white
                   "
                 >
-                  Download
-                </a>
+                  <FileText size={28} />
+                </div>
+
+
+
+                <h2
+                  className="
+                    mt-6
+                    text-2xl
+                    font-black
+                    capitalize
+                    dark:text-white
+                  "
+                >
+                  {item.title}
+                </h2>
+
+
+
+                <p
+                  className="
+                    mt-3
+                    text-sm
+                    text-slate-500
+                    dark:text-slate-400
+                  "
+                >
+                  PDF Document
+                </p>
+
+
+
+                <div className="mt-6 flex flex-wrap gap-3">
+
+
+                  <a
+                    href={item.file}
+                    target="_blank"
+                    className="
+                      rounded-xl
+                      bg-[#3B2412]
+                      px-5
+                      py-3
+                      font-bold
+                      text-white
+                      transition
+                      hover:bg-[#C9A96E]
+                    "
+                  >
+                    Open PDF
+                  </a>
+
+
+
+                  <a
+                    href={item.file}
+                    download
+                    className="
+                      rounded-xl
+                      border
+                      border-[#C9A96E]
+                      px-5
+                      py-3
+                      font-bold
+                      text-[#3B2412]
+                      transition
+                      hover:bg-[#C9A96E]
+                      hover:text-white
+
+                      dark:text-white
+                    "
+                  >
+                    Download
+                  </a>
+
+
+                </div>
 
 
               </div>
 
-
-            </div>
-
-          ))}
+            ))}
 
 
-        </div>
+          </section>
 
 
-      ) : (
+        ) : (
 
-        <div className="mt-8 rounded-2xl border border-dashed p-6 text-slate-500">
 
-          📂 No resources uploaded yet
+          <div
+            className="
+              mt-12
+              rounded-[2rem]
+              border
+              border-dashed
+              border-[#C9A96E]
+              bg-white
+              p-8
+              text-slate-500
 
-        </div>
+              dark:bg-slate-900
+              dark:text-slate-400
+            "
+          >
+            No resources uploaded yet
+          </div>
 
-      )}
+
+        )}
+
+
+      </section>
 
 
     </main>
