@@ -9,7 +9,7 @@ import Founder from "@/components/Founder";
 import Footer from "@/components/Footer";
 import LT7Icon from "@/components/LT7Icon";
 
-import { BookOpen, FileText, PlayCircle } from "lucide-react";
+import { BookOpen, FileText, Video } from "lucide-react";
 
 
 export default function Home() {
@@ -17,12 +17,9 @@ export default function Home() {
     <>
       <Navbar />
 
-
       <main className="min-h-screen bg-[#FAF7F0] text-[#3B2412] dark:bg-slate-950 dark:text-white">
 
-
         <Hero />
-
 
 
         {/* Resources */}
@@ -41,34 +38,42 @@ export default function Home() {
           </div>
 
 
-
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
 
             <ResourceCard
-              icon="📖"
+              icon={<BookOpen size={40} />}
               title="Lecture Notes"
               description="Access organised learning materials from your courses."
+              link="/resources/lecture-notes"
             />
 
 
             <ResourceCard
-              icon="📄"
+              icon={<FileText size={40} />}
               title="Past Papers"
               description="Prepare using previous examination papers."
+              link="/resources/past-papers"
             />
 
 
             <ResourceCard
-              icon="▶️"
+              icon={<Video size={40} />}
               title="Tutorials"
-              description="Practice questions and academic exercises."
+              description="Watch and learn through guided academic tutorials."
+              link="/resources/tutorials"
             />
 
 
             <ResourceCard
-              icon="⚡"
+              icon={
+                <LT7Icon
+                  size={40}
+                  shape="circle"
+                />
+              }
               title="LT7 Assistant"
               description="Generate quizzes and understand difficult topics."
+              link="/lt7"
             />
 
           </div>
@@ -77,11 +82,8 @@ export default function Home() {
 
 
 
-
-
         {/* Faculties */}
         <section className="mx-auto max-w-7xl px-6 pb-20">
-
 
           <h2 className="text-4xl font-black">
             Explore Faculties
@@ -96,8 +98,7 @@ export default function Home() {
 
           <div className="mt-10 grid gap-8 md:grid-cols-2">
 
-
-            {faculties.map((faculty)=>(
+            {faculties.map((faculty) => (
 
               <FacultyCard
                 key={faculty.slug}
@@ -106,9 +107,7 @@ export default function Home() {
 
             ))}
 
-
           </div>
-
 
         </section>
 
@@ -116,11 +115,8 @@ export default function Home() {
 
 
 
-
-
         {/* LT7 Banner */}
         <section className="mx-auto max-w-7xl px-6 pb-20">
-
 
           <div className="rounded-[3rem] bg-[#3B2412] px-8 py-16 text-center text-white">
 
@@ -136,7 +132,6 @@ export default function Home() {
 
 
 
-
             <h2 className="mt-5 text-4xl font-black">
               Study Smarter With LT7
             </h2>
@@ -149,7 +144,6 @@ export default function Home() {
               with LT7, your personal academic assistant.
 
             </p>
-
 
 
 
@@ -175,22 +169,16 @@ export default function Home() {
 
           </div>
 
-
         </section>
-
-
 
 
 
         <Founder />
 
-
       </main>
 
 
-
       <Footer />
-
 
     </>
   );
