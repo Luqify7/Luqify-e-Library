@@ -11,7 +11,9 @@ export default async function CategoryPage({
     category: string;
   }>;
 }) {
+
   const { slug, year, semester, course, category } = await params;
+
 
   const categoryResources = resources.filter(
     (resource) =>
@@ -22,63 +24,126 @@ export default async function CategoryPage({
       resource.category === category
   );
 
+
   return (
     <main className="mx-auto max-w-5xl px-6 py-10">
 
-      <h1 className="text-3xl font-bold capitalize">
+
+      <h1 className="text-3xl font-black capitalize">
         {category.replaceAll("-", " ")}
       </h1>
 
+
       <p className="mt-2 text-slate-500">
-        {course.replaceAll("-", " ")}
+        Available learning materials
       </p>
 
 
-      <div className="mt-8 space-y-4">
 
-        {categoryResources.length > 0 ? (
+      {categoryResources.length > 0 ? (
 
-          categoryResources.map((resource) => (
+        <div className="mt-8 grid gap-6 md:grid-cols-2">
 
-            <a
-              key={resource.title}
-              href={resource.file}
-              target="_blank"
-              className="block rounded-2xl border p-5 transition hover:bg-slate-50 dark:hover:bg-slate-800"
+
+          {categoryResources.map((item)=>(
+
+            <div
+              key={item.title}
+              className="
+                rounded-3xl
+                border
+                bg-white
+                p-6
+                shadow-sm
+                transition
+                hover:shadow-lg
+                dark:border-slate-800
+                dark:bg-slate-900
+              "
             >
 
-              <div className="flex items-center justify-between">
 
-                <div>
-                  <h2 className="font-semibold">
-                    📄 {resource.title}
-                  </h2>
-
-                  <p className="mt-1 text-sm text-slate-500">
-                    PDF Document
-                  </p>
-                </div>
+              <div className="text-4xl">
+                📄
+              </div>
 
 
-                <span className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white">
-                  Open
-                </span>
+
+              <h2 className="mt-4 text-xl font-bold capitalize">
+                {item.title}
+              </h2>
+
+
+
+              <p className="mt-2 text-sm text-slate-500">
+                PDF Document
+              </p>
+
+
+
+              <div className="mt-6 flex gap-3">
+
+
+                <a
+                  href={item.file}
+                  target="_blank"
+                  className="
+                    rounded-xl
+                    bg-[#3B2412]
+                    px-5
+                    py-2
+                    font-semibold
+                    text-white
+                    transition
+                    hover:bg-[#C9A96E]
+                  "
+                >
+                  Open PDF
+                </a>
+
+
+
+                <a
+                  href={item.file}
+                  download
+                  className="
+                    rounded-xl
+                    border
+                    border-[#C9A96E]
+                    px-5
+                    py-2
+                    font-semibold
+                    text-[#3B2412]
+                    transition
+                    hover:bg-[#C9A96E]
+                    hover:text-white
+                  "
+                >
+                  Download
+                </a>
+
 
               </div>
 
-            </a>
 
-          ))
+            </div>
 
-        ) : (
+          ))}
 
-          <div className="rounded-xl border border-dashed p-5 text-slate-500">
-            No resources uploaded yet
-          </div>
 
-        )}
+        </div>
 
-      </div>
+
+      ) : (
+
+        <div className="mt-8 rounded-2xl border border-dashed p-6 text-slate-500">
+
+          📂 No resources uploaded yet
+
+        </div>
+
+      )}
+
 
     </main>
   );

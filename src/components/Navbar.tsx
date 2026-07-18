@@ -9,10 +9,12 @@ export default function Navbar() {
 
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
 
+
         {/* Logo */}
         <div className="flex items-center gap-4">
 
           <Sidebar />
+
 
           <Link
             href="/"
@@ -33,8 +35,9 @@ export default function Navbar() {
 
 
 
-        {/* Navigation */}
-        <nav className="hidden items-center gap-10 text-sm font-medium md:flex">
+        {/* Desktop Navigation */}
+        <nav className="hidden items-center gap-10 text-sm font-medium lg:flex">
+
 
           <Link
             href="/"
@@ -75,21 +78,23 @@ export default function Navbar() {
             About
           </Link>
 
+
         </nav>
 
 
 
-        {/* Right */}
+        {/* Right Controls */}
+
         <div className="flex items-center gap-3">
 
 
           {/* Search */}
+
           <Link
             href="/search"
             aria-label="Search"
             className="
-              hidden
-              md:flex
+              flex
               h-10
               w-10
               items-center
@@ -104,14 +109,15 @@ export default function Navbar() {
               dark:text-white
             "
           >
-            <Search
-              size={18}
-              strokeWidth={2}
-            />
+
+            <Search size={18}/>
+
           </Link>
 
 
+
           {/* Theme */}
+
           <ThemeToggle />
 
 
