@@ -1,7 +1,14 @@
-import { FileText } from "lucide-react";
+import {
+  FileText,
+  Download,
+  ChevronRight,
+  Home,
+} from "lucide-react";
+
 import { resources } from "@/data/resources";
 
-export default async function CategoryPage({
+
+export default async function ResourceCategoryPage({
   params,
 }: {
   params: Promise<{
@@ -13,10 +20,16 @@ export default async function CategoryPage({
   }>;
 }) {
 
-  const { slug, year, semester, course, category } = await params;
+  const {
+    slug,
+    year,
+    semester,
+    course,
+    category,
+  } = await params;
 
 
-  const categoryResources = resources.filter(
+  const filteredResources = resources.filter(
     (resource) =>
       resource.program === slug &&
       resource.year === year &&
@@ -24,7 +37,6 @@ export default async function CategoryPage({
       resource.course === course &&
       resource.category === category
   );
-
 
 
   return (
@@ -41,236 +53,249 @@ export default async function CategoryPage({
       "
     >
 
-      <section className="mx-auto max-w-6xl">
+      <section className="mx-auto max-w-7xl">
 
 
-        {/* Header */}
-        <div className="flex items-center gap-5">
+        {/* Breadcrumb */}
 
+        <div
+          className="
+            mb-10
+            flex
+            flex-wrap
+            items-center
+            gap-2
+            text-sm
+            text-[#6b5845]
 
-          <div
-            className="
-              flex
-              h-16
-              w-16
-              items-center
-              justify-center
-              rounded-2xl
-              bg-slate-800
-              text-white
-            "
-          >
-            <FileText size={30} />
-          </div>
+            dark:text-slate-400
+          "
+        >
 
+          <Home size={16} />
 
-          <div>
+          <span>Home</span>
 
-            <p
-              className="
-                text-sm
-                font-bold
-                text-[#C9A96E]
-              "
-            >
-              Resource Library
-            </p>
+          <ChevronRight size={16} />
 
+          <span>Resources</span>
 
-            <h1
-              className="
-                mt-2
-                text-4xl
-                font-black
-                capitalize
-                md:text-5xl
-              "
-            >
-              {category.replaceAll("-", " ")}
-            </h1>
+          <ChevronRight size={16} />
 
-
-            <p
-              className="
-                mt-3
-                text-slate-500
-                dark:text-slate-400
-              "
-            >
-              Available learning materials
-            </p>
-
-
-          </div>
-
+          <span className="capitalize text-[#C9A96E]">
+            {category.replaceAll("-", " ")}
+          </span>
 
         </div>
 
 
 
-        {/* Resources */}
-        {categoryResources.length > 0 ? (
+        {/* Header */}
 
-          <section
+        <div
+          className="
+            rounded-[3rem]
+            border
+            border-[#e8dcc8]
+            bg-white
+            p-10
+            shadow-sm
+
+            dark:border-slate-800
+            dark:bg-slate-900
+          "
+        >
+
+          <p
             className="
-              mt-12
-              grid
-              gap-8
-              md:grid-cols-2
+              text-sm
+              font-bold
+              uppercase
+              tracking-wider
+              text-[#C9A96E]
             "
           >
+            Resource Library
+          </p>
 
-            {categoryResources.map((item) => (
+
+          <h1
+            className="
+              mt-3
+              text-4xl
+              font-black
+              capitalize
+
+              md:text-6xl
+            "
+          >
+            {category.replaceAll("-", " ")}
+          </h1>
+
+
+          <p
+            className="
+              mt-4
+              text-[#6b5845]
+
+              dark:text-slate-400
+            "
+          >
+            {filteredResources.length} resources available
+          </p>
+
+        </div>
+
+
+
+
+        {/* Resources */}
+
+        <section className="mt-12">
+
+          <div className="grid gap-6">
+
+
+            {filteredResources.length > 0 ? (
+
+              filteredResources.map((resource) => (
+
+                <a
+                  key={`${resource.title}-${resource.file}`}
+                  href={resource.file}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="
+                    group
+                    flex
+                    items-center
+                    justify-between
+
+                    rounded-3xl
+
+                    border
+                    border-[#e8dcc8]
+
+                    bg-white
+
+                    p-6
+
+                    shadow-sm
+
+                    transition-all
+
+                    hover:-translate-y-1
+                    hover:shadow-lg
+
+                    dark:border-slate-700
+                    dark:bg-slate-900
+                  "
+                >
+
+
+                  <div
+                    className="
+                      flex
+                      items-center
+                      gap-5
+                    "
+                  >
+
+                    <div
+                      className="
+                        flex
+                        h-14
+                        w-14
+                        items-center
+                        justify-center
+
+                        rounded-2xl
+
+                        bg-[#FAF7F0]
+
+                        text-[#3B2412]
+
+                        dark:bg-slate-800
+                        dark:text-white
+                      "
+                    >
+
+                      <FileText size={28} />
+
+                    </div>
+
+
+
+                    <div>
+
+                      <h2
+                        className="
+                          text-lg
+                          font-bold
+                        "
+                      >
+                        {resource.title}
+                      </h2>
+
+
+                      <p
+                        className="
+                          mt-1
+                          text-sm
+                          text-slate-500
+                        "
+                      >
+                        Academic Material
+                      </p>
+
+                    </div>
+
+
+                  </div>
+
+
+
+                  <Download
+                    size={22}
+                    className="
+                      text-[#C9A96E]
+                      transition
+                      group-hover:scale-110
+                    "
+                  />
+
+
+                </a>
+
+              ))
+
+            ) : (
 
               <div
-                key={item.title}
                 className="
-                  rounded-[2.5rem]
+                  rounded-[2rem]
                   border
                   border-[#e8dcc8]
                   bg-white
                   p-8
-                  shadow-sm
-                  transition-all
-                  duration-300
-                  hover:-translate-y-2
-                  hover:shadow-xl
+                  text-slate-500
 
                   dark:border-slate-700
                   dark:bg-slate-900
                 "
               >
-
-
-                <div
-                  className="
-                    flex
-                    h-14
-                    w-14
-                    items-center
-                    justify-center
-                    rounded-2xl
-                    bg-[#FAF7F0]
-                    text-[#3B2412]
-
-                    dark:bg-slate-800
-                    dark:text-white
-                  "
-                >
-                  <FileText size={28} />
-                </div>
-
-
-
-                <h2
-                  className="
-                    mt-6
-                    text-2xl
-                    font-black
-                    capitalize
-                    dark:text-white
-                  "
-                >
-                  {item.title}
-                </h2>
-
-
-
-                <p
-                  className="
-                    mt-3
-                    text-sm
-                    text-slate-500
-                    dark:text-slate-400
-                  "
-                >
-                  PDF Document
-                </p>
-
-
-
-                <div className="mt-6 flex flex-wrap gap-3">
-
-
-                  <a
-                    href={item.file}
-                    target="_blank"
-                    className="
-                      rounded-xl
-                      bg-[#3B2412]
-                      px-5
-                      py-3
-                      font-bold
-                      text-white
-                      transition
-                      hover:bg-[#C9A96E]
-                    "
-                  >
-                    Open PDF
-                  </a>
-
-
-
-                  <a
-                    href={item.file}
-                    download
-                    className="
-                      rounded-xl
-                      border
-                      border-[#C9A96E]
-                      px-5
-                      py-3
-                      font-bold
-                      text-[#3B2412]
-                      transition
-                      hover:bg-[#C9A96E]
-                      hover:text-white
-
-                      dark:text-white
-                    "
-                  >
-                    Download
-                  </a>
-
-
-                </div>
-
-
+                No resources uploaded yet
               </div>
 
-            ))}
+            )}
 
 
-          </section>
-
-
-        ) : (
-
-
-          <div
-            className="
-              mt-12
-              rounded-[2rem]
-              border
-              border-dashed
-              border-[#C9A96E]
-              bg-white
-              p-8
-              text-slate-500
-
-              dark:bg-slate-900
-              dark:text-slate-400
-            "
-          >
-            No resources uploaded yet
           </div>
 
-
-        )}
+        </section>
 
 
       </section>
-
 
     </main>
   );

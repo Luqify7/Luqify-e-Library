@@ -1,6 +1,6 @@
+import ThemeProvider from "@/components/ThemeProvider";
 import type { Metadata } from "next";
 import "./globals.css";
-import { ThemeProvider } from "@/components/ThemeProvider";
 import LT7Widget from "@/components/LT7Widget";
 
 export const metadata: Metadata = {

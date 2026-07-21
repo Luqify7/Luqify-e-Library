@@ -1,298 +1,228 @@
 import Link from "next/link";
 import {
-  GraduationCap,
-  BookOpen,
-  FileText,
+  ArrowRight,
+  Search,
+  Sparkles,
 } from "lucide-react";
-import LT7Icon from "@/components/LT7Icon";
 
+import CampusShowcase from "@/components/CampusShowcase";
 
 export default function Hero() {
   return (
-
     <section
       className="
+        relative
+        overflow-hidden
         border-b
         border-[#e8dcc8]
         bg-[#FAF7F0]
-
+        px-6
+        py-24
         dark:border-slate-800
         dark:bg-slate-950
       "
     >
 
+      {/* Background glow */}
+      <div
+        className="
+          absolute
+          -right-40
+          -top-40
+          h-[420px]
+          w-[420px]
+          rounded-full
+          bg-[#C9A96E]/20
+          blur-3xl
+          dark:bg-[#C9A96E]/10
+        "
+      />
+
 
       <div
         className="
+          relative
           mx-auto
           grid
           max-w-7xl
           items-center
-          gap-12
-          px-6
-          py-24
+          gap-16
           lg:grid-cols-2
         "
       >
 
-
-        {/* Hero Text */}
+        {/* LEFT */}
         <div>
 
 
-          <span
+          <div
             className="
+              mb-6
+              inline-flex
+              items-center
+              gap-2
               rounded-full
               border
-              border-[#C9A96E]
-              bg-[#fff8ea]
+              border-[#e8dcc8]
+              bg-white
               px-4
               py-2
               text-sm
-              font-semibold
+              font-medium
               text-[#3B2412]
-
+              shadow-sm
+              dark:border-slate-700
               dark:bg-slate-900
-              dark:text-[#C9A96E]
+              dark:text-white
             "
           >
-            Welcome to Luqify e-Library
-          </span>
+            <Sparkles 
+              size={16}
+              className="text-[#C9A96E]"
+            />
+
+            Digital Learning Platform
+          </div>
 
 
 
           <h1
             className="
-              mt-8
+              max-w-xl
               text-5xl
               font-black
-              leading-tight
+              leading-[1.05]
+              tracking-tight
               text-[#3B2412]
               md:text-6xl
-
               dark:text-white
             "
           >
-            Your Gateway
-            <br />
-            To Academic Excellence
+
+            Welcome To
+
+            <span className="block text-[#C9A96E]">
+              Luqify e-Library
+            </span>
+
           </h1>
 
 
 
           <p
             className="
-              mt-8
-              max-w-xl
+              mt-6
+              max-w-lg
               text-lg
-              leading-8
-              text-[#6b5845]
-
-              dark:text-slate-400
+              leading-relaxed
+              text-[#6b5844]
+              dark:text-slate-300
             "
           >
-            Access lecture notes, tutorials, past papers and academic resources
-            from a modern digital library built to support your learning journey.
+            A modern academic space where students can
+            discover lecture notes, exams, tutorials,
+            and learning resources in one place.
           </p>
 
 
 
-          <div className="mt-10 flex gap-4">
-
+          <div
+            className="
+              mt-8
+              flex
+              flex-wrap
+              gap-4
+            "
+          >
 
             <Link
-              href="/faculties/commerce"
+              href="/faculties"
               className="
-                rounded-xl
+                group
+                flex
+                items-center
+                gap-2
+                rounded-2xl
                 bg-[#3B2412]
-                px-7
-                py-3
+                px-6
+                py-3.5
                 font-semibold
                 text-white
+                shadow-lg
+                transition
+                hover:-translate-y-1
+                hover:bg-[#4b2e17]
+                dark:bg-[#C9A96E]
+                dark:text-black
               "
             >
+
               Explore Library
+
+              <ArrowRight
+                size={18}
+                className="
+                  transition
+                  group-hover:translate-x-1
+                "
+              />
+
             </Link>
 
 
 
             <Link
-              href="/"
-              className="
-                rounded-xl
-                border
-                border-[#C9A96E]
-                px-7
-                py-3
-                font-semibold
-              "
-            >
-              Browse Resources
-            </Link>
-
-
-          </div>
-
-
-        </div>
-
-
-
-
-        {/* Hero Image */}
-        <div className="relative">
-
-
-          <div
-            className="
-              absolute
-              -inset-5
-              rounded-[3rem]
-              bg-[#C9A96E]/20
-              blur-3xl
-            "
-          />
-
-
-          <div
-            className="
-              relative
-              overflow-hidden
-              rounded-[3rem]
-              border
-              shadow-xl
-            "
-          >
-
-            <img
-              src="/images/library-hero.jpg"
-              alt="Luqify library"
-              className="h-[420px] w-full object-cover"
-            />
-
-          </div>
-
-
-        </div>
-
-
-      </div>
-
-
-
-
-      {/* Feature Cards */}
-      <div
-        className="
-          mx-auto
-          grid
-          max-w-7xl
-          gap-6
-          px-6
-          pb-24
-          md:grid-cols-4
-        "
-      >
-
-
-        {[
-          {
-            icon: <GraduationCap size={40} />,
-            title: "Faculties",
-            text: "Explore programmes and academic departments.",
-          },
-
-          {
-            icon: <BookOpen size={40} />,
-            title: "Lecture Notes",
-            text: "Access organised learning materials.",
-          },
-
-          {
-            icon: <FileText size={40} />,
-            title: "Past Papers",
-            text: "Prepare using previous examinations.",
-          },
-
-          {
-            icon: <LT7Icon size={50} />,
-            title: "LT7 Assistant",
-            text: "Study smarter with intelligent learning tools.",
-          },
-
-        ].map((item) => (
-
-          <div
-            key={item.title}
-            className="
-              rounded-[2rem]
-              border
-              border-[#e8dcc8]
-              bg-white
-              p-6
-              shadow-sm
-              transition-all
-              duration-300
-              hover:-translate-y-1
-              hover:shadow-lg
-
-              dark:border-slate-700
-              dark:bg-slate-900
-            "
-          >
-
-            <div
+              href="/search"
               className="
                 flex
-                h-14
-                w-14
                 items-center
-                justify-center
+                gap-2
                 rounded-2xl
-                bg-[#FAF7F0]
+                border
+                border-[#d9c7aa]
+                bg-white
+                px-6
+                py-3.5
+                font-semibold
                 text-[#3B2412]
-
-                dark:bg-slate-800
+                transition
+                hover:-translate-y-1
+                dark:border-slate-700
+                dark:bg-slate-900
                 dark:text-white
               "
             >
-              {item.icon}
-            </div>
 
+              <Search size={18} />
 
+              Search Resources
 
-            <h3
-              className="
-                mt-5
-                font-black
-              "
-            >
-              {item.title}
-            </h3>
-
-
-
-            <p
-              className="
-                mt-2
-                text-sm
-                text-slate-500
-                dark:text-slate-400
-              "
-            >
-              {item.text}
-            </p>
+            </Link>
 
 
           </div>
 
-        ))}
+
+        </div>
+
+
+
+        {/* RIGHT VISUAL */}
+        <div
+          className="
+            relative
+            lg:translate-x-4
+          "
+        >
+
+          <CampusShowcase />
+
+        </div>
 
 
       </div>
 
 
     </section>
-
   );
 }

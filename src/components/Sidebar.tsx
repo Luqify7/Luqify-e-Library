@@ -15,6 +15,7 @@ export default function Sidebar() {
     { name: "END-SEM PAPERS", href: "/" },
     { name: "TIMETABLE", href: "/" },
     { name: "ANNOUNCEMENTS", href: "/" },
+    
     { name: "ABOUT", href: "/" },
     { name: "CONTACT", href: "/" },
   ];
@@ -51,11 +52,11 @@ export default function Sidebar() {
 
             <div>
               <h1 className="text-3xl font-bold tracking-wide">
-                Luqify7
+            luqify e-library
               </h1>
 
               <p className="text-sm text-slate-400 mt-1">
-                E-Library
+            
               </p>
             </div>
 

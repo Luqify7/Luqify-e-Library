@@ -1,135 +1,46 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
-import { courses } from "@/data/courses";
-import { resources } from "@/data/resources";
+import { Search } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 export default function SearchBar() {
-
   const [query, setQuery] = useState("");
+  const router = useRouter();
 
-  const results = [
-    ...courses.map((course) => ({
-      title: course.name,
-      type: "Course",
-      link: `/programs/${course.program}/${course.year}/${course.semester}/${course.slug}`,
-    })),
+  function handleSearch() {
+    if (!query.trim()) return;
 
-    ...resources.map((resource) => ({
-      title: resource.title,
-      type: "Resource",
-      link: `/programs/${resource.program}/${resource.year}/${resource.semester}/${resource.course}/${resource.category}`,
-    })),
-  ].filter((item) =>
-    item.title.toLowerCase().includes(query.toLowerCase())
-  );
-
+    router.push(`/search?q=${encodeURIComponent(query)}`);
+  }
 
   return (
-    <div className="relative mx-auto w-full max-w-2xl">
+    <div className="flex items-center gap-3 rounded-2xl border border-[#e8dcc8] bg-white px-5 py-4 shadow-sm transition focus-within:ring-2 focus-within:ring-[#C9A96E] dark:border-slate-700 dark:bg-slate-900">
 
+      <Search
+        size={22}
+        className="text-[#C9A96E]"
+      />
 
-      <div
-        className="
-          flex
-          items-center
-          rounded-full
-          border
-          border-slate-200
-          bg-white
-          px-6
-          py-4
-          shadow-sm
-          transition
-          hover:shadow-md
-          focus-within:shadow-lg
-          dark:border-slate-700
-          dark:bg-slate-900
-        "
+      <input
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleSearch();
+          }
+        }}
+        placeholder="Search lecture notes, tutorials, exams..."
+        className="w-full bg-transparent text-sm text-[#3B2412] outline-none placeholder:text-slate-400 dark:text-white"
+      />
+
+      <button
+        onClick={handleSearch}
+        className="rounded-xl bg-[#3B2412] px-4 py-2 text-sm font-semibold text-white transition hover:bg-[#C9A96E]"
       >
-
-        <span className="mr-4 text-xl">
-          🔍
-        </span>
-
-
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="
-            w-full
-            bg-transparent
-            text-lg
-            outline-none
-            dark:text-white
-          "
-        />
-
-      </div>
-
-
-
-      {query && (
-
-        <div
-          className="
-            absolute
-            left-0
-            right-0
-            top-full
-            z-50
-            mt-3
-            overflow-hidden
-            rounded-3xl
-            border
-            bg-white
-            shadow-xl
-            dark:border-slate-700
-            dark:bg-slate-900
-          "
-        >
-
-          {results.length > 0 ? (
-
-            results.map((item) => (
-
-              <Link
-                key={item.link}
-                href={item.link}
-                className="
-                  block
-                  px-6
-                  py-4
-                  transition
-                  hover:bg-slate-100
-                  dark:hover:bg-slate-800
-                "
-              >
-
-                <p className="font-semibold">
-                  {item.title}
-                </p>
-
-                <p className="text-sm text-slate-500">
-                  {item.type}
-                </p>
-
-              </Link>
-
-            ))
-
-          ) : (
-
-            <p className="px-6 py-5 text-slate-500">
-              No results found
-            </p>
-
-          )}
-
-        </div>
-
-      )}
+        Search
+      </button>
 
     </div>
   );
