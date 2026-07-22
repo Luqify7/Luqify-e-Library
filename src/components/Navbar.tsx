@@ -1,12 +1,14 @@
 import Link from "next/link";
+import Image from "next/image";
 import Sidebar from "./Sidebar";
 import ThemeToggle from "@/components/ThemeToggle";
-import LuqifyLogo from "@/components/LuqifyLogo";
 import { Search } from "lucide-react";
 
 
 export default function Navbar() {
+
   return (
+
     <header
       className="
         sticky
@@ -17,7 +19,6 @@ export default function Navbar() {
         bg-[#FAF7F0]/90
         backdrop-blur-md
         shadow-sm
-
         dark:border-slate-800
         dark:bg-slate-950/90
       "
@@ -31,22 +32,21 @@ export default function Navbar() {
           max-w-7xl
           items-center
           justify-between
-          px-6
+          px-4
+          sm:px-6
         "
       >
 
 
-        {/* Logo */}
+        {/* LEFT SIDE */}
 
-        <div
-          className="
-            flex
-            items-center
-            gap-4
-          "
-        >
+        <div className="flex items-center gap-3">
 
-          <Sidebar />
+
+          <div className="lg:hidden">
+            <Sidebar />
+          </div>
+
 
 
           <Link
@@ -55,49 +55,61 @@ export default function Navbar() {
               flex
               items-center
               gap-3
-              text-[#3B2412]
-
-              dark:text-white
+              transition
+              hover:opacity-90
             "
           >
-
-            <LuqifyLogo size={46} />
 
 
             <div
               className="
-                leading-tight
+                flex
+                h-14
+                w-14
+                items-center
+                justify-center
+                rounded-full
+                bg-[#C9A96E]
+                p-2
+                shadow-md
               "
             >
+
+              <Image
+                src="/images/Luqify e-library-logo.png"
+                alt="Luqify e-Library"
+                width={44}
+                height={44}
+                priority
+                className="object-contain"
+              />
+
+            </div>
+
+
+
+
+            <div className="leading-tight">
+
 
               <h1
                 className="
                   text-xl
                   font-black
                   tracking-tight
+                  text-[#3B2412]
+                  dark:text-white
                 "
               >
+
                 Luqify
-                <span
-                  className="
-                    font-medium
-                  "
-                >
+
+                <span className="font-medium">
                   {" "}e-Library
                 </span>
+
+
               </h1>
-
-
-              <p
-                className="
-                  text-xs
-                  text-[#6b5845]
-
-                  dark:text-slate-400
-                "
-              >
-              
-              </p>
 
 
             </div>
@@ -112,7 +124,12 @@ export default function Navbar() {
 
 
 
-        {/* Desktop Navigation */}
+
+
+
+
+        {/* DESKTOP NAVIGATION */}
+
 
         <nav
           className="
@@ -121,37 +138,28 @@ export default function Navbar() {
             gap-10
             text-sm
             font-semibold
-
+            text-[#3B2412]
+            dark:text-white
             lg:flex
           "
         >
 
+
+
           <Link
             href="/"
-            className="
-              text-[#3B2412]
-              transition
-              hover:text-[#C9A96E]
-
-              dark:text-slate-300
-              dark:hover:text-[#C9A96E]
-            "
+            className="transition hover:text-[#C9A96E]"
           >
             Home
           </Link>
 
 
 
-          <Link
-            href="/faculties/commerce"
-            className="
-              text-[#3B2412]
-              transition
-              hover:text-[#C9A96E]
 
-              dark:text-slate-300
-              dark:hover:text-[#C9A96E]
-            "
+
+          <Link
+            href="/faculties"
+            className="transition hover:text-[#C9A96E]"
           >
             Library
           </Link>
@@ -159,16 +167,10 @@ export default function Navbar() {
 
 
 
-          <Link
-            href="/faculties/commerce"
-            className="
-              text-[#3B2412]
-              transition
-              hover:text-[#C9A96E]
 
-              dark:text-slate-300
-              dark:hover:text-[#C9A96E]
-            "
+          <Link
+            href="/faculties"
+            className="transition hover:text-[#C9A96E]"
           >
             Faculties
           </Link>
@@ -176,15 +178,28 @@ export default function Navbar() {
 
 
 
+
+
+          <Link
+            href="/upload"
+            className="
+              transition
+              hover:text-[#C9A96E]
+            "
+          >
+            Uploads
+          </Link>
+
+
+
+
+
+
           <Link
             href="/lt7"
             className="
-              text-[#3B2412]
               transition
               hover:text-[#C9A96E]
-
-              dark:text-slate-300
-              dark:hover:text-[#C9A96E]
             "
           >
             LT7
@@ -193,19 +208,18 @@ export default function Navbar() {
 
 
 
+
+
           <Link
             href="/"
             className="
-              text-[#3B2412]
               transition
               hover:text-[#C9A96E]
-
-              dark:text-slate-300
-              dark:hover:text-[#C9A96E]
             "
           >
             About
           </Link>
+
 
 
         </nav>
@@ -214,15 +228,21 @@ export default function Navbar() {
 
 
 
-        {/* Right Controls */}
+
+
+
+
+        {/* CONTROLS */}
+
 
         <div
           className="
             flex
             items-center
-            gap-3
+            gap-2
           "
         >
+
 
 
           <Link
@@ -239,10 +259,8 @@ export default function Navbar() {
               border-[#C9A96E]
               text-[#3B2412]
               transition
-
               hover:bg-[#C9A96E]
               hover:text-white
-
               dark:text-white
             "
           >
@@ -253,15 +271,21 @@ export default function Navbar() {
 
 
 
+
           <ThemeToggle />
 
 
+
         </div>
+
+
 
 
       </div>
 
 
     </header>
+
   );
+
 }

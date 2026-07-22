@@ -3,140 +3,114 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 
+
 :root {
-  --background: #FAF7F0;
-  --foreground: #3B2412;
+
+  --background:#FAF7F0;
+  --foreground:#3B2412;
+
 }
+
 
 
 .dark {
-  --background: #020617;
-  --foreground: #f8fafc;
+
+  --background:#020617;
+  --foreground:#f8fafc;
+
 }
+
+
+
 
 
 html {
-  scroll-behavior: smooth;
+
+  scroll-behavior:smooth;
+
 }
+
+
+
 
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+
+  background:var(--background);
+
+  color:var(--foreground);
 
   transition:
-    background-color 0.3s ease,
-    color 0.3s ease;
+  background-color .3s ease,
+  color .3s ease;
+
 }
 
 
 
-/* Luqify Brand Colors */
+
 
 ::selection {
-  background: #C9A96E;
-  color: #3B2412;
+
+  background:#C9A96E;
+
+  color:#3B2412;
+
 }
 
 
 
-/* ============================= */
-/* Vertical Image Scroll Motion */
-/* ============================= */
 
-
-@keyframes scroll-up {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(-50%);
-  }
-}
-
-
-@keyframes scroll-down {
-  from {
-    transform: translateY(-50%);
-  }
-
-  to {
-    transform: translateY(0);
-  }
-}
-
-
-.animate-scroll-up {
-  animation: scroll-up 18s linear infinite;
-}
-
-
-.animate-scroll-down {
-  animation: scroll-down 18s linear infinite;
-}
 
 
 
 
 
 /* ============================= */
-/* Library Flow Floating Cards */
+/* Floating Cards */
 /* ============================= */
 
 
 .library-float {
-  animation-name: luqify-float;
-  animation-duration: 5s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: infinite;
-  will-change: transform;
+
+
+  animation:
+
+  luqify-float
+
+  5s
+
+  ease-in-out
+
+  infinite;
+
+
+  will-change:transform;
+
+
 }
 
-
-
-.library-float:nth-child(1) {
-  animation-delay: 0s;
-}
-
-
-.library-float:nth-child(2) {
-  animation-delay: 0.7s;
-}
-
-
-.library-float:nth-child(3) {
-  animation-delay: 1.4s;
-}
-
-
-.library-float:nth-child(4) {
-  animation-delay: 2.1s;
-}
-
-
-.library-float:nth-child(5) {
-  animation-delay: 2.8s;
-}
 
 
 
 
 @keyframes luqify-float {
 
-  0% {
-    transform: translateY(0);
+
+  0%,
+  100% {
+
+    transform:translateY(0);
+
   }
 
 
   50% {
-    transform: translateY(-18px);
+
+    transform:translateY(-18px);
+
   }
 
-
-  100% {
-    transform: translateY(0);
-  }
 
 }
 
@@ -144,12 +118,327 @@ body {
 
 
 
-@media (prefers-reduced-motion: reduce) {
+
+
+
+
+/* ============================= */
+/* Extra Floating */
+/* ============================= */
+
+
+@keyframes float {
+
+
+  0%,
+  100% {
+
+    transform:translateY(0);
+
+  }
+
+
+  50% {
+
+    transform:translateY(-18px);
+
+  }
+
+
+}
+
+
+
+
+@keyframes floatReverse {
+
+
+  0%,
+  100% {
+
+    transform:translateY(0);
+
+  }
+
+
+  50% {
+
+    transform:translateY(18px);
+
+  }
+
+
+}
+
+
+
+
+@keyframes floatSlow {
+
+
+  0%,
+  100% {
+
+    transform:translateY(0);
+
+  }
+
+
+  50% {
+
+    transform:translateY(-10px);
+
+  }
+
+
+}
+
+
+
+
+
+.animate-float {
+
+ animation:
+
+ float
+
+ 5s
+
+ ease-in-out
+
+ infinite;
+
+}
+
+
+
+.animate-float-reverse {
+
+
+ animation:
+
+ floatReverse
+
+ 6s
+
+ ease-in-out
+
+ infinite;
+
+
+}
+
+
+
+.animate-float-slow {
+
+
+ animation:
+
+ floatSlow
+
+ 7s
+
+ ease-in-out
+
+ infinite;
+
+
+}
+
+
+
+
+
+
+
+
+
+/* ============================= */
+/* Luqify PayChangu Flow */
+/* ============================= */
+
+
+
+@keyframes luqify-flow-up {
+
+
+  from {
+
+    transform:translate3d(0,0,0);
+
+  }
+
+
+  to {
+
+    transform:translate3d(0,-50%,0);
+
+  }
+
+
+}
+
+
+
+
+
+
+
+@keyframes luqify-flow-down {
+
+
+  from {
+
+    transform:translate3d(0,-50%,0);
+
+  }
+
+
+  to {
+
+    transform:translate3d(0,0,0);
+
+  }
+
+
+}
+
+
+
+
+
+
+
+.luqify-track-up {
+
+
+  display:flex;
+
+  flex-direction:column;
+
+
+  animation:
+
+  luqify-flow-up
+
+  20s
+
+  linear
+
+  infinite;
+
+
+  will-change:transform;
+
+
+}
+
+
+
+
+
+.luqify-track-down {
+
+
+  display:flex;
+
+  flex-direction:column;
+
+
+  animation:
+
+  luqify-flow-down
+
+  23s
+
+  linear
+
+  infinite;
+
+
+  will-change:transform;
+
+
+}
+
+
+
+
+
+
+
+
+/* ============================= */
+/* Pause Interaction */
+/* ============================= */
+
+
+.pause-flow {
+
+
+  animation-play-state:paused;
+
+
+}
+
+
+
+
+
+
+
+
+
+/* ============================= */
+/* Image Smoothness */
+/* ============================= */
+
+
+.luqify-track-up img,
+.luqify-track-down img {
+
+
+  user-select:none;
+
+  pointer-events:none;
+
+
+}
+
+
+
+
+
+
+
+
+/* ============================= */
+/* Accessibility */
+/* ============================= */
+
+
+@media (prefers-reduced-motion:reduce){
+
 
   .library-float,
-  .animate-scroll-up,
-  .animate-scroll-down {
-    animation: none;
+
+  .animate-float,
+
+  .animate-float-reverse,
+
+  .animate-float-slow,
+
+  .luqify-track-up,
+
+  .luqify-track-down {
+
+
+    animation:none;
+
+
   }
+
 
 }

@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import {
   ArrowRight,
@@ -5,10 +7,48 @@ import {
   Sparkles,
 } from "lucide-react";
 
-import CampusShowcase from "@/components/CampusShowcase";
+import { useState } from "react";
+
 
 export default function Hero() {
+
+
+  const [leftPaused, setLeftPaused] = useState(false);
+  const [rightPaused, setRightPaused] = useState(false);
+
+
+
+  const leftImages = [
+    "/images/library-hero.jpg",
+    "/images/library-1.jpg",
+    "/images/campus-1.jpg",
+    "/images/library-2.jpg",
+    "/images/campus-2.jpg",
+    "/images/library-3.jpg",
+    "/images/campus-3.jpg",
+    "/images/library-4.jpg",
+  ];
+
+
+
+  const rightImages = [
+    "/images/founder.jpg",
+    "/images/student-1.jpg",
+    "/images/student-2.jpg",
+    "/images/student-3.jpg",
+    "/images/student-4.jpg",
+    "/images/student-5.jpg",
+    "/images/student-6.jpg",
+    "/images/student-7.jpg",
+    "/images/student-8.jpg",
+  ];
+
+
+
+
+
   return (
+
     <section
       className="
         relative
@@ -17,26 +57,46 @@ export default function Hero() {
         border-[#e8dcc8]
         bg-[#FAF7F0]
         px-6
-        py-24
+        lg:px-10
         dark:border-slate-800
         dark:bg-slate-950
       "
     >
 
-      {/* Background glow */}
+
+
+      {/* GLOW */}
+
+      <div
+        className="
+          absolute
+          -left-32
+          top-10
+          h-72
+          w-72
+          rounded-full
+          bg-[#C9A96E]/10
+          blur-3xl
+        "
+      />
+
+
       <div
         className="
           absolute
           -right-40
           -top-40
-          h-[420px]
-          w-[420px]
+          h-[450px]
+          w-[450px]
           rounded-full
           bg-[#C9A96E]/20
           blur-3xl
-          dark:bg-[#C9A96E]/10
         "
       />
+
+
+
+
 
 
       <div
@@ -46,12 +106,18 @@ export default function Hero() {
           grid
           max-w-7xl
           items-center
-          gap-16
+          gap-20
           lg:grid-cols-2
         "
       >
 
-        {/* LEFT */}
+
+
+
+
+        {/* CONTENT */}
+
+
         <div>
 
 
@@ -60,29 +126,25 @@ export default function Hero() {
               mb-6
               inline-flex
               items-center
-              gap-2
               rounded-full
               border
               border-[#e8dcc8]
               bg-white
               px-4
               py-2
-              text-sm
-              font-medium
-              text-[#3B2412]
               shadow-sm
-              dark:border-slate-700
-              dark:bg-slate-900
-              dark:text-white
             "
           >
-            <Sparkles 
+
+            <Sparkles
               size={16}
               className="text-[#C9A96E]"
             />
 
-            Digital Learning Platform
           </div>
+
+
+
 
 
 
@@ -95,17 +157,29 @@ export default function Hero() {
               tracking-tight
               text-[#3B2412]
               md:text-6xl
-              dark:text-white
             "
           >
 
             Welcome To
 
-            <span className="block text-[#C9A96E]">
+
+            <span
+              className="
+                mt-2
+                block
+                text-[#C9A96E]
+              "
+            >
+
               Luqify e-Library
+
             </span>
 
+
           </h1>
+
+
+
 
 
 
@@ -116,13 +190,17 @@ export default function Hero() {
               text-lg
               leading-relaxed
               text-[#6b5844]
-              dark:text-slate-300
             "
           >
-            A modern academic space where students can
-            discover lecture notes, exams, tutorials,
-            and learning resources in one place.
+
+            Discover lecture notes, tutorials, past papers and academic
+            resources from every faculty — all in one modern digital
+            library built for university students.
+
           </p>
+
+
+
 
 
 
@@ -135,10 +213,11 @@ export default function Hero() {
             "
           >
 
+
+
             <Link
               href="/faculties"
               className="
-                group
                 flex
                 items-center
                 gap-2
@@ -151,23 +230,17 @@ export default function Hero() {
                 shadow-lg
                 transition
                 hover:-translate-y-1
-                hover:bg-[#4b2e17]
-                dark:bg-[#C9A96E]
-                dark:text-black
               "
             >
 
               Explore Library
 
-              <ArrowRight
-                size={18}
-                className="
-                  transition
-                  group-hover:translate-x-1
-                "
-              />
+              <ArrowRight size={18}/>
 
             </Link>
+
+
+
 
 
 
@@ -185,15 +258,10 @@ export default function Hero() {
                 py-3.5
                 font-semibold
                 text-[#3B2412]
-                transition
-                hover:-translate-y-1
-                dark:border-slate-700
-                dark:bg-slate-900
-                dark:text-white
               "
             >
 
-              <Search size={18} />
+              <Search size={18}/>
 
               Search Resources
 
@@ -207,22 +275,237 @@ export default function Hero() {
 
 
 
-        {/* RIGHT VISUAL */}
+
+
+
+
+
+
+        {/* IMAGE FLOW */}
+
+
+
         <div
           className="
             relative
-            lg:translate-x-4
+            flex
+            h-[650px]
+            justify-center
+            gap-5
+            overflow-hidden
+            px-2
           "
         >
 
-          <CampusShowcase />
+
+
+
+
+          {/* TOP FADE */}
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-x-0
+              top-0
+              z-20
+              h-20
+              bg-gradient-to-b
+              from-[#020617]
+              via-[#020617]/80
+              to-transparent
+            "
+          />
+
+
+
+
+          {/* BOTTOM FADE */}
+
+          <div
+            className="
+              pointer-events-none
+              absolute
+              inset-x-0
+              bottom-0
+              z-20
+              h-20
+              bg-gradient-to-t
+              from-[#020617]
+              via-[#020617]/80
+              to-transparent
+            "
+          />
+
+
+
+
+
+
+
+          {/* LEFT FLOW */}
+
+
+
+          <div
+            className="overflow-hidden"
+            onMouseEnter={()=>setLeftPaused(true)}
+            onMouseLeave={()=>setLeftPaused(false)}
+            onTouchStart={()=>setLeftPaused(true)}
+            onTouchEnd={()=>setLeftPaused(false)}
+          >
+
+
+            <div
+              className={`
+                luqify-track-up
+                ${leftPaused ? "pause-flow" : ""}
+                cursor-grab
+                select-none
+                active:cursor-grabbing
+              `}
+            >
+
+
+
+              {[...leftImages,...leftImages].map(
+                (image,index)=>(
+
+                <div
+                  key={index}
+                  className="
+                    mb-6
+                    h-[220px]
+                    w-[230px]
+                    shrink-0
+                    overflow-hidden
+                    rounded-[2rem]
+                    shadow-2xl
+                    transition
+                    duration-300
+                    hover:scale-105
+                  "
+                >
+
+
+                  <img
+                    src={image}
+                    alt="Luqify library"
+                    draggable="false"
+                    className="
+                      h-full
+                      w-full
+                      object-cover
+                      pointer-events-none
+                    "
+                  />
+
+
+                </div>
+
+              ))}
+
+
+            </div>
+
+
+          </div>
+
+
+
+
+
+
+
+
+          {/* RIGHT FLOW */}
+
+
+
+          <div
+            className="overflow-hidden"
+            onMouseEnter={()=>setRightPaused(true)}
+            onMouseLeave={()=>setRightPaused(false)}
+            onTouchStart={()=>setRightPaused(true)}
+            onTouchEnd={()=>setRightPaused(false)}
+          >
+
+
+
+            <div
+              className={`
+                luqify-track-down
+                ${rightPaused ? "pause-flow" : ""}
+                cursor-grab
+                select-none
+                active:cursor-grabbing
+              `}
+            >
+
+
+
+              {[...rightImages,...rightImages].map(
+                (image,index)=>(
+
+
+                <div
+                  key={index}
+                  className="
+                    mb-6
+                    h-[220px]
+                    w-[230px]
+                    shrink-0
+                    overflow-hidden
+                    rounded-[2rem]
+                    shadow-2xl
+                    transition
+                    duration-300
+                    hover:scale-105
+                  "
+                >
+
+
+                  <img
+                    src={image}
+                    alt="Luqify students"
+                    draggable="false"
+                    className="
+                      h-full
+                      w-full
+                      object-cover
+                      pointer-events-none
+                    "
+                  />
+
+
+                </div>
+
+
+              ))}
+
+
+            </div>
+
+
+          </div>
+
+
+
+
+
 
         </div>
+
+
+
+
 
 
       </div>
 
 
     </section>
+
   );
 }
