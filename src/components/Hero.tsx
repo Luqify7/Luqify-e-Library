@@ -1,21 +1,18 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+
 import {
   ArrowRight,
-  Search,
-  Sparkles,
+  Upload,
 } from "lucide-react";
-
-import { useState } from "react";
 
 
 export default function Hero() {
 
-
   const [leftPaused, setLeftPaused] = useState(false);
   const [rightPaused, setRightPaused] = useState(false);
-
 
 
   const leftImages = [
@@ -30,7 +27,6 @@ export default function Hero() {
   ];
 
 
-
   const rightImages = [
     "/images/founder.jpg",
     "/images/student-1.jpg",
@@ -41,9 +37,17 @@ export default function Hero() {
     "/images/student-6.jpg",
     "/images/student-7.jpg",
     "/images/student-8.jpg",
+    "/images/student-9.jpg",
+    "/images/student-10.jpg",
+    "/images/student-11.jpg",
+    "/images/student-12.jpg",
+    "/images/student-13.jpg",
   ];
 
 
+
+  const cardShadow =
+    "shadow-[0_25px_60px_-15px_rgba(59,36,18,0.25)] hover:shadow-[0_35px_80px_-20px_rgba(201,169,110,0.45)]";
 
 
 
@@ -57,6 +61,7 @@ export default function Hero() {
         border-[#e8dcc8]
         bg-[#FAF7F0]
         px-6
+        py-20
         lg:px-10
         dark:border-slate-800
         dark:bg-slate-950
@@ -64,37 +69,32 @@ export default function Hero() {
     >
 
 
-
-      {/* GLOW */}
-
       <div
         className="
           absolute
-          -left-32
-          top-10
-          h-72
-          w-72
-          rounded-full
-          bg-[#C9A96E]/10
-          blur-3xl
-        "
-      />
-
-
-      <div
-        className="
-          absolute
-          -right-40
-          -top-40
-          h-[450px]
-          w-[450px]
+          -left-40
+          top-20
+          h-[500px]
+          w-[500px]
           rounded-full
           bg-[#C9A96E]/20
-          blur-3xl
+          blur-[120px]
         "
       />
 
 
+      <div
+        className="
+          absolute
+          right-[-200px]
+          top-[-100px]
+          h-[600px]
+          w-[600px]
+          rounded-full
+          bg-[#C9A96E]/10
+          blur-[120px]
+        "
+      />
 
 
 
@@ -106,45 +106,30 @@ export default function Hero() {
           grid
           max-w-7xl
           items-center
-          gap-20
+          gap-16
           lg:grid-cols-2
         "
       >
 
 
 
-
-
-        {/* CONTENT */}
+        {/* TEXT */}
 
 
         <div>
 
-
-          <div
+          <p
             className="
-              mb-6
-              inline-flex
-              items-center
-              rounded-full
-              border
-              border-[#e8dcc8]
-              bg-white
-              px-4
-              py-2
-              shadow-sm
+              mb-5
+              text-sm
+              font-semibold
+              uppercase
+              tracking-[0.3em]
+              text-[#C9A96E]
             "
           >
-
-            <Sparkles
-              size={16}
-              className="text-[#C9A96E]"
-            />
-
-          </div>
-
-
-
+            Welcome To
+          </p>
 
 
 
@@ -153,43 +138,37 @@ export default function Hero() {
               max-w-xl
               text-5xl
               font-black
-              leading-[1.05]
+              leading-[1]
               tracking-tight
               text-[#3B2412]
-              md:text-6xl
+              md:text-7xl
+              dark:text-white
             "
           >
 
-            Welcome To
-
+            Luqify
 
             <span
               className="
-                mt-2
                 block
                 text-[#C9A96E]
               "
             >
-
-              Luqify e-Library
-
+              e-Library
             </span>
-
 
           </h1>
 
 
 
-
-
-
           <p
             className="
-              mt-6
+              mt-7
               max-w-lg
               text-lg
               leading-relaxed
               text-[#6b5844]
+              dark:text-slate-300
             "
           >
 
@@ -202,17 +181,14 @@ export default function Hero() {
 
 
 
-
-
           <div
             className="
-              mt-8
+              mt-10
               flex
               flex-wrap
               gap-4
             "
           >
-
 
 
             <Link
@@ -221,10 +197,10 @@ export default function Hero() {
                 flex
                 items-center
                 gap-2
-                rounded-2xl
+                rounded-full
                 bg-[#3B2412]
-                px-6
-                py-3.5
+                px-7
+                py-4
                 font-semibold
                 text-white
                 shadow-lg
@@ -241,29 +217,31 @@ export default function Hero() {
 
 
 
-
-
-
             <Link
-              href="/search"
+              href="/upload"
               className="
                 flex
                 items-center
                 gap-2
-                rounded-2xl
+                rounded-full
                 border
                 border-[#d9c7aa]
                 bg-white
-                px-6
-                py-3.5
+                px-7
+                py-4
                 font-semibold
                 text-[#3B2412]
+                transition
+                hover:bg-[#f8f0e3]
+                dark:border-slate-700
+                dark:bg-slate-900
+                dark:text-white
               "
             >
 
-              <Search size={18}/>
+              <Upload size={18}/>
 
-              Search Resources
+              Uploads
 
             </Link>
 
@@ -279,9 +257,7 @@ export default function Hero() {
 
 
 
-
-
-        {/* IMAGE FLOW */}
+        {/* IMAGE COLLAGE */}
 
 
 
@@ -289,15 +265,11 @@ export default function Hero() {
           className="
             relative
             flex
-            h-[650px]
+            h-[680px]
             justify-center
-            gap-5
-            overflow-hidden
-            px-2
+            gap-2
           "
         >
-
-
 
 
 
@@ -310,14 +282,15 @@ export default function Hero() {
               inset-x-0
               top-0
               z-20
-              h-20
+              h-32
               bg-gradient-to-b
-              from-[#020617]
-              via-[#020617]/80
+              from-[#FAF7F0]
+              via-[#FAF7F0]/80
               to-transparent
+              dark:from-slate-950
+              dark:via-slate-950/80
             "
           />
-
 
 
 
@@ -330,11 +303,13 @@ export default function Hero() {
               inset-x-0
               bottom-0
               z-20
-              h-20
+              h-32
               bg-gradient-to-t
-              from-[#020617]
-              via-[#020617]/80
+              from-[#FAF7F0]
+              via-[#FAF7F0]/80
               to-transparent
+              dark:from-slate-950
+              dark:via-slate-950/80
             "
           />
 
@@ -342,14 +317,15 @@ export default function Hero() {
 
 
 
-
-
-          {/* LEFT FLOW */}
+          {/* LEFT COLUMN */}
 
 
 
           <div
-            className="overflow-hidden"
+            className="
+              relative
+              overflow-hidden
+            "
             onMouseEnter={()=>setLeftPaused(true)}
             onMouseLeave={()=>setLeftPaused(false)}
             onTouchStart={()=>setLeftPaused(true)}
@@ -361,46 +337,42 @@ export default function Hero() {
               className={`
                 luqify-track-up
                 ${leftPaused ? "pause-flow" : ""}
-                cursor-grab
-                select-none
-                active:cursor-grabbing
               `}
             >
 
 
-
-              {[...leftImages,...leftImages].map(
-                (image,index)=>(
+              {[...leftImages,...leftImages].map((image,index)=>(
 
                 <div
                   key={index}
-                  className="
-                    mb-6
-                    h-[220px]
-                    w-[230px]
-                    shrink-0
+                  className={`
+                    mb-3
                     overflow-hidden
-                    rounded-[2rem]
-                    shadow-2xl
                     transition
-                    duration-300
-                    hover:scale-105
-                  "
-                >
+                    duration-500
+                    hover:scale-[1.02]
+                    ${cardShadow}
 
+                    ${
+                      index % 3 === 0
+                      ?
+                      "h-[290px] w-[250px] rounded-[3rem_1rem_3rem_1rem]"
+                      :
+                      "h-[190px] w-[220px] rounded-[1rem_3rem_1rem_3rem]"
+                    }
+                  `}
+                >
 
                   <img
                     src={image}
-                    alt="Luqify library"
+                    alt="library"
                     draggable="false"
                     className="
                       h-full
                       w-full
                       object-cover
-                      pointer-events-none
                     "
                   />
-
 
                 </div>
 
@@ -418,13 +390,16 @@ export default function Hero() {
 
 
 
-
-          {/* RIGHT FLOW */}
+          {/* RIGHT COLUMN */}
 
 
 
           <div
-            className="overflow-hidden"
+            className="
+              relative
+              overflow-hidden
+              pt-24
+            "
             onMouseEnter={()=>setRightPaused(true)}
             onMouseLeave={()=>setRightPaused(false)}
             onTouchStart={()=>setRightPaused(true)}
@@ -432,52 +407,48 @@ export default function Hero() {
           >
 
 
-
             <div
               className={`
                 luqify-track-down
                 ${rightPaused ? "pause-flow" : ""}
-                cursor-grab
-                select-none
-                active:cursor-grabbing
               `}
             >
 
 
-
-              {[...rightImages,...rightImages].map(
-                (image,index)=>(
+              {[...rightImages,...rightImages].map((image,index)=>(
 
 
                 <div
                   key={index}
-                  className="
-                    mb-6
-                    h-[220px]
-                    w-[230px]
-                    shrink-0
+                  className={`
+                    mb-3
                     overflow-hidden
-                    rounded-[2rem]
-                    shadow-2xl
                     transition
-                    duration-300
-                    hover:scale-105
-                  "
+                    duration-500
+                    hover:scale-[1.02]
+                    ${cardShadow}
+
+                    ${
+                      index % 2 === 0
+                      ?
+                      "h-[260px] w-[240px] rounded-[3rem_3rem_1rem_3rem]"
+                      :
+                      "h-[180px] w-[220px] rounded-[1rem_3rem_1rem_3rem]"
+                    }
+                  `}
                 >
 
 
                   <img
                     src={image}
-                    alt="Luqify students"
+                    alt="students"
                     draggable="false"
                     className="
                       h-full
                       w-full
                       object-cover
-                      pointer-events-none
                     "
                   />
-
 
                 </div>
 
@@ -492,14 +463,7 @@ export default function Hero() {
 
 
 
-
-
-
         </div>
-
-
-
-
 
 
       </div>

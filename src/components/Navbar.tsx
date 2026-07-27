@@ -1,8 +1,16 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+
 import Sidebar from "./Sidebar";
 import ThemeToggle from "@/components/ThemeToggle";
-import { Search } from "lucide-react";
+
+import {
+  Bell,
+  MessageCircle,
+  Search,
+} from "lucide-react";
 
 
 export default function Navbar() {
@@ -38,14 +46,14 @@ export default function Navbar() {
       >
 
 
-        {/* LEFT SIDE */}
+        {/* LEFT */}
 
         <div className="flex items-center gap-3">
 
 
-          <div className="lg:hidden">
-            <Sidebar />
-          </div>
+          {/* SIDEBAR BUTTON */}
+
+          <Sidebar />
 
 
 
@@ -55,11 +63,8 @@ export default function Navbar() {
               flex
               items-center
               gap-3
-              transition
-              hover:opacity-90
             "
           >
-
 
             <div
               className="
@@ -88,31 +93,22 @@ export default function Navbar() {
 
 
 
+            <h1
+              className="
+                text-xl
+                font-black
+                text-[#3B2412]
+                dark:text-white
+              "
+            >
 
-            <div className="leading-tight">
+              Luqify
 
+              <span className="font-medium">
+                {" "}e-Library
+              </span>
 
-              <h1
-                className="
-                  text-xl
-                  font-black
-                  tracking-tight
-                  text-[#3B2412]
-                  dark:text-white
-                "
-              >
-
-                Luqify
-
-                <span className="font-medium">
-                  {" "}e-Library
-                </span>
-
-
-              </h1>
-
-
-            </div>
+            </h1>
 
 
           </Link>
@@ -124,18 +120,13 @@ export default function Navbar() {
 
 
 
-
-
-
-
-        {/* DESKTOP NAVIGATION */}
-
+        {/* DESKTOP MENU */}
 
         <nav
           className="
             hidden
             items-center
-            gap-10
+            gap-8
             text-sm
             font-semibold
             text-[#3B2412]
@@ -144,82 +135,36 @@ export default function Navbar() {
           "
         >
 
-
-
           <Link
             href="/"
-            className="transition hover:text-[#C9A96E]"
+            className="hover:text-[#C9A96E]"
           >
             Home
           </Link>
 
 
-
-
-
           <Link
             href="/faculties"
-            className="transition hover:text-[#C9A96E]"
+            className="hover:text-[#C9A96E]"
           >
             Library
           </Link>
 
 
-
-
-
-          <Link
-            href="/faculties"
-            className="transition hover:text-[#C9A96E]"
-          >
-            Faculties
-          </Link>
-
-
-
-
-
-
           <Link
             href="/upload"
-            className="
-              transition
-              hover:text-[#C9A96E]
-            "
+            className="hover:text-[#C9A96E]"
           >
             Uploads
           </Link>
 
 
-
-
-
-
           <Link
             href="/lt7"
-            className="
-              transition
-              hover:text-[#C9A96E]
-            "
+            className="hover:text-[#C9A96E]"
           >
             LT7
           </Link>
-
-
-
-
-
-
-          <Link
-            href="/"
-            className="
-              transition
-              hover:text-[#C9A96E]
-            "
-          >
-            About
-          </Link>
-
 
 
         </nav>
@@ -229,11 +174,7 @@ export default function Navbar() {
 
 
 
-
-
-
-        {/* CONTROLS */}
-
+        {/* RIGHT */}
 
         <div
           className="
@@ -244,10 +185,9 @@ export default function Navbar() {
         >
 
 
-
           <Link
             href="/search"
-            aria-label="Search"
+            aria-label="Search resources"
             className="
               flex
               h-10
@@ -272,13 +212,63 @@ export default function Navbar() {
 
 
 
+          <Link
+            href="/notifications"
+            aria-label="Notifications"
+            className="
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-[#C9A96E]
+              text-[#3B2412]
+              transition
+              hover:bg-[#C9A96E]
+              hover:text-white
+              dark:text-white
+            "
+          >
+
+            <Bell size={18}/>
+
+          </Link>
+
+
+
+
+          <Link
+            href="/messages"
+            aria-label="Messages"
+            className="
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-[#C9A96E]
+              text-[#3B2412]
+              transition
+              hover:bg-[#C9A96E]
+              hover:text-white
+              dark:text-white
+            "
+          >
+
+            <MessageCircle size={18}/>
+
+          </Link>
+
+
+
           <ThemeToggle />
 
 
-
         </div>
-
-
 
 
       </div>

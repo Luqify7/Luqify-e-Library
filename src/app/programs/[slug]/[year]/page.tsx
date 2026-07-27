@@ -1,11 +1,16 @@
+// src/app/programs/[slug]/[year]/page.tsx
+
 import Link from "next/link";
+
 import {
   CalendarDays,
   BookOpen,
   ChevronRight,
-  Home,
   GraduationCap,
 } from "lucide-react";
+
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { maguCommerce } from "@/data/magu-commerce";
 
 
 export default async function YearPage({
@@ -17,7 +22,16 @@ export default async function YearPage({
   }>;
 }) {
 
+
   const { slug, year } = await params;
+
+
+
+  const currentProgram =
+    maguCommerce.programmes[
+      slug as keyof typeof maguCommerce.programmes
+    ];
+
 
 
   const semesters = [
@@ -38,7 +52,23 @@ export default async function YearPage({
 
 
 
+  const yearLabel = year.replaceAll("-", " ");
+
+
+
+  const facultyName = maguCommerce.faculty;
+
+
+
+  const programName =
+    currentProgram?.name ??
+    slug.replaceAll("-", " ");
+
+
+
+
   return (
+
     <main
       className="
         min-h-screen
@@ -52,56 +82,42 @@ export default async function YearPage({
       "
     >
 
+
       <section className="mx-auto max-w-7xl">
+
 
 
         {/* Breadcrumb */}
 
-        <div
-          className="
-            mb-10
-            flex
-            flex-wrap
-            items-center
-            gap-2
-            text-sm
-            text-[#6b5845]
+        <Breadcrumbs
 
-            dark:text-slate-400
-          "
-        >
+          items={[
 
-          <Home size={16} />
-
-          <span>
-            Home
-          </span>
+            {
+              name: "Faculties",
+              href: "/faculties",
+            },
 
 
-          <ChevronRight size={16} />
+            {
+              name: facultyName,
+              href: "/faculties/commerce",
+            },
 
 
-          <span>
-            Programmes
-          </span>
+            {
+              name: programName,
+              href: `/programs/${slug}`,
+            },
 
 
-          <ChevronRight size={16} />
+            {
+              name: yearLabel,
+            },
 
+          ]}
 
-          <span className="capitalize">
-            {slug.replaceAll("-", " ")}
-          </span>
-
-
-          <ChevronRight size={16} />
-
-
-          <span className="capitalize text-[#C9A96E]">
-            {year.replaceAll("-", " ")}
-          </span>
-
-        </div>
+        />
 
 
 
@@ -112,6 +128,7 @@ export default async function YearPage({
 
         <div
           className="
+            mt-10
             rounded-[3rem]
             border
             border-[#e8dcc8]
@@ -124,6 +141,7 @@ export default async function YearPage({
           "
         >
 
+
           <div
             className="
               flex
@@ -134,6 +152,8 @@ export default async function YearPage({
               md:items-center
             "
           >
+
+
 
             <div
               className="
@@ -147,13 +167,17 @@ export default async function YearPage({
                 text-white
               "
             >
+
               <GraduationCap size={38} />
+
             </div>
 
 
 
 
+
             <div>
+
 
               <p
                 className="
@@ -169,18 +193,22 @@ export default async function YearPage({
 
 
 
+
               <h1
                 className="
                   mt-2
                   text-4xl
                   font-black
                   capitalize
-
                   md:text-6xl
                 "
               >
-                {year.replaceAll("-", " ")}
+
+                {yearLabel}
+
               </h1>
+
+
 
 
 
@@ -194,14 +222,20 @@ export default async function YearPage({
                   dark:text-slate-400
                 "
               >
-                Select a semester to access courses, lecture notes,
-                tutorials and examination resources.
+
+                Select a semester to access courses,
+                lecture notes, tutorials and examination
+                resources.
+
               </p>
+
 
             </div>
 
 
+
           </div>
+
 
 
         </div>
@@ -211,12 +245,16 @@ export default async function YearPage({
 
 
 
+
         {/* Semester Section */}
+
 
         <div className="mt-14">
 
 
+
           <div className="mb-8">
+
 
             <h2
               className="
@@ -224,8 +262,11 @@ export default async function YearPage({
                 font-black
               "
             >
+
               Choose Semester
+
             </h2>
+
 
 
             <p
@@ -236,11 +277,16 @@ export default async function YearPage({
                 dark:text-slate-400
               "
             >
+
               Select your semester to view available courses.
+
             </p>
 
 
+
           </div>
+
+
 
 
 
@@ -250,149 +296,155 @@ export default async function YearPage({
             className="
               grid
               gap-8
-
               md:grid-cols-2
             "
           >
 
-            {semesters.map((semester) => (
-
-              <Link
-                key={semester.slug}
-                href={`/programs/${slug}/${year}/${semester.slug}`}
-
-                className="
-                  group
-
-                  rounded-[2.5rem]
-
-                  border
-                  border-[#e8dcc8]
-
-                  bg-white
-
-                  p-8
-
-                  shadow-sm
-
-                  transition-all
-                  duration-300
-
-                  hover:-translate-y-2
-                  hover:shadow-xl
 
 
-                  dark:border-slate-700
-                  dark:bg-slate-900
-                "
-              >
+            {
+              semesters.map((semester)=>(
 
 
-                <div
+                <Link
+
+                  key={semester.slug}
+
+                  href={`/programs/${slug}/${year}/${semester.slug}`}
+
                   className="
-                    flex
-                    h-16
-                    w-16
-                    items-center
-                    justify-center
-
-                    rounded-2xl
-
-                    bg-[#FAF7F0]
-
-                    text-[#3B2412]
-
-                    dark:bg-slate-800
-                    dark:text-white
-                  "
-                >
-                  <CalendarDays size={30} />
-                </div>
-
-
-
-
-
-                <h3
-                  className="
-                    mt-6
-
-                    text-3xl
-
-                    font-black
-                  "
-                >
-                  {semester.name}
-                </h3>
-
-
-
-
-                <p
-                  className="
-                    mt-3
-
-                    text-sm
-
-                    leading-6
-
-                    text-[#6b5845]
-
-                    dark:text-slate-400
-                  "
-                >
-                  {semester.description}
-                </p>
-
-
-
-
-
-                <div
-                  className="
-                    mt-6
-
-                    flex
-                    items-center
-                    gap-3
-
-                    font-bold
-
-                    text-[#C9A96E]
-
+                    group
+                    rounded-[2.5rem]
+                    border
+                    border-[#e8dcc8]
+                    bg-white
+                    p-8
+                    shadow-sm
                     transition-all
+                    duration-300
+                    hover:-translate-y-2
+                    hover:shadow-xl
 
-                    group-hover:gap-5
+                    dark:border-slate-700
+                    dark:bg-slate-900
                   "
+
                 >
 
-                  <BookOpen size={18} />
-
-                  <span>
-                    Open Semester
-                  </span>
 
 
-                  <ChevronRight size={18} />
+                  <div
+                    className="
+                      flex
+                      h-16
+                      w-16
+                      items-center
+                      justify-center
+                      rounded-2xl
+                      bg-[#FAF7F0]
+                      text-[#3B2412]
 
-                </div>
+                      dark:bg-slate-800
+                      dark:text-white
+                    "
+                  >
+
+                    <CalendarDays size={30}/>
+
+                  </div>
 
 
 
-              </Link>
 
-            ))}
+
+
+                  <h3
+                    className="
+                      mt-6
+                      text-3xl
+                      font-black
+                    "
+                  >
+
+                    {semester.name}
+
+                  </h3>
+
+
+
+
+
+
+                  <p
+                    className="
+                      mt-3
+                      text-sm
+                      leading-6
+                      text-[#6b5845]
+
+                      dark:text-slate-400
+                    "
+                  >
+
+                    {semester.description}
+
+                  </p>
+
+
+
+
+
+
+                  <div
+                    className="
+                      mt-6
+                      flex
+                      items-center
+                      gap-3
+                      font-bold
+                      text-[#C9A96E]
+                      transition-all
+                      group-hover:gap-5
+                    "
+                  >
+
+                    <BookOpen size={18}/>
+
+
+                    <span>
+                      Open Semester
+                    </span>
+
+
+                    <ChevronRight size={18}/>
+
+
+                  </div>
+
+
+
+
+                </Link>
+
+
+              ))
+            }
+
 
 
           </div>
 
 
+
         </div>
+
 
 
       </section>
 
 
     </main>
+
   );
+
 }

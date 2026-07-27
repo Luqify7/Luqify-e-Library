@@ -1,11 +1,7 @@
 import UploadForm from "@/components/UploadForm";
 
-
 export default function UploadPage() {
-
-
   return (
-
     <main
       className="
         min-h-screen
@@ -15,22 +11,18 @@ export default function UploadPage() {
         dark:bg-slate-950
       "
     >
-
       <div
         className="
           mx-auto
           max-w-3xl
         "
       >
-
-
         <div
           className="
             mb-10
             text-center
           "
         >
-
           <h1
             className="
               text-4xl
@@ -42,7 +34,6 @@ export default function UploadPage() {
             Upload Academic Resource
           </h1>
 
-
           <p
             className="
               mt-4
@@ -51,22 +42,12 @@ export default function UploadPage() {
             "
           >
             Share lecture notes, tutorials, past papers and study materials
-            with the Luqify student community.
+            with the Luqify e-Library student community.
           </p>
-
-
         </div>
 
-
-
         <UploadForm />
-
-
       </div>
-
-
     </main>
-
   );
-
 }

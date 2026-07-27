@@ -1,4 +1,7 @@
 export const courses = [
+
+  // YEAR 1 - SEMESTER 1
+
   {
     slug: "financial-accounting",
     name: "Financial Accounting",
@@ -30,4 +33,24 @@ export const courses = [
     year: "year-1",
     semester: "semester-1",
   },
+
+
+  // YEAR 2 - SEMESTER 1
+
+  {
+    slug: "financial-accounting",
+    name: "Financial Accounting",
+    program: "bachelor-of-accountancy",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "accounting",
+    name: "Accounting",
+    program: "bachelor-of-accountancy",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
 ];

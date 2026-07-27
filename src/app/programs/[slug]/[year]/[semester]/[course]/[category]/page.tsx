@@ -1,11 +1,34 @@
 import {
   FileText,
-  Download,
-  ChevronRight,
-  Home,
 } from "lucide-react";
 
-import { resources } from "@/data/resources";
+import { supabase } from "@/lib/supabase";
+import ResourceActions from "@/components/ResourceActions";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { programs } from "@/data/programs";
+
+
+function formatFileSize(bytes?: number) {
+
+  if (!bytes) return "Unknown size";
+
+  const sizes = [
+    "Bytes",
+    "KB",
+    "MB",
+    "GB",
+  ];
+
+  const index = Math.floor(
+    Math.log(bytes) / Math.log(1024)
+  );
+
+  return `${(
+    bytes / Math.pow(1024, index)
+  ).toFixed(1)} ${sizes[index]}`;
+
+}
+
 
 
 export default async function ResourceCategoryPage({
@@ -20,6 +43,7 @@ export default async function ResourceCategoryPage({
   }>;
 }) {
 
+
   const {
     slug,
     year,
@@ -29,17 +53,78 @@ export default async function ResourceCategoryPage({
   } = await params;
 
 
-  const filteredResources = resources.filter(
-    (resource) =>
-      resource.program === slug &&
-      resource.year === year &&
-      resource.semester === semester &&
-      resource.course === course &&
-      resource.category === category
+
+  const currentProgram = programs.find(
+    (program) => program.slug === slug
   );
 
 
+  const facultyName = currentProgram?.faculty
+    ? currentProgram.faculty
+        .replaceAll("-", " ")
+        .replace(/\b\w/g, (char) => char.toUpperCase())
+    : "Faculty";
+
+
+  const programName =
+    currentProgram?.name ??
+    slug.replaceAll("-", " ");
+
+
+
+  const yearName =
+    year
+      .replaceAll("-", " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+
+
+
+  const semesterName =
+    semester
+      .replaceAll("-", " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+
+
+
+  const courseName =
+    course
+      .replaceAll("-", " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+
+
+
+  const categoryName =
+    category
+      .replaceAll("-", " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+
+
+
+  const {
+    data: filteredResources,
+    error,
+  } = await supabase
+    .from("resources")
+    .select("*")
+    .ilike("programme", slug)
+    .ilike("year", yearName)
+    .ilike("semester", semesterName)
+    .ilike("course", courseName)
+    .ilike("category", categoryName);
+
+
+
+  if (error) {
+    console.log(
+      "RESOURCE FETCH ERROR:",
+      error.message
+    );
+  }
+
+
+
   return (
+
     <main
       className="
         min-h-screen
@@ -58,35 +143,48 @@ export default async function ResourceCategoryPage({
 
         {/* Breadcrumb */}
 
-        <div
-          className="
-            mb-10
-            flex
-            flex-wrap
-            items-center
-            gap-2
-            text-sm
-            text-[#6b5845]
+        <Breadcrumbs
+          items={[
+            {
+              name: "Faculties",
+              href: "/faculties",
+            },
 
-            dark:text-slate-400
-          "
-        >
+            {
+              name: facultyName,
+              href: `/faculties/${currentProgram?.faculty}`,
+            },
 
-          <Home size={16} />
+            {
+              name: programName,
+              href: `/programs/${slug}`,
+            },
 
-          <span>Home</span>
+            {
+              name: yearName,
+              href: `/programs/${slug}/${year}`,
+            },
 
-          <ChevronRight size={16} />
+            {
+              name: semesterName,
+              href:
+                `/programs/${slug}/${year}/${semester}`,
+            },
 
-          <span>Resources</span>
+            {
+              name: courseName,
+              href:
+                `/programs/${slug}/${year}/${semester}/${course}`,
+            },
 
-          <ChevronRight size={16} />
+            {
+              name: categoryName,
+            },
 
-          <span className="capitalize text-[#C9A96E]">
-            {category.replaceAll("-", " ")}
-          </span>
+          ]}
+        />
 
-        </div>
+
 
 
 
@@ -119,6 +217,7 @@ export default async function ResourceCategoryPage({
           </p>
 
 
+
           <h1
             className="
               mt-3
@@ -129,22 +228,25 @@ export default async function ResourceCategoryPage({
               md:text-6xl
             "
           >
-            {category.replaceAll("-", " ")}
+            {categoryName}
           </h1>
+
 
 
           <p
             className="
               mt-4
               text-[#6b5845]
-
               dark:text-slate-400
             "
           >
-            {filteredResources.length} resources available
+            {filteredResources?.length ?? 0} resources available
           </p>
 
+
         </div>
+
+
 
 
 
@@ -153,26 +255,25 @@ export default async function ResourceCategoryPage({
 
         <section className="mt-12">
 
+
           <div className="grid gap-6">
 
 
-            {filteredResources.length > 0 ? (
+          {
+            filteredResources &&
+            filteredResources.length > 0 ? (
 
-              filteredResources.map((resource) => (
+              filteredResources.map((resource)=>(
 
-                <a
-                  key={`${resource.title}-${resource.file}`}
-                  href={resource.file}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <div
+                  key={resource.id}
+
                   className="
-                    group
                     flex
-                    items-center
-                    justify-between
+                    flex-col
+                    gap-5
 
                     rounded-3xl
-
                     border
                     border-[#e8dcc8]
 
@@ -186,6 +287,11 @@ export default async function ResourceCategoryPage({
 
                     hover:-translate-y-1
                     hover:shadow-lg
+
+                    md:flex-row
+                    md:items-center
+                    md:justify-between
+
 
                     dark:border-slate-700
                     dark:bg-slate-900
@@ -220,33 +326,29 @@ export default async function ResourceCategoryPage({
                       "
                     >
 
-                      <FileText size={28} />
+                      <FileText size={28}/>
 
                     </div>
 
 
 
+
                     <div>
 
-                      <h2
-                        className="
-                          text-lg
-                          font-bold
-                        "
-                      >
+                      <h2 className="text-lg font-bold">
                         {resource.title}
                       </h2>
 
 
-                      <p
-                        className="
-                          mt-1
-                          text-sm
-                          text-slate-500
-                        "
-                      >
-                        Academic Material
+                      <p className="mt-1 text-sm text-slate-500">
+                        {resource.file_name || "Academic Material"}
                       </p>
+
+
+                      <p className="mt-1 text-xs text-slate-400">
+                        {formatFileSize(resource.file_size)}
+                      </p>
+
 
                     </div>
 
@@ -255,17 +357,14 @@ export default async function ResourceCategoryPage({
 
 
 
-                  <Download
-                    size={22}
-                    className="
-                      text-[#C9A96E]
-                      transition
-                      group-hover:scale-110
-                    "
+
+                  <ResourceActions
+                    fileUrl={resource.file_url}
+                    fileName={resource.file_name}
                   />
 
 
-                </a>
+                </div>
 
               ))
 
@@ -284,19 +383,26 @@ export default async function ResourceCategoryPage({
                   dark:bg-slate-900
                 "
               >
+
                 No resources uploaded yet
+
               </div>
 
-            )}
+            )
+
+          }
 
 
           </div>
+
 
         </section>
 
 
       </section>
 
+
     </main>
+
   );
 }

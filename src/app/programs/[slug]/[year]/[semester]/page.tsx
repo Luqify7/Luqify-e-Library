@@ -1,13 +1,14 @@
 import Link from "next/link";
+
 import {
   BookOpen,
   GraduationCap,
   ChevronRight,
-  Home,
   Layers,
 } from "lucide-react";
 
-import { courses } from "@/data/courses";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { maguCommerce } from "@/data/magu-commerce";
 
 
 export default async function SemesterPage({
@@ -20,28 +21,99 @@ export default async function SemesterPage({
   }>;
 }) {
 
+
   const { slug, year, semester } = await params;
 
 
 
-  const semesterCourses = courses.filter(
-    (course) =>
-      course.program === slug &&
-      course.year === year &&
-      course.semester === semester
+  const currentProgram =
+    maguCommerce.programmes[
+      slug as keyof typeof maguCommerce.programmes
+    ];
+
+
+
+  const yearNumber = Number(
+    year.replace("year-", "")
+  );
+
+
+  const semesterNumber = Number(
+    semester.replace("semester-", "")
   );
 
 
 
+
+  let semesterCourses:
+    readonly (readonly [string, string])[] = [];
+
+
+
+
+  if (yearNumber <= 2) {
+
+    semesterCourses =
+      maguCommerce.commonCore.years[
+        yearNumber as 1 | 2
+      ]
+      .semesters[
+        semesterNumber as 1 | 2
+      ];
+
+  }
+
+
+
+  else if (currentProgram) {
+
+
+    semesterCourses =
+      currentProgram.years[
+        yearNumber as 3 | 4
+      ]
+      .semesters[
+        semesterNumber as 1 | 2
+      ];
+
+  }
+
+
+
+
+
+  const facultyName =
+    maguCommerce.faculty;
+
+
+
+  const programName =
+    currentProgram?.name ??
+    slug.replaceAll("-", " ");
+
+
+
+  const yearName =
+    year.replaceAll("-", " ");
+
+
+
+  const semesterName =
+    semester.replaceAll("-", " ");
+
+
+
+
+
+
   return (
+
     <main
       className="
         min-h-screen
         bg-[#FAF7F0]
-
         px-6
         py-16
-
         text-[#3B2412]
 
         dark:bg-slate-950
@@ -49,96 +121,81 @@ export default async function SemesterPage({
       "
     >
 
+
       <section className="mx-auto max-w-7xl">
 
 
 
-        {/* Breadcrumb */}
+        <Breadcrumbs
+
+          items={[
+
+            {
+              name: "Faculties",
+              href: "/faculties",
+            },
+
+
+            {
+              name: facultyName,
+              href: "/faculties/commerce",
+            },
+
+
+            {
+              name: programName,
+              href: `/programs/${slug}`,
+            },
+
+
+            {
+              name: yearName,
+              href: `/programs/${slug}/${year}`,
+            },
+
+
+            {
+              name: semesterName,
+            },
+
+          ]}
+
+        />
+
+
+
+
+
+
+
 
         <div
           className="
-            mb-10
-            flex
-            flex-wrap
-            items-center
-            gap-2
-
-            text-sm
-            text-[#6b5845]
-
-            dark:text-slate-400
-          "
-        >
-
-          <Home size={16} />
-
-          <span>
-            Home
-          </span>
-
-
-          <ChevronRight size={16} />
-
-
-          <span>
-            Library
-          </span>
-
-
-          <ChevronRight size={16} />
-
-
-          <span className="capitalize">
-            {year.replaceAll("-", " ")}
-          </span>
-
-
-          <ChevronRight size={16} />
-
-
-          <span className="capitalize text-[#C9A96E]">
-            {semester.replaceAll("-", " ")}
-          </span>
-
-
-        </div>
-
-
-
-
-
-
-        {/* Header */}
-
-        <div
-          className="
+            mt-10
             rounded-[3rem]
-
             border
             border-[#e8dcc8]
-
             bg-white
-
             p-10
-
             shadow-sm
-
 
             dark:border-slate-800
             dark:bg-slate-900
           "
         >
 
+
+
           <div
             className="
               flex
               flex-col
               gap-6
-
               md:flex-row
               md:items-center
             "
           >
+
 
 
             <div
@@ -148,21 +205,22 @@ export default async function SemesterPage({
                 w-20
                 items-center
                 justify-center
-
                 rounded-3xl
-
                 bg-[#3B2412]
-
                 text-white
               "
             >
+
               <BookOpen size={38}/>
+
             </div>
 
 
 
 
+
             <div>
+
 
               <p
                 className="
@@ -170,12 +228,15 @@ export default async function SemesterPage({
                   font-bold
                   uppercase
                   tracking-wider
-
                   text-[#C9A96E]
                 "
               >
+
                 Course Library
+
               </p>
+
+
 
 
 
@@ -185,12 +246,14 @@ export default async function SemesterPage({
                   text-4xl
                   font-black
                   capitalize
-
                   md:text-6xl
                 "
               >
-                {semester.replaceAll("-", " ")}
+
+                {semesterName}
+
               </h1>
+
 
 
 
@@ -203,7 +266,9 @@ export default async function SemesterPage({
                   dark:text-slate-400
                 "
               >
+
                 Browse available courses and access academic resources.
+
               </p>
 
 
@@ -214,17 +279,17 @@ export default async function SemesterPage({
 
 
 
+
+
+
           <div
             className="
               mt-8
-
               flex
               items-center
               gap-3
-
               text-sm
               font-semibold
-
               text-[#C9A96E]
             "
           >
@@ -236,6 +301,7 @@ export default async function SemesterPage({
           </div>
 
 
+
         </div>
 
 
@@ -244,7 +310,7 @@ export default async function SemesterPage({
 
 
 
-        {/* Courses */}
+
 
         <section className="mt-14">
 
@@ -255,164 +321,178 @@ export default async function SemesterPage({
               font-black
             "
           >
+
             Courses
+
           </h2>
+
+
+
 
 
 
           <div
             className="
               mt-8
-
               grid
               gap-8
-
               md:grid-cols-2
             "
           >
 
 
-            {semesterCourses.length > 0 ? (
 
-              semesterCourses.map((course) => (
+            {
+              semesterCourses.length > 0 ? (
 
-                <Link
-                  key={course.slug}
-                  href={`/programs/${slug}/${year}/${semester}/${course.slug}`}
 
+                semesterCourses.map((course)=>(
+
+
+                  <Link
+
+                    key={course[1]}
+
+                    href={`/programs/${slug}/${year}/${semester}/${course[1]}`}
+
+                    className="
+                      group
+                      rounded-[2.5rem]
+                      border
+                      border-[#e8dcc8]
+                      bg-white
+                      p-8
+                      shadow-sm
+                      transition-all
+                      duration-300
+                      hover:-translate-y-2
+                      hover:shadow-xl
+
+                      dark:border-slate-700
+                      dark:bg-slate-900
+                    "
+
+                  >
+
+
+
+
+                    <div
+                      className="
+                        flex
+                        h-16
+                        w-16
+                        items-center
+                        justify-center
+                        rounded-2xl
+                        bg-[#FAF7F0]
+                        text-[#3B2412]
+
+                        dark:bg-slate-800
+                        dark:text-white
+                      "
+                    >
+
+                      <GraduationCap size={30}/>
+
+                    </div>
+
+
+
+
+
+
+                    <h3
+                      className="
+                        mt-6
+                        text-2xl
+                        font-black
+                      "
+                    >
+
+                      {course[0]}
+
+                    </h3>
+
+
+
+
+
+
+                    <div
+                      className="
+                        mt-6
+                        flex
+                        items-center
+                        gap-3
+                        font-bold
+                        text-[#C9A96E]
+                        transition-all
+                        group-hover:gap-5
+                      "
+                    >
+
+                      <span>
+                        Open Course
+                      </span>
+
+
+                      <ChevronRight size={18}/>
+
+
+                    </div>
+
+
+
+
+                  </Link>
+
+
+                ))
+
+
+              ) : (
+
+
+                <div
                   className="
-                    group
-
-                    rounded-[2.5rem]
-
+                    rounded-[2rem]
                     border
                     border-[#e8dcc8]
-
                     bg-white
-
                     p-8
-
-                    shadow-sm
-
-                    transition-all
-                    duration-300
-
-                    hover:-translate-y-2
-                    hover:shadow-xl
-
+                    text-slate-500
 
                     dark:border-slate-700
                     dark:bg-slate-900
+                    dark:text-slate-400
                   "
                 >
 
+                  No courses available yet.
 
-                  <div
-                    className="
-                      flex
-                      h-16
-                      w-16
-                      items-center
-                      justify-center
-
-                      rounded-2xl
-
-                      bg-[#FAF7F0]
-
-                      text-[#3B2412]
-
-                      dark:bg-slate-800
-                      dark:text-white
-                    "
-                  >
-
-                    <GraduationCap size={30}/>
-
-                  </div>
+                </div>
 
 
+              )
+            }
 
-
-                  <h3
-                    className="
-                      mt-6
-
-                      text-2xl
-
-                      font-black
-                    "
-                  >
-                    {course.name}
-                  </h3>
-
-
-
-
-                  <div
-                    className="
-                      mt-6
-
-                      flex
-                      items-center
-                      gap-3
-
-                      font-bold
-
-                      text-[#C9A96E]
-
-                      transition-all
-
-                      group-hover:gap-5
-                    "
-                  >
-
-                    Open Course
-
-                    <ChevronRight size={18}/>
-
-                  </div>
-
-
-                </Link>
-
-              ))
-
-            ) : (
-
-              <div
-                className="
-                  rounded-[2rem]
-
-                  border
-                  border-[#e8dcc8]
-
-                  bg-white
-
-                  p-8
-
-                  text-slate-500
-
-
-                  dark:border-slate-700
-                  dark:bg-slate-900
-                  dark:text-slate-400
-                "
-              >
-                No courses uploaded yet
-              </div>
-
-            )}
 
 
           </div>
 
 
+
         </section>
+
 
 
       </section>
 
 
+
     </main>
+
   );
+
 }

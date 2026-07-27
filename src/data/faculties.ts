@@ -1,40 +1,62 @@
 export const faculties = [
+
   {
-    name: "Faculty of Commerce",
+    name: "Faculty of Commerce and Management",
     slug: "commerce",
 
     programs: [
-      {
-        name: "Bachelor of Accountancy",
-        slug: "bachelor-of-accountancy",
-      },
 
       {
-        name: "Bachelor of Business Administration",
-        slug: "bachelor-of-business-administration",
+        name: "Bachelor of Commerce Accounting",
+        slug: "accounting",
       },
 
-      {
-        name: "Bachelor of Marketing",
-        slug: "bachelor-of-marketing",
-      },
 
       {
-        name: "Bachelor of Human Resource Management",
-        slug: "bachelor-of-human-resource-management",
+        name: "Bachelor of Commerce Banking and Finance",
+        slug: "banking-and-finance",
       },
 
-      {
-        name: "Bachelor of Insurance and Risk Management",
-        slug: "bachelor-of-insurance-and-risk-management",
-      },
 
       {
-        name: "Bachelor of Monitoring and Evaluation",
-        slug: "bachelor-of-monitoring-and-evaluation",
+        name: "Bachelor of Commerce Business Administration",
+        slug: "business-administration",
       },
+
+
+      {
+        name: "Bachelor of Commerce Human Resource Management",
+        slug: "human-resource-management",
+      },
+
+
+      {
+        name: "Bachelor of Commerce Marketing",
+        slug: "marketing",
+      },
+
+
+      {
+        name: "Bachelor of Commerce Monitoring and Evaluation",
+        slug: "monitoring-and-evaluation",
+      },
+
+
+      {
+        name: "Bachelor of Commerce Insurance",
+        slug: "insurance",
+      },
+
+
+      {
+        name: "Bachelor of Science in Business Information Systems",
+        slug: "business-information-systems",
+      },
+
     ],
+
   },
+
 
 
   {
@@ -42,10 +64,14 @@ export const faculties = [
     slug: "education",
 
     programs: [
+
       {
         name: "Bachelor of Education",
-        slug: "bachelor-of-education",
+        slug: "education",
       },
+
     ],
+
   },
+
 ];

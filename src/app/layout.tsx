@@ -1,21 +1,31 @@
 import ThemeProvider from "@/components/ThemeProvider";
 import type { Metadata } from "next";
 import "./globals.css";
+
 import LT7Widget from "@/components/LT7Widget";
+
 
 export const metadata: Metadata = {
   title: "Luqify e-Library",
   description: "Digital academic library",
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
+    >
+
       <body>
+
         <ThemeProvider>
 
           {children}
@@ -23,7 +33,9 @@ export default function RootLayout({
           <LT7Widget />
 
         </ThemeProvider>
+
       </body>
+
     </html>
   );
 }

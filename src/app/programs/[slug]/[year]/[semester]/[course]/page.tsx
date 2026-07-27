@@ -3,12 +3,14 @@ import {
   Video,
   FileText,
   ChevronRight,
-  Home,
   Layers,
 } from "lucide-react";
 
 import Link from "next/link";
-import { resources } from "@/data/resources";
+
+import { supabase } from "@/lib/supabase";
+import Breadcrumbs from "@/components/Breadcrumbs";
+import { maguCommerce } from "@/data/magu-commerce";
 
 
 export default async function CoursePage({
@@ -22,56 +24,139 @@ export default async function CoursePage({
   }>;
 }) {
 
+
   const { slug, year, semester, course } = await params;
 
 
 
+  const cleanYear =
+    year.replace("year-", "");
+
+
+
+  const cleanSemester =
+    semester.replace("semester-", "");
+
+
+
+
+  const currentProgram =
+    maguCommerce.programmes[
+      slug as keyof typeof maguCommerce.programmes
+    ];
+
+
+
+  const facultyName =
+    maguCommerce.faculty;
+
+
+
+  const programName =
+    currentProgram?.name ??
+    slug.replaceAll("-", " ");
+
+
+
+
+  const yearName =
+    year.replaceAll("-", " ");
+
+
+
+  const semesterName =
+    semester.replaceAll("-", " ");
+
+
+
+
+  const courseDisplayName =
+    course
+      .replaceAll("-", " ")
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+
+
+
+
+
+
+  const { data: uploadedResources } = await supabase
+
+    .from("resources")
+
+    .select("*")
+
+    .eq("programme", slug)
+
+    .eq("year", cleanYear)
+
+    .eq("semester", cleanSemester)
+
+    .ilike("course", courseDisplayName);
+
+
+
+
+
+
+
   const categories = [
+
     {
       name: "Lecture Notes",
       slug: "lecture-notes",
       icon: <BookOpen size={30} />,
-      category: "lecture-notes",
-      description: "Study materials and course notes.",
+      category: "lecture notes",
+      description:
+        "Study materials and course notes.",
     },
+
 
     {
       name: "Tutorials",
       slug: "tutorials",
       icon: <Video size={30} />,
-      category: "tutorials",
-      description: "Practice questions and exercises.",
+      category: "tutorial",
+      description:
+        "Practice questions and exercises.",
     },
 
-    {
-      name: "Mid Semester Exam Papers",
-      slug: "mid-semester-exams",
-      icon: <FileText size={30} />,
-      category: "mid-semester-exams",
-      description: "Previous mid-semester examinations.",
-    },
 
     {
-      name: "End Semester Exam Papers",
-      slug: "end-semester-exams",
-      icon: <FileText size={30} />,
-      category: "end-semester-exams",
-      description: "Previous final examinations.",
+      name: "Study Guides",
+      slug: "study-guides",
+      icon: <BookOpen size={30} />,
+      category: "study guide",
+      description:
+        "Helpful study materials and summaries.",
     },
+
+
+    {
+      name: "Exam Papers",
+      slug: "exam-papers",
+      icon: <FileText size={30} />,
+      category: "exam",
+      description:
+        "Previous examination materials.",
+    },
+
   ];
 
 
 
 
+
+
+
   return (
+
     <main
       className="
         min-h-screen
         bg-[#FAF7F0]
-
         px-6
         py-16
-
         text-[#3B2412]
 
         dark:bg-slate-950
@@ -79,86 +164,81 @@ export default async function CoursePage({
       "
     >
 
+
       <section className="mx-auto max-w-7xl">
 
 
 
-        {/* Breadcrumb */}
+        <Breadcrumbs
+
+          items={[
+
+            {
+              name: "Faculties",
+              href: "/faculties",
+            },
+
+
+            {
+              name: facultyName,
+              href: "/faculties/commerce",
+            },
+
+
+            {
+              name: programName,
+              href: `/programs/${slug}`,
+            },
+
+
+            {
+              name: yearName,
+              href: `/programs/${slug}/${year}`,
+            },
+
+
+            {
+              name: semesterName,
+              href:
+                `/programs/${slug}/${year}/${semester}`,
+            },
+
+
+            {
+              name: courseDisplayName,
+            },
+
+          ]}
+
+        />
+
+
+
+
+
+
 
         <div
           className="
-            mb-10
-
-            flex
-            flex-wrap
-            items-center
-            gap-2
-
-            text-sm
-
-            text-[#6b5845]
-
-            dark:text-slate-400
-          "
-        >
-
-          <Home size={16}/>
-
-          <span>
-            Home
-          </span>
-
-
-          <ChevronRight size={16}/>
-
-
-          <span>
-            Courses
-          </span>
-
-
-          <ChevronRight size={16}/>
-
-
-          <span className="capitalize text-[#C9A96E]">
-            {course.replaceAll("-", " ")}
-          </span>
-
-        </div>
-
-
-
-
-
-
-
-        {/* Course Header */}
-
-        <div
-          className="
+            mt-10
             rounded-[3rem]
-
             border
             border-[#e8dcc8]
-
             bg-white
-
             p-10
-
             shadow-sm
-
 
             dark:border-slate-800
             dark:bg-slate-900
           "
         >
 
+
           <div
             className="
               flex
               flex-col
               gap-6
-
               md:flex-row
               md:items-center
             "
@@ -172,11 +252,8 @@ export default async function CoursePage({
                 w-20
                 items-center
                 justify-center
-
                 rounded-3xl
-
                 bg-[#3B2412]
-
                 text-white
               "
             >
@@ -198,7 +275,6 @@ export default async function CoursePage({
                   font-bold
                   uppercase
                   tracking-wider
-
                   text-[#C9A96E]
                 "
               >
@@ -211,17 +287,15 @@ export default async function CoursePage({
               <h1
                 className="
                   mt-2
-
                   text-4xl
-
                   font-black
-
                   capitalize
-
                   md:text-6xl
                 "
               >
-                {course.replaceAll("-", " ")}
+
+                {courseDisplayName}
+
               </h1>
 
 
@@ -230,16 +304,17 @@ export default async function CoursePage({
               <p
                 className="
                   mt-4
-
                   text-[#6b5845]
-
                   dark:text-slate-400
                 "
               >
-                {year.replaceAll("-", " ")}
+
+                {yearName}
                 {" • "}
-                {semester.replaceAll("-", " ")}
+                {semesterName}
+
               </p>
+
 
 
             </div>
@@ -250,18 +325,16 @@ export default async function CoursePage({
 
 
 
+
+
           <div
             className="
               mt-8
-
               flex
               items-center
               gap-3
-
               text-sm
-
               font-semibold
-
               text-[#C9A96E]
             "
           >
@@ -273,6 +346,7 @@ export default async function CoursePage({
           </div>
 
 
+
         </div>
 
 
@@ -280,8 +354,6 @@ export default async function CoursePage({
 
 
 
-
-        {/* Categories */}
 
 
         <section className="mt-14">
@@ -293,7 +365,9 @@ export default async function CoursePage({
               font-black
             "
           >
+
             Available Resources
+
           </h2>
 
 
@@ -301,14 +375,15 @@ export default async function CoursePage({
           <p
             className="
               mt-3
-
               text-[#6b5845]
-
               dark:text-slate-400
             "
           >
+
             Access notes, tutorials and examination materials.
+
           </p>
+
 
 
 
@@ -317,184 +392,179 @@ export default async function CoursePage({
           <div
             className="
               mt-8
-
               grid
-
               gap-8
-
               md:grid-cols-2
             "
           >
 
 
 
-            {categories.map((item)=>{
+            {
+              categories.map((item)=>{
 
 
-              const count = resources.filter(
-                (resource)=>
-                  resource.program === slug &&
-                  resource.year === year &&
-                  resource.semester === semester &&
-                  resource.course === course &&
-                  resource.category === item.category
-              ).length;
+                const count =
+                  uploadedResources?.filter(
+                    (resource)=>
+                      resource.category
+                        ?.toLowerCase()
+                        .includes(item.category)
+                  ).length ?? 0;
 
 
 
+                return (
 
-              return (
+                  <Link
 
-                <Link
-                  key={item.slug}
-                  href={`/programs/${slug}/${year}/${semester}/${course}/${item.slug}`}
+                    key={item.slug}
 
-                  className="
-                    group
+                    href={`/programs/${slug}/${year}/${semester}/${course}/${item.slug}`}
 
-                    rounded-[2.5rem]
-
-                    border
-                    border-[#e8dcc8]
-
-                    bg-white
-
-                    p-8
-
-                    shadow-sm
-
-                    transition-all
-                    duration-300
-
-                    hover:-translate-y-2
-                    hover:shadow-xl
-
-
-                    dark:border-slate-700
-                    dark:bg-slate-900
-                  "
-                >
-
-
-                  <div
                     className="
-                      flex
-                      items-center
-                      justify-between
+                      group
+                      rounded-[2.5rem]
+                      border
+                      border-[#e8dcc8]
+                      bg-white
+                      p-8
+                      shadow-sm
+                      transition-all
+                      duration-300
+                      hover:-translate-y-2
+                      hover:shadow-xl
+
+                      dark:border-slate-700
+                      dark:bg-slate-900
                     "
+
                   >
+
 
 
                     <div
                       className="
                         flex
-                        h-16
-                        w-16
                         items-center
-                        justify-center
-
-                        rounded-2xl
-
-                        bg-[#FAF7F0]
-
-                        text-[#3B2412]
-
-                        dark:bg-slate-800
-                        dark:text-white
+                        justify-between
                       "
                     >
 
-                      {item.icon}
+
+                      <div
+                        className="
+                          flex
+                          h-16
+                          w-16
+                          items-center
+                          justify-center
+                          rounded-2xl
+                          bg-[#FAF7F0]
+                          text-[#3B2412]
+
+                          dark:bg-slate-800
+                          dark:text-white
+                        "
+                      >
+
+                        {item.icon}
+
+                      </div>
+
+
+
+
+                      <ChevronRight
+                        size={22}
+                        className="
+                          text-slate-400
+                          transition-all
+                          group-hover:translate-x-1
+                        "
+                      />
+
+
 
                     </div>
 
 
 
-                    <ChevronRight
-                      size={22}
+
+
+                    <h3
                       className="
-                        text-slate-400
-                        transition-all
-                        group-hover:translate-x-1
+                        mt-6
+                        text-2xl
+                        font-black
                       "
-                    />
+                    >
 
-                  </div>
+                      {item.name}
 
-
-
-
-
-                  <h3
-                    className="
-                      mt-6
-
-                      text-2xl
-
-                      font-black
-
-                      capitalize
-                    "
-                  >
-                    {item.name}
-                  </h3>
+                    </h3>
 
 
 
 
 
-                  <p
-                    className="
-                      mt-3
+                    <p
+                      className="
+                        mt-3
+                        text-sm
+                        text-[#6b5845]
+                        dark:text-slate-400
+                      "
+                    >
 
-                      text-sm
+                      {item.description}
 
-                      text-[#6b5845]
-
-                      dark:text-slate-400
-                    "
-                  >
-                    {item.description}
-                  </p>
-
+                    </p>
 
 
 
 
-                  <p
-                    className="
-                      mt-5
 
-                      font-bold
+                    <p
+                      className="
+                        mt-5
+                        font-bold
+                        text-[#C9A96E]
+                      "
+                    >
 
-                      text-[#C9A96E]
-                    "
-                  >
+                      {count > 0
+                        ? `${count} resource${count > 1 ? "s" : ""} available`
+                        : "No resources uploaded yet"}
 
-                    {count > 0
-                      ? `${count} resource${count > 1 ? "s" : ""} available`
-                      : "No resources uploaded yet"}
-
-                  </p>
-
-
-                </Link>
-
-              );
+                    </p>
 
 
-            })}
+
+                  </Link>
+
+                );
+
+
+              })
+            }
+
 
 
           </div>
 
 
+
         </section>
+
 
 
       </section>
 
 
+
     </main>
+
   );
+
 }

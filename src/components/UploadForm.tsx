@@ -9,35 +9,228 @@ import {
 import { useState } from "react";
 
 import { faculties } from "@/data/faculties";
-
+import { supabase } from "@/lib/supabase";
 
 
 export default function UploadForm() {
 
+  const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
-  const [submitted,setSubmitted] = useState(false);
+  const [selectedFaculty, setSelectedFaculty] = useState("");
+  const [selectedProgramme, setSelectedProgramme] = useState("");
 
-  const [selectedFaculty,setSelectedFaculty] = useState("");
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const [selectedFile,setSelectedFile] = useState<File | null>(null);
+  const [form, setForm] = useState({
+    title: "",
+    course: "",
+    year: "",
+    semester: "",
+    category: "",
+  });
 
 
+  const currentFaculty = faculties.find(
+    (faculty) => faculty.slug === selectedFaculty
+  );
 
-  function handleSubmit(e:React.FormEvent){
 
-    e.preventDefault();
-
-    setSubmitted(true);
-
+  function handleChange(
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
   }
 
 
 
-  const currentFaculty = faculties.find(
-    (faculty)=>faculty.slug === selectedFaculty
-  );
+  async function handleSubmit(
+    e: React.FormEvent
+  ) {
+
+    e.preventDefault();
 
 
+    if (!selectedFile) {
+      alert("Please select a file");
+      return;
+    }
+
+
+    if (
+      !selectedFaculty ||
+      !selectedProgramme ||
+      !form.title ||
+      !form.course ||
+      !form.year ||
+      !form.semester ||
+      !form.category
+    ) {
+      alert("Please complete all fields");
+      return;
+    }
+
+
+    setLoading(true);
+
+
+    try {
+
+      // Check logged in user
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+
+      if (!user) {
+        throw new Error("You must be logged in to upload resources.");
+      }
+
+
+
+      const safeFileName =
+        selectedFile.name.replace(/\s+/g, "-");
+
+
+      const storagePath =
+        `${Date.now()}-${safeFileName}`;
+
+
+
+      console.log(
+        "Uploading file:",
+        storagePath
+      );
+
+
+
+      const {
+        error: uploadError
+      } = await supabase.storage
+        .from("resources")
+        .upload(
+          storagePath,
+          selectedFile,
+          {
+            upsert: false,
+          }
+        );
+
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+
+
+      const {
+        data: publicUrlData
+      } =
+        supabase.storage
+          .from("resources")
+          .getPublicUrl(storagePath);
+
+
+
+      const resourceData = {
+
+        title: form.title,
+
+        faculty: selectedFaculty,
+
+        programme: selectedProgramme,
+
+        year: form.year,
+
+        semester: form.semester,
+
+        category: form.category,
+
+        course: form.course,
+
+        file_url: publicUrlData.publicUrl,
+
+        file_type: selectedFile.type,
+
+        file_name: selectedFile.name,
+
+        storage_path: storagePath,
+
+        file_size: selectedFile.size,
+
+      };
+
+
+
+      console.log(
+        "INSERTING RESOURCE:",
+        resourceData
+      );
+
+
+
+      const {
+        error: databaseError
+      } =
+        await supabase
+          .from("resources")
+          .insert(resourceData);
+
+
+
+      if (databaseError) {
+        throw databaseError;
+      }
+
+
+
+      setSubmitted(true);
+
+
+
+    } catch(error:any) {
+
+
+      console.error(
+        "UPLOAD FAILED:",
+        error
+      );
+
+
+      console.error(
+        "MESSAGE:",
+        error?.message
+      );
+
+
+      console.error(
+        "CODE:",
+        error?.code
+      );
+
+
+      console.error(
+        "DETAILS:",
+        error?.details
+      );
+
+
+      alert(
+        error?.message ||
+        "Upload failed"
+      );
+
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  }
 
 
 
@@ -56,58 +249,53 @@ export default function UploadForm() {
       "
     >
 
+      {
+        submitted ? (
 
-
-    {
-      submitted ? (
-
-
-        <div
-          className="
-            flex
-            flex-col
-            items-center
-            justify-center
-            py-16
-            text-center
-          "
-        >
-
-          <CheckCircle
-            size={60}
-            className="text-[#C9A96E]"
-          />
-
-
-          <h2
+          <div
             className="
-              mt-6
-              text-2xl
-              font-bold
-              text-[#3B2412]
-              dark:text-white
+              flex
+              flex-col
+              items-center
+              justify-center
+              py-16
+              text-center
             "
           >
-            Resource Submitted
-          </h2>
+
+            <CheckCircle
+              size={60}
+              className="text-[#C9A96E]"
+            />
+
+            <h2
+              className="
+                mt-6
+                text-2xl
+                font-bold
+                text-[#3B2412]
+                dark:text-white
+              "
+            >
+              Resource Uploaded
+            </h2>
 
 
-          <p
-            className="
-              mt-3
-              text-[#6b5844]
-              dark:text-slate-300
-            "
-          >
-            Your resource has been sent for review.
-          </p>
+            <p
+              className="
+                mt-3
+                text-[#6b5844]
+                dark:text-slate-300
+              "
+            >
+              Your resource is now available in Luqify e-Library.
+            </p>
 
 
-        </div>
+          </div>
 
 
-
-      ) : (
+        ) : (
 
 
 <form
@@ -116,400 +304,158 @@ className="space-y-6"
 >
 
 
-{/* FACULTY */}
-
 <div>
 
-<label className="
-mb-2
-block
-font-semibold
-text-[#3B2412]
-">
+<label className="mb-2 block font-semibold text-[#3B2412]">
 Faculty
 </label>
 
-
 <select
-
 value={selectedFaculty}
-
-onChange={(e)=>setSelectedFaculty(e.target.value)}
-
-className="
-w-full
-rounded-2xl
-border
-border-[#d9c7aa]
-bg-[#FAF7F0]
-px-4
-py-3
-outline-none
-"
-
+onChange={(e)=>{
+setSelectedFaculty(e.target.value);
+setSelectedProgramme("");
+}}
+className="w-full rounded-2xl border border-[#d9c7aa] bg-[#FAF7F0] px-4 py-3"
 >
-
 
 <option value="">
 Select Faculty
 </option>
 
-
 {
 faculties.map((faculty)=>(
-
 <option
 key={faculty.slug}
 value={faculty.slug}
 >
-
 {faculty.name}
-
 </option>
-
 ))
-
 }
 
-
 </select>
-
 
 </div>
 
 
 
-
-
-{/* PROGRAMME */}
-
 <div>
 
-
-<label className="
-mb-2
-block
-font-semibold
-text-[#3B2412]
-">
+<label className="mb-2 block font-semibold text-[#3B2412]">
 Programme
 </label>
 
-
 <select
-
-className="
-w-full
-rounded-2xl
-border
-border-[#d9c7aa]
-bg-[#FAF7F0]
-px-4
-py-3
-"
-
+value={selectedProgramme}
+onChange={(e)=>setSelectedProgramme(e.target.value)}
+className="w-full rounded-2xl border border-[#d9c7aa] bg-[#FAF7F0] px-4 py-3"
 >
 
-
-<option>
+<option value="">
 Select Programme
 </option>
 
-
-
 {
 currentFaculty?.programs.map((program)=>(
-
 <option
 key={program.slug}
+value={program.slug}
 >
-
 {program.name}
-
 </option>
-
 ))
-
 }
 
-
 </select>
-
 
 </div>
 
 
 
-
-
-
-
-{/* YEAR + SEMESTER */}
-
-<div
-className="
-grid
-gap-5
-md:grid-cols-2
-"
->
-
+<div className="grid gap-5 md:grid-cols-2">
 
 <select
-className="
-rounded-2xl
-border
-border-[#d9c7aa]
-bg-[#FAF7F0]
-px-4
-py-3
-"
+name="year"
+value={form.year}
+onChange={handleChange}
+className="rounded-2xl border border-[#d9c7aa] bg-[#FAF7F0] px-4 py-3"
 >
 
-<option>
+<option value="">
 Academic Year
 </option>
 
-<option>
-Year 1
-</option>
-
-<option>
-Year 2
-</option>
-
-<option>
-Year 3
-</option>
-
-<option>
-Year 4
-</option>
-
+<option>Year 1</option>
+<option>Year 2</option>
+<option>Year 3</option>
+<option>Year 4</option>
 
 </select>
 
 
-
-
-
 <select
-className="
-rounded-2xl
-border
-border-[#d9c7aa]
-bg-[#FAF7F0]
-px-4
-py-3
-"
+name="semester"
+value={form.semester}
+onChange={handleChange}
+className="rounded-2xl border border-[#d9c7aa] bg-[#FAF7F0] px-4 py-3"
 >
 
-<option>
+<option value="">
 Semester
 </option>
 
-<option>
-Semester 1
-</option>
-
-<option>
-Semester 2
-</option>
-
+<option>Semester 1</option>
+<option>Semester 2</option>
 
 </select>
 
-
-
 </div>
 
-
-
-
-
-
-
-
-
-{/* COURSE */}
-
-<div>
-
-<label className="
-mb-2
-block
-font-semibold
-text-[#3B2412]
-">
-
-Course
-
-</label>
 
 
 <input
-
+name="course"
+value={form.course}
+onChange={handleChange}
 placeholder="Example: Cost Accounting"
-
-className="
-w-full
-rounded-2xl
-border
-border-[#d9c7aa]
-bg-[#FAF7F0]
-px-4
-py-3
-"
-
+className="w-full rounded-2xl border border-[#d9c7aa] bg-[#FAF7F0] px-4 py-3"
 />
-
-
-</div>
-
-
-
-
-
-
-
-
-{/* RESOURCE TYPE */}
-
-<div>
-
-<label className="
-mb-2
-block
-font-semibold
-text-[#3B2412]
-">
-
-Resource Type
-
-</label>
 
 
 
 <select
-
-className="
-w-full
-rounded-2xl
-border
-border-[#d9c7aa]
-bg-[#FAF7F0]
-px-4
-py-3
-"
-
+name="category"
+value={form.category}
+onChange={handleChange}
+className="w-full rounded-2xl border border-[#d9c7aa] bg-[#FAF7F0] px-4 py-3"
 >
 
-
-<option>
-Select Type
+<option value="">
+Resource Type
 </option>
 
-<option>
-Lecture Notes
-</option>
-
-<option>
-Tutorials
-</option>
-
-<option>
-Past Papers
-</option>
-
-<option>
-Presentation Slides
-</option>
-
-<option>
-Study Guides
-</option>
-
-<option>
-Other
-</option>
-
+<option>Lecture Notes</option>
+<option>Tutorials</option>
+<option>Past Papers</option>
+<option>Presentation Slides</option>
+<option>Study Guides</option>
 
 </select>
 
 
-</div>
-
-
-
-
-
-
-
-{/* TITLE */}
-
-<div>
-
-<label className="
-mb-2
-block
-font-semibold
-text-[#3B2412]
-">
-
-Resource Title
-
-</label>
-
 
 <input
-
-placeholder="Example: Cost Accounting Chapter 1 Notes"
-
-className="
-w-full
-rounded-2xl
-border
-border-[#d9c7aa]
-bg-[#FAF7F0]
-px-4
-py-3
-"
-
+name="title"
+value={form.title}
+onChange={handleChange}
+placeholder="Resource Title"
+className="w-full rounded-2xl border border-[#d9c7aa] bg-[#FAF7F0] px-4 py-3"
 />
-
-
-</div>
-
-
-
-
-
-
-
-
-
-
-{/* UPLOAD */}
-
-
-<div>
-
-
-<label className="
-mb-2
-block
-font-semibold
-text-[#3B2412]
-">
-
-Upload Resource
-
-</label>
 
 
 
 <label
-
 className="
 flex
 cursor-pointer
@@ -524,12 +470,8 @@ border-[#C9A96E]
 bg-[#FAF7F0]
 p-8
 text-center
-transition
-hover:bg-[#f4ead7]
 "
-
 >
-
 
 <UploadCloud
 size={35}
@@ -537,95 +479,37 @@ className="text-[#C9A96E]"
 />
 
 
-
 <span className="font-semibold">
-
 Browse Files
-
 </span>
-
-
-
-<span className="
-text-sm
-text-[#6b5844]
-">
-
-PDF, Word, PowerPoint, Excel or Images
-
-</span>
-
 
 
 {
 selectedFile && (
-
-<span className="
-text-sm
-font-semibold
-text-[#3B2412]
-">
-
+<span className="text-sm font-semibold text-[#3B2412]">
 {selectedFile.name}
-
 </span>
-
 )
-
 }
-
-
 
 
 <input
-
 type="file"
-
-accept="
-.pdf,
-.doc,
-.docx,
-.ppt,
-.pptx,
-.xls,
-.xlsx,
-.jpg,
-.jpeg,
-.png
-"
-
+accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
 onChange={(e)=>{
-
 if(e.target.files){
-
 setSelectedFile(e.target.files[0]);
-
 }
-
 }}
-
 className="hidden"
-
 />
-
-
 
 </label>
 
 
-</div>
-
-
-
-
-
-
-
 
 <button
-
-type="submit"
-
+disabled={loading}
 className="
 flex
 w-full
@@ -639,29 +523,26 @@ font-bold
 text-white
 transition
 hover:-translate-y-1
+disabled:opacity-50
 "
-
 >
-
 
 <FileText size={20}/>
 
-Submit Resource
-
+{
+loading
+? "Uploading..."
+: "Submit Resource"
+}
 
 </button>
 
 
-
-
-
 </form>
 
+        )
 
-      )
-
-    }
-
+      }
 
     </div>
 
