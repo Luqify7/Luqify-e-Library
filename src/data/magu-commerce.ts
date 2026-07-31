@@ -18,7 +18,7 @@ export const maguCommerce = {
             ["Accounting Fundamentals", "accounting-fundamentals"],
             ["Business Mathematics", "business-mathematics"],
             ["Co-operative Management Fundamentals", "co-operative-management-fundamentals"],
-            ["Old Testament", "old-testament"]
+            ["Old Testament", "old-testament"],
             ["End-User Computing", "end-user-computing"],
           ],
 
@@ -27,7 +27,7 @@ export const maguCommerce = {
             ["Business Statistics", "business-statistics"],
             ["Business Law", "business-law"],
             ["Financial Accounting", "financial-accounting"],
-            ["Organisational Behaviuor", "organisational-behaviuor"]
+            ["Organisational Behaviuor", "organisational-behaviuor"],
             ["New Testament", "new-testament"]
           ],
         },
