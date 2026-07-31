@@ -67,10 +67,13 @@ export default async function ProgramPage({
 
 
 
-  const years =
-    Object.keys(program.years).map(
-      (year)=>`year-${year}`
-    );
+  // Commerce programmes all have 4 academic years
+  const years = [
+    "1",
+    "2",
+    "3",
+    "4",
+  ];
 
 
 
@@ -120,7 +123,6 @@ export default async function ProgramPage({
 
             {
               name: program.name,
-              href: `/programs/${slug}`,
             },
 
           ]}
@@ -166,7 +168,6 @@ export default async function ProgramPage({
 
 
 
-
           <div>
 
 
@@ -181,6 +182,7 @@ export default async function ProgramPage({
               Programme Library
 
             </p>
+
 
 
 
@@ -213,6 +215,7 @@ export default async function ProgramPage({
 
 
 
+
         <section
           className="
             mt-14
@@ -226,7 +229,6 @@ export default async function ProgramPage({
 
 
 
-
           {
             years.map((year)=>(
 
@@ -235,7 +237,7 @@ export default async function ProgramPage({
 
                 key={year}
 
-                href={`/programs/${slug}/${year}`}
+                href={`/programs/${slug}/year-${year}`}
 
                 className="
                   group
@@ -255,7 +257,6 @@ export default async function ProgramPage({
                 "
 
               >
-
 
 
 
@@ -285,6 +286,7 @@ export default async function ProgramPage({
 
 
 
+
                 <h2
                   className="
                     mt-6
@@ -295,9 +297,11 @@ export default async function ProgramPage({
                   "
                 >
 
-                  {year.replace("year-", "Year ")}
+                  Year {year}
 
                 </h2>
+
+
 
 
 
@@ -333,7 +337,6 @@ export default async function ProgramPage({
 
 
             ))
-
           }
 
 
