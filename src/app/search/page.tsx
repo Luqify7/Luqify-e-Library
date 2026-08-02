@@ -1,4 +1,3 @@
-import { supabase } from "@/lib/supabase";
 import Link from "next/link";
 
 import {
@@ -7,6 +6,8 @@ import {
   FileText,
   GraduationCap,
 } from "lucide-react";
+
+import { createServerSupabase } from "@/lib/supabase-server";
 
 import { faculties } from "@/data/faculties";
 import { courses } from "@/data/courses";
@@ -20,9 +21,15 @@ export default async function SearchPage({
   }>;
 }) {
 
+
   const { q } = await searchParams;
 
+
   const query = q?.toLowerCase().trim() || "";
+
+
+  const supabase = await createServerSupabase();
+
 
 
   const facultyResults = faculties.filter((faculty) =>
@@ -49,25 +56,31 @@ export default async function SearchPage({
 
   if (query) {
 
+
     const { data, error } = await supabase
       .from("resources")
       .select("*")
       .or(
         `title.ilike.%${query}%,course.ilike.%${query}%,programme.ilike.%${query}%,faculty.ilike.%${query}%,category.ilike.%${query}%`
       )
-      .order("created_at", {
-        ascending: false,
-      });
+      .order(
+        "created_at",
+        {
+          ascending: false,
+        }
+      );
 
 
 
     if (error) {
 
-      console.log("SEARCH ERROR:", error);
+      console.log(
+        "SEARCH ERROR:",
+        error
+      );
 
     } else {
 
-      console.log("SEARCH RESOURCES:", data);
       resourceResults = data ?? [];
 
     }
@@ -110,72 +123,64 @@ export default async function SearchPage({
 
 
 
-        <div className="mt-10">
+        <form
+          action="/search"
+          className="
+            mt-10
+            flex
+            items-center
+            gap-3
+            rounded-2xl
+            border
+            border-[#e8dcc8]
+            bg-white
+            px-5
+            py-4
 
-          <form
-            action="/search"
+            dark:border-slate-700
+            dark:bg-slate-900
+          "
+        >
+
+          <Search
+            size={22}
+            className="text-[#C9A96E]"
+          />
+
+
+          <input
+            name="q"
+            defaultValue={q}
+            placeholder="Search lecture notes, tutorials, exams..."
             className="
-              flex
-              items-center
-              gap-3
-              rounded-2xl
-              border
-              border-[#e8dcc8]
-              bg-white
-              px-5
-              py-4
+              w-full
+              bg-transparent
+              outline-none
+              text-[#3B2412]
 
-              dark:border-slate-700
-              dark:bg-slate-900
+              dark:text-white
+            "
+          />
+
+
+
+          <button
+            className="
+              rounded-xl
+              bg-[#3B2412]
+              px-5
+              py-2
+              font-semibold
+              text-white
+
+              hover:bg-[#C9A96E]
             "
           >
+            Search
+          </button>
 
 
-            <Search
-              size={22}
-              className="text-[#C9A96E]"
-            />
-
-
-
-            <input
-              name="q"
-              defaultValue={q}
-              placeholder="Search lecture notes, tutorials, exams..."
-              className="
-                w-full
-                bg-transparent
-                outline-none
-                text-[#3B2412]
-
-                dark:text-white
-              "
-            />
-
-
-
-            <button
-              className="
-                rounded-xl
-                bg-[#3B2412]
-                px-5
-                py-2
-                font-semibold
-                text-white
-
-                hover:bg-[#C9A96E]
-              "
-            >
-              Search
-            </button>
-
-
-
-          </form>
-
-
-        </div>
-
+        </form>
 
 
 
@@ -185,9 +190,6 @@ export default async function SearchPage({
 
           <div className="mt-12 space-y-10">
 
-
-
-            {/* Faculties */}
 
             {facultyResults.length > 0 && (
 
@@ -208,19 +210,12 @@ export default async function SearchPage({
 
                 ))}
 
-
               </ResultSection>
 
             )}
 
 
 
-
-
-
-
-
-            {/* Programmes */}
 
             {programResults.length > 0 && (
 
@@ -241,21 +236,12 @@ export default async function SearchPage({
 
                 ))}
 
-
               </ResultSection>
 
             )}
 
 
 
-
-
-
-
-
-
-
-            {/* Courses */}
 
             {courseResults.length > 0 && (
 
@@ -276,7 +262,6 @@ export default async function SearchPage({
 
                 ))}
 
-
               </ResultSection>
 
             )}
@@ -286,91 +271,103 @@ export default async function SearchPage({
 
 
 
+            {resourceResults.length > 0 && (
+
+              <ResultSection
+                title="Resources"
+                icon={<FileText size={22}/>}
+              >
+
+                {resourceResults.map((resource)=>{
+
+
+                  const fileUrl =
+                    supabase.storage
+                      .from("resources")
+                      .getPublicUrl(
+                        resource.storage_path
+                      )
+                      .data.publicUrl;
 
 
 
-          {/* Resources */}
+                  return (
 
-{resourceResults.length > 0 && (
+                    <div
+                      key={resource.id}
+                      className="
+                        rounded-2xl
+                        border
+                        border-[#e8dcc8]
+                        bg-white
+                        p-5
+                        shadow-sm
 
-  <ResultSection
-    title="Resources"
-    icon={<FileText size={22} />}
-  >
+                        dark:border-slate-700
+                        dark:bg-slate-900
+                      "
+                    >
 
-    {resourceResults.map((resource) => {
+                      <h3 className="text-lg font-bold">
+                        {resource.course}
+                      </h3>
 
-      const fileUrl = supabase.storage
-        .from("resources")
-        .getPublicUrl(resource.storage_path)
-        .data.publicUrl;
 
-      return (
+                      <p className="mt-1 text-sm text-slate-500">
+                        {resource.title}
+                      </p>
 
-        <div
-          key={resource.id}
-          className="
-            rounded-2xl
-            border
-            border-[#e8dcc8]
-            bg-white
-            p-5
-            shadow-sm
-            transition
-            hover:shadow-md
 
-            dark:border-slate-700
-            dark:bg-slate-900
-          "
-        >
+                      <div className="mt-4 text-sm text-slate-600 dark:text-slate-400">
 
-          <h3 className="text-lg font-bold">
-            {resource.course}
-          </h3>
+                        <p>{resource.programme}</p>
 
-          <p className="mt-1 text-sm text-slate-500">
-            {resource.title}
-          </p>
+                        <p>
+                          {resource.year} • {resource.semester}
+                        </p>
 
-          <div className="mt-4 space-y-1 text-sm text-slate-600 dark:text-slate-400">
-            <p>{resource.programme}</p>
-            <p>{resource.year} • {resource.semester}</p>
-            <p>{resource.category}</p>
-          </div>
+                        <p>
+                          {resource.category}
+                        </p>
 
-          <a
-            href={fileUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="
-              mt-5
-              inline-flex
-              items-center
-              rounded-xl
-              bg-[#3B2412]
-              px-5
-              py-2
-              font-semibold
-              text-white
-              transition
-              hover:bg-[#C9A96E]
-            "
-          >
-            Open Resource
-          </a>
-
-        </div>
-
-      );
-
-    })}
-
-  </ResultSection>
-
-)}
+                      </div>
 
 
 
+                      <a
+                        href={fileUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="
+                          mt-5
+                          inline-flex
+                          rounded-xl
+                          bg-[#3B2412]
+                          px-5
+                          py-2
+                          font-semibold
+                          text-white
+
+                          hover:bg-[#C9A96E]
+                        "
+                      >
+
+                        Open Resource
+
+                      </a>
+
+
+                    </div>
+
+                  );
+
+
+                })}
+
+
+              </ResultSection>
+
+            )}
 
 
 
@@ -386,7 +383,6 @@ export default async function SearchPage({
               </p>
 
             )}
-
 
 
 
@@ -409,8 +405,6 @@ export default async function SearchPage({
 
 
 
-
-
 function ResultSection({
   title,
   icon,
@@ -425,7 +419,6 @@ function ResultSection({
   return (
 
     <section>
-
 
       <div className="mb-4 flex items-center gap-3">
 
@@ -448,7 +441,6 @@ function ResultSection({
         {children}
 
       </div>
-
 
 
     </section>
