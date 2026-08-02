@@ -17,7 +17,7 @@ import {
   Home,
 } from "lucide-react";
 
-import { supabaseServer } from "@/lib/supabase-server";
+import { createServerSupabase } from "@/lib/supabase-server";
 
 
 interface Resource {
@@ -373,6 +373,9 @@ export default async function ResourcesPage({
 }) {
 
 
+  const supabase = await createServerSupabase();
+
+
   const {
     programme,
     year,
@@ -381,7 +384,6 @@ export default async function ResourcesPage({
     category,
 
   } = await searchParams;
-
 
 
   // Convert URL slugs into the Title Case format stored in the database.
@@ -394,7 +396,7 @@ export default async function ResourcesPage({
 
 
 
-  let query = supabaseServer
+  let query = supabase
     .from("resources")
     .select("*")
     .order(
