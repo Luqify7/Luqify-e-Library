@@ -8,11 +8,13 @@ type BreadcrumbItem = {
   href?: string;
 };
 
+interface BreadcrumbsProps {
+  items: BreadcrumbItem[];
+}
+
 export default function Breadcrumbs({
   items,
-}: {
-  items: BreadcrumbItem[];
-}) {
+}: BreadcrumbsProps) {
   return (
     <nav
       className="
@@ -26,7 +28,7 @@ export default function Breadcrumbs({
         dark:text-slate-400
       "
     >
-      {/* HOME */}
+
       <Link
         href="/"
         aria-label="Go home"
@@ -42,21 +44,28 @@ export default function Breadcrumbs({
         <span>Home</span>
       </Link>
 
-      {/* OTHER BREADCRUMBS */}
+
       {items.map((item, index) => {
         const isLast = index === items.length - 1;
 
         return (
           <div
             key={`${item.name}-${index}`}
-            className="flex items-center gap-2"
+            className="
+              flex
+              items-center
+              gap-2
+            "
           >
+
             <ChevronRight
               size={15}
               className="text-[#C9A96E]"
             />
 
+
             {item.href && !isLast ? (
+
               <Link
                 href={item.href}
                 className="
@@ -66,7 +75,9 @@ export default function Breadcrumbs({
               >
                 {item.name}
               </Link>
+
             ) : (
+
               <span
                 className="
                   font-semibold
@@ -76,10 +87,13 @@ export default function Breadcrumbs({
               >
                 {item.name}
               </span>
+
             )}
+
           </div>
         );
       })}
+
     </nav>
   );
 }
