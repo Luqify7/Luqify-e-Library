@@ -6,7 +6,7 @@ import {
   ExternalLink,
 } from "lucide-react";
 
-import { supabase } from "@/lib/supabase";
+import { createServerSupabase } from "@/lib/supabase-server";
 import DeleteResourceButton from "@/components/DeleteResourceButton";
 
 
@@ -34,6 +34,7 @@ function formatFileSize(bytes?: number) {
 
 
 export default async function AdminPage() {
+  const supabase = createServerSupabase();
 
 
   const {
