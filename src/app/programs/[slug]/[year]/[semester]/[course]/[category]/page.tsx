@@ -1,15 +1,12 @@
-import {
-  FileText,
-} from "lucide-react";
+import { FileText } from "lucide-react";
 
-import { supabase } from "@/lib/supabase";
+import { createServerSupabase } from "@/lib/supabase-server";
 import ResourceActions from "@/components/ResourceActions";
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { programs } from "@/data/programs";
 
 
 function formatFileSize(bytes?: number) {
-
   if (!bytes) return "Unknown size";
 
   const sizes = [
@@ -26,7 +23,6 @@ function formatFileSize(bytes?: number) {
   return `${(
     bytes / Math.pow(1024, index)
   ).toFixed(1)} ${sizes[index]}`;
-
 }
 
 
@@ -43,7 +39,6 @@ export default async function ResourceCategoryPage({
   }>;
 }) {
 
-
   const {
     slug,
     year,
@@ -53,10 +48,14 @@ export default async function ResourceCategoryPage({
   } = await params;
 
 
+  const supabase = await createServerSupabase();
+
+
 
   const currentProgram = programs.find(
     (program) => program.slug === slug
   );
+
 
 
   const facultyName = currentProgram?.faculty
@@ -64,6 +63,7 @@ export default async function ResourceCategoryPage({
         .replaceAll("-", " ")
         .replace(/\b\w/g, (char) => char.toUpperCase())
     : "Faculty";
+
 
 
   const programName =
@@ -100,6 +100,7 @@ export default async function ResourceCategoryPage({
 
 
 
+
   const {
     data: filteredResources,
     error,
@@ -124,7 +125,6 @@ export default async function ResourceCategoryPage({
 
 
   return (
-
     <main
       className="
         min-h-screen
@@ -140,8 +140,6 @@ export default async function ResourceCategoryPage({
 
       <section className="mx-auto max-w-7xl">
 
-
-        {/* Breadcrumb */}
 
         <Breadcrumbs
           items={[
@@ -180,18 +178,14 @@ export default async function ResourceCategoryPage({
             {
               name: categoryName,
             },
-
           ]}
         />
 
 
 
-
-
-        {/* Header */}
-
         <div
           className="
+            mt-10
             rounded-[3rem]
             border
             border-[#e8dcc8]
@@ -217,7 +211,6 @@ export default async function ResourceCategoryPage({
           </p>
 
 
-
           <h1
             className="
               mt-3
@@ -230,7 +223,6 @@ export default async function ResourceCategoryPage({
           >
             {categoryName}
           </h1>
-
 
 
           <p
@@ -248,153 +240,136 @@ export default async function ResourceCategoryPage({
 
 
 
-
-
-
-        {/* Resources */}
-
         <section className="mt-12">
-
 
           <div className="grid gap-6">
 
 
-          {
-            filteredResources &&
-            filteredResources.length > 0 ? (
+          {filteredResources && filteredResources.length > 0 ? (
 
-              filteredResources.map((resource)=>(
-
-                <div
-                  key={resource.id}
-
-                  className="
-                    flex
-                    flex-col
-                    gap-5
-
-                    rounded-3xl
-                    border
-                    border-[#e8dcc8]
-
-                    bg-white
-
-                    p-6
-
-                    shadow-sm
-
-                    transition-all
-
-                    hover:-translate-y-1
-                    hover:shadow-lg
-
-                    md:flex-row
-                    md:items-center
-                    md:justify-between
-
-
-                    dark:border-slate-700
-                    dark:bg-slate-900
-                  "
-                >
-
-
-                  <div
-                    className="
-                      flex
-                      items-center
-                      gap-5
-                    "
-                  >
-
-                    <div
-                      className="
-                        flex
-                        h-14
-                        w-14
-                        items-center
-                        justify-center
-
-                        rounded-2xl
-
-                        bg-[#FAF7F0]
-
-                        text-[#3B2412]
-
-                        dark:bg-slate-800
-                        dark:text-white
-                      "
-                    >
-
-                      <FileText size={28}/>
-
-                    </div>
-
-
-
-
-                    <div>
-
-                      <h2 className="text-lg font-bold">
-                        {resource.title}
-                      </h2>
-
-
-                      <p className="mt-1 text-sm text-slate-500">
-                        {resource.file_name || "Academic Material"}
-                      </p>
-
-
-                      <p className="mt-1 text-xs text-slate-400">
-                        {formatFileSize(resource.file_size)}
-                      </p>
-
-
-                    </div>
-
-
-                  </div>
-
-
-
-
-                  <ResourceActions
-                    fileUrl={resource.file_url}
-                    fileName={resource.file_name}
-                  />
-
-
-                </div>
-
-              ))
-
-            ) : (
+            filteredResources.map((resource) => (
 
               <div
+                key={resource.id}
                 className="
-                  rounded-[2rem]
+                  flex
+                  flex-col
+                  gap-5
+
+                  rounded-3xl
                   border
                   border-[#e8dcc8]
+
                   bg-white
-                  p-8
-                  text-slate-500
+
+                  p-6
+
+                  shadow-sm
+
+                  transition-all
+
+                  hover:-translate-y-1
+                  hover:shadow-lg
+
+                  md:flex-row
+                  md:items-center
+                  md:justify-between
 
                   dark:border-slate-700
                   dark:bg-slate-900
                 "
               >
 
-                No resources uploaded yet
+
+                <div
+                  className="
+                    flex
+                    items-center
+                    gap-5
+                  "
+                >
+
+                  <div
+                    className="
+                      flex
+                      h-14
+                      w-14
+                      items-center
+                      justify-center
+
+                      rounded-2xl
+
+                      bg-[#FAF7F0]
+
+                      text-[#3B2412]
+
+                      dark:bg-slate-800
+                      dark:text-white
+                    "
+                  >
+
+                    <FileText size={28}/>
+
+                  </div>
+
+
+
+                  <div>
+
+                    <h2 className="text-lg font-bold">
+                      {resource.title}
+                    </h2>
+
+
+                    <p className="mt-1 text-sm text-slate-500">
+                      {resource.file_name || "Academic Material"}
+                    </p>
+
+
+                    <p className="mt-1 text-xs text-slate-400">
+                      {formatFileSize(resource.file_size)}
+                    </p>
+
+
+                  </div>
+
+
+                </div>
+
+
+
+                <ResourceActions
+                  fileUrl={resource.file_url}
+                  fileName={resource.file_name}
+                />
+
 
               </div>
 
-            )
+            ))
 
-          }
+          ) : (
+
+            <div
+              className="
+                rounded-[2rem]
+                border
+                border-[#e8dcc8]
+                bg-white
+                p-8
+                text-slate-500
+
+                dark:border-slate-700
+                dark:bg-slate-900
+              "
+            >
+              No resources uploaded yet
+            </div>
+
+          )}
 
 
           </div>
-
 
         </section>
 
@@ -403,6 +378,5 @@ export default async function ResourceCategoryPage({
 
 
     </main>
-
   );
 }
