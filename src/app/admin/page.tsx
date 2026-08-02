@@ -32,15 +32,10 @@ function formatFileSize(bytes?: number) {
 }
 
 
-
 export default async function AdminPage() {
-  const supabase = createServerSupabase();
+  const supabase = await createServerSupabase();
 
-
-  const {
-    data: resources,
-    error,
-  } = await supabase
+  const { data: resources, error } = await supabase
     .from("resources")
     .select("*")
     .order(
