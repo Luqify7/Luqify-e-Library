@@ -81,7 +81,7 @@ export default function Navbar() {
             >
 
               <Image
-                src="/images/Luqify e-library-logo.png"
+                src="/images/Luqify-e-library-logo.png"
                 alt="Luqify e-Library"
                 width={44}
                 height={44}
