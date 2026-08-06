@@ -81,12 +81,12 @@ export default function Navbar() {
             >
 
               <Image
-                src="/images/Luqify-e-library-logo.png"
+                src="/images/luqify-e-library-logo.png"
                 alt="Luqify e-Library"
-                width={44}
-                height={44}
+                width={56}
+                height={56}
                 priority
-                className="object-contain"
+                unoptimized
               />
 
             </div>
