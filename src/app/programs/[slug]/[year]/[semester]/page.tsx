@@ -8,7 +8,8 @@ import {
 } from "lucide-react";
 
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { maguCommerce } from "@/data/magu-commerce";
+import { programs } from "@/data/programs";
+import { courses } from "@/data/courses";
 
 
 export default async function SemesterPage({
@@ -26,64 +27,24 @@ export default async function SemesterPage({
 
 
 
-  const currentProgram =
-    maguCommerce.programmes[
-      slug as keyof typeof maguCommerce.programmes
-    ];
-
-
-
-  const yearNumber = Number(
-    year.replace("year-", "")
-  );
-
-
-  const semesterNumber = Number(
-    semester.replace("semester-", "")
+  const currentProgram = programs.find(
+    (program) => program.slug === slug
   );
 
 
 
-
-  let semesterCourses:
-    readonly (readonly [string, string])[] = [];
-
-
-
-
-  if (yearNumber <= 2) {
-
-    semesterCourses =
-      maguCommerce.commonCore.years[
-        yearNumber as 1 | 2
-      ]
-      .semesters[
-        semesterNumber as 1 | 2
-      ];
-
-  }
-
-
-
-  else if (currentProgram) {
-
-
-    semesterCourses =
-      currentProgram.years[
-        yearNumber as 3 | 4
-      ]
-      .semesters[
-        semesterNumber as 1 | 2
-      ];
-
-  }
-
-
+  const semesterCourses = courses.filter(
+    (course) =>
+      course.program === slug &&
+      course.year === year &&
+      course.semester === semester
+  );
 
 
 
   const facultyName =
-    maguCommerce.faculty;
+    currentProgram?.faculty ??
+    "Faculty";
 
 
 
@@ -103,9 +64,6 @@ export default async function SemesterPage({
 
 
 
-
-
-
   return (
 
     <main
@@ -120,7 +78,6 @@ export default async function SemesterPage({
         dark:text-white
       "
     >
-
 
       <section className="mx-auto max-w-7xl">
 
@@ -138,7 +95,7 @@ export default async function SemesterPage({
 
             {
               name: facultyName,
-              href: "/faculties/commerce",
+              href: `/faculties/${facultyName}`,
             },
 
 
@@ -161,8 +118,6 @@ export default async function SemesterPage({
           ]}
 
         />
-
-
 
 
 
@@ -220,7 +175,6 @@ export default async function SemesterPage({
 
 
             <div>
-
 
               <p
                 className="
@@ -309,9 +263,6 @@ export default async function SemesterPage({
 
 
 
-
-
-
         <section className="mt-14">
 
 
@@ -341,19 +292,17 @@ export default async function SemesterPage({
           >
 
 
-
             {
               semesterCourses.length > 0 ? (
-
 
                 semesterCourses.map((course)=>(
 
 
                   <Link
 
-                    key={course[1]}
+                    key={course.slug}
 
-                    href={`/programs/${slug}/${year}/${semester}/${course[1]}`}
+                    href={`/programs/${slug}/${year}/${semester}/${course.slug}`}
 
                     className="
                       group
@@ -373,8 +322,6 @@ export default async function SemesterPage({
                     "
 
                   >
-
-
 
 
                     <div
@@ -401,7 +348,6 @@ export default async function SemesterPage({
 
 
 
-
                     <h3
                       className="
                         mt-6
@@ -410,10 +356,9 @@ export default async function SemesterPage({
                       "
                     >
 
-                      {course[0]}
+                      {course.name}
 
                     </h3>
-
 
 
 
@@ -427,8 +372,6 @@ export default async function SemesterPage({
                         gap-3
                         font-bold
                         text-[#C9A96E]
-                        transition-all
-                        group-hover:gap-5
                       "
                     >
 
@@ -441,7 +384,6 @@ export default async function SemesterPage({
 
 
                     </div>
-
 
 
 
@@ -478,17 +420,13 @@ export default async function SemesterPage({
             }
 
 
-
           </div>
-
 
 
         </section>
 
 
-
       </section>
-
 
 
     </main>

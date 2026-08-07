@@ -8,6 +8,8 @@ import {
   ClipboardList,
 } from "lucide-react";
 
+import { courses } from "@/data/courses";
+
 export default async function CoursePage({
   params,
 }: {
@@ -25,37 +27,45 @@ export default async function CoursePage({
     course,
   } = await params;
 
-  const courseName = decodeURIComponent(course);
+  const currentCourse = courses.find(
+    (item) =>
+      item.program === slug &&
+      item.year === year &&
+      item.semester === semester &&
+      item.slug === course
+  );
+
+  const courseName =
+    currentCourse?.name ??
+    course
+      .replaceAll("-", " ")
+      .replace(/\b\w/g, (letter) => letter.toUpperCase());
 
   const categories = [
     {
       name: "Lecture Notes",
-      description:
-        "Course materials and lecture resources",
+      description: "Course materials and lecture resources",
       icon: BookOpen,
       category: "lecture-notes",
     },
 
     {
       name: "Tutorials",
-      description:
-        "Tutorial sheets and practice materials",
+      description: "Tutorial sheets and practice materials",
       icon: ClipboardList,
       category: "tutorials",
     },
 
     {
       name: "Mid-Semester Exams",
-      description:
-        "Previous mid-semester examination papers",
+      description: "Previous mid-semester examination papers",
       icon: FileText,
       category: "mid-semester-exams",
     },
 
     {
       name: "End-of-Semester Exams",
-      description:
-        "Previous final examination papers",
+      description: "Previous final examination papers",
       icon: GraduationCap,
       category: "end-semester-exams",
     },
@@ -63,9 +73,7 @@ export default async function CoursePage({
 
   const formattedYear = year
     .replace("-", " ")
-    .replace(/\b\w/g, (letter) =>
-      letter.toUpperCase()
-    );
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
 
   const formattedSemester =
     semester === "semester-1"
@@ -109,7 +117,6 @@ export default async function CoursePage({
           ]}
         />
 
-
         <div className="mb-10">
 
           <div
@@ -140,9 +147,7 @@ export default async function CoursePage({
             />
 
             {formattedYear}
-
           </div>
-
 
           <h1
             className="
@@ -156,7 +161,6 @@ export default async function CoursePage({
             {courseName}
           </h1>
 
-
           <p
             className="
               mt-3
@@ -169,8 +173,6 @@ export default async function CoursePage({
 
         </div>
 
-
-
         <div
           className="
             grid
@@ -178,7 +180,6 @@ export default async function CoursePage({
             md:grid-cols-2
           "
         >
-
           {categories.map((item) => {
 
             const Icon = item.icon;
@@ -187,7 +188,6 @@ export default async function CoursePage({
 
               <Link
                 key={item.category}
-
                 href={
                   `/resources?programme=${slug}` +
                   `&year=${year}` +
@@ -195,7 +195,6 @@ export default async function CoursePage({
                   `&course=${encodeURIComponent(courseName)}` +
                   `&category=${item.category}`
                 }
-
                 className="
                   group
                   rounded-3xl
@@ -226,16 +225,13 @@ export default async function CoursePage({
                     dark:bg-slate-800
                   "
                 >
-
                   <Icon
                     className="
                       h-7
                       w-7
                     "
                   />
-
                 </div>
-
 
                 <h2
                   className="
@@ -246,7 +242,6 @@ export default async function CoursePage({
                 >
                   {item.name}
                 </h2>
-
 
                 <p
                   className="
@@ -259,7 +254,6 @@ export default async function CoursePage({
                   {item.description}
                 </p>
 
-
                 <div
                   className="
                     mt-6
@@ -270,17 +264,13 @@ export default async function CoursePage({
                   Browse resources →
                 </div>
 
-
               </Link>
 
             );
-
           })}
-
         </div>
 
       </section>
-
     </main>
   );
 }

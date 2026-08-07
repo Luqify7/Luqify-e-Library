@@ -1,5 +1,3 @@
-// src/app/programs/[slug]/[year]/page.tsx
-
 import Link from "next/link";
 
 import {
@@ -10,7 +8,7 @@ import {
 } from "lucide-react";
 
 import Breadcrumbs from "@/components/Breadcrumbs";
-import { maguCommerce } from "@/data/magu-commerce";
+import { programs } from "@/data/programs";
 
 
 export default async function YearPage({
@@ -22,15 +20,13 @@ export default async function YearPage({
   }>;
 }) {
 
-
   const { slug, year } = await params;
 
 
 
-  const currentProgram =
-    maguCommerce.programmes[
-      slug as keyof typeof maguCommerce.programmes
-    ];
+  const currentProgram = programs.find(
+    (program) => program.slug === slug
+  );
 
 
 
@@ -56,14 +52,15 @@ export default async function YearPage({
 
 
 
-  const facultyName = maguCommerce.faculty;
-
-
-
   const programName =
     currentProgram?.name ??
     slug.replaceAll("-", " ");
 
+
+
+  const facultyName =
+    currentProgram?.faculty ??
+    "Faculty";
 
 
 
@@ -82,12 +79,8 @@ export default async function YearPage({
       "
     >
 
-
       <section className="mx-auto max-w-7xl">
 
-
-
-        {/* Breadcrumb */}
 
         <Breadcrumbs
 
@@ -101,7 +94,7 @@ export default async function YearPage({
 
             {
               name: facultyName,
-              href: "/faculties/commerce",
+              href: `/faculties/${facultyName}`,
             },
 
 
@@ -122,9 +115,6 @@ export default async function YearPage({
 
 
 
-
-
-        {/* Header */}
 
         <div
           className="
@@ -154,7 +144,6 @@ export default async function YearPage({
           >
 
 
-
             <div
               className="
                 flex
@@ -168,16 +157,14 @@ export default async function YearPage({
               "
             >
 
-              <GraduationCap size={38} />
+              <GraduationCap size={38}/>
 
             </div>
 
 
 
 
-
             <div>
-
 
               <p
                 className="
@@ -190,7 +177,6 @@ export default async function YearPage({
               >
                 Academic Year
               </p>
-
 
 
 
@@ -207,8 +193,6 @@ export default async function YearPage({
                 {yearLabel}
 
               </h1>
-
-
 
 
 
@@ -233,9 +217,7 @@ export default async function YearPage({
             </div>
 
 
-
           </div>
-
 
 
         </div>
@@ -245,12 +227,7 @@ export default async function YearPage({
 
 
 
-
-        {/* Semester Section */}
-
-
         <div className="mt-14">
-
 
 
           <div className="mb-8">
@@ -283,9 +260,7 @@ export default async function YearPage({
             </p>
 
 
-
           </div>
-
 
 
 
@@ -299,7 +274,6 @@ export default async function YearPage({
               md:grid-cols-2
             "
           >
-
 
 
             {
@@ -332,7 +306,6 @@ export default async function YearPage({
                 >
 
 
-
                   <div
                     className="
                       flex
@@ -357,7 +330,6 @@ export default async function YearPage({
 
 
 
-
                   <h3
                     className="
                       mt-6
@@ -369,7 +341,6 @@ export default async function YearPage({
                     {semester.name}
 
                   </h3>
-
 
 
 
@@ -410,18 +381,14 @@ export default async function YearPage({
 
                     <BookOpen size={18}/>
 
-
                     <span>
                       Open Semester
                     </span>
-
 
                     <ChevronRight size={18}/>
 
 
                   </div>
-
-
 
 
                 </Link>
@@ -431,13 +398,10 @@ export default async function YearPage({
             }
 
 
-
           </div>
 
 
-
         </div>
-
 
 
       </section>

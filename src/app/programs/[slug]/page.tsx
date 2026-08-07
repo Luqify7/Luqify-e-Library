@@ -7,7 +7,7 @@ import {
   ChevronRight,
 } from "lucide-react";
 
-import { maguCommerce } from "@/data/magu-commerce";
+import { programs } from "@/data/programs";
 
 
 export default async function ProgramPage({
@@ -16,16 +16,12 @@ export default async function ProgramPage({
   params: Promise<{ slug: string }>;
 }) {
 
-
   const { slug } = await params;
 
 
-
-  const program =
-    maguCommerce.programmes[
-      slug as keyof typeof maguCommerce.programmes
-    ];
-
+  const program = programs.find(
+    (item) => item.slug === slug
+  );
 
 
   if (!program) {
@@ -39,7 +35,6 @@ export default async function ProgramPage({
           items-center
           justify-center
           bg-[#FAF7F0]
-
           dark:bg-slate-950
         "
       >
@@ -49,13 +44,10 @@ export default async function ProgramPage({
             text-3xl
             font-black
             text-[#3B2412]
-
             dark:text-white
           "
         >
-
           Programme Not Found
-
         </h1>
 
       </main>
@@ -66,16 +58,9 @@ export default async function ProgramPage({
 
 
 
-
-  // Commerce programmes all have 4 academic years
-  const years = [
-    "1",
-    "2",
-    "3",
-    "4",
-  ];
-
-
+  const years = program.years.map((year) =>
+    year.slug.replace("year-", "")
+  );
 
 
 
@@ -103,8 +88,6 @@ export default async function ProgramPage({
       >
 
 
-
-
         <Breadcrumbs
 
           items={[
@@ -116,8 +99,8 @@ export default async function ProgramPage({
 
 
             {
-              name: maguCommerce.faculty,
-              href: "/faculties/commerce",
+              name: program.faculty,
+              href: `/faculties/${program.faculty}`,
             },
 
 
@@ -133,9 +116,6 @@ export default async function ProgramPage({
 
 
 
-
-
-
         <div
           className="
             mt-10
@@ -144,7 +124,6 @@ export default async function ProgramPage({
             gap-5
           "
         >
-
 
 
           <div
@@ -167,9 +146,7 @@ export default async function ProgramPage({
 
 
 
-
           <div>
-
 
             <p
               className="
@@ -178,12 +155,8 @@ export default async function ProgramPage({
                 text-[#C9A96E]
               "
             >
-
               Programme Library
-
             </p>
-
-
 
 
 
@@ -201,14 +174,10 @@ export default async function ProgramPage({
             </h1>
 
 
-
           </div>
 
 
-
         </div>
-
-
 
 
 
@@ -225,8 +194,6 @@ export default async function ProgramPage({
             lg:grid-cols-4
           "
         >
-
-
 
 
           {
@@ -259,8 +226,6 @@ export default async function ProgramPage({
               >
 
 
-
-
                 <div
                   className="
                     flex
@@ -284,15 +249,11 @@ export default async function ProgramPage({
 
 
 
-
-
-
                 <h2
                   className="
                     mt-6
                     text-3xl
                     font-black
-
                     dark:text-white
                   "
                 >
@@ -300,9 +261,6 @@ export default async function ProgramPage({
                   Year {year}
 
                 </h2>
-
-
-
 
 
 
@@ -338,8 +296,6 @@ export default async function ProgramPage({
 
             ))
           }
-
-
 
 
 
