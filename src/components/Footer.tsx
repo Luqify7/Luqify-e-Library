@@ -52,7 +52,7 @@ export default function Footer() {
               "
             >
               <Image
-                src="/images/Luqify-e-library-logo.png"
+                src="/images/luqify-e-library-logo.png"
                 alt="Luqify e-Library"
                 width={52}
                 height={52}
