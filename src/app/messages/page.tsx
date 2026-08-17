@@ -4,6 +4,9 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
+import Sidebar from "@/components/Sidebar";
+import ThemeToggle from "@/components/ThemeToggle";
+
 
 import {
   Bell,

@@ -4,9 +4,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 
-import Sidebar from "./Sidebar";
-import ThemeToggle from "@/components/ThemeToggle";
-
 import {
   Bell,
   MessageCircle,
@@ -14,10 +11,15 @@ import {
 } from "lucide-react";
 
 import { supabase } from "@/lib/supabase";
+import Sidebar from "@/components/Sidebar";
+import ThemeToggle from "@/components/ThemeToggle";
 
 export default function Navbar() {
   const [unreadCount, setUnreadCount] = useState(0);
 
+  /*
+   * LOAD UNREAD NOTIFICATIONS
+   */
   useEffect(() => {
     let mounted = true;
 
@@ -30,14 +32,12 @@ export default function Navbar() {
         })
         .eq("read", false);
 
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
 
       if (error) {
         console.error(
           "NOTIFICATION COUNT ERROR:",
-          error.message
+          error.message || error
         );
 
         setUnreadCount(0);
@@ -52,7 +52,6 @@ export default function Navbar() {
     /*
      * REALTIME NOTIFICATIONS
      */
-
     const notificationChannel = supabase
       .channel("navbar-notifications")
       .on(
@@ -107,7 +106,12 @@ export default function Navbar() {
         {/* LEFT */}
 
         <div className="flex items-center gap-3">
+
+          {/* SIDEBAR */}
+
           <Sidebar />
+
+          {/* LOGO */}
 
           <Link
             href="/"
