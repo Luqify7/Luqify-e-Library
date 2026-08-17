@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { createClient } from "@/lib/supabase";
 
 export default function AdminLoginPage() {
   const [email, setEmail] = useState("");
@@ -11,34 +10,41 @@ export default function AdminLoginPage() {
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
-  const supabase = createClient();
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ) {
     e.preventDefault();
 
     setError(null);
     setLoading(true);
 
     try {
+      const { createClient } = await import(
+        "@/lib/supabase"
+      );
+
+      const supabase = createClient();
+
       const { error: signInError } =
         await supabase.auth.signInWithPassword({
-          email,
+          email: email.trim(),
           password,
         });
 
       if (signInError) {
         setError(signInError.message);
-        setLoading(false);
         return;
       }
 
       await router.push("/admin");
       router.refresh();
-
     } catch (err) {
-      setError("Something went wrong. Please try again.");
-      console.error(err);
+      console.error("ADMIN LOGIN ERROR:", err);
 
+      setError(
+        "Something went wrong. Please try again."
+      );
     } finally {
       setLoading(false);
     }
@@ -53,6 +59,7 @@ export default function AdminLoginPage() {
         justify-center
         bg-[#FAF7F0]
         px-4
+        dark:bg-slate-950
       "
     >
       <div
@@ -65,6 +72,8 @@ export default function AdminLoginPage() {
           bg-white
           p-8
           shadow-xl
+          dark:border-slate-800
+          dark:bg-slate-900
         "
       >
         <h1
@@ -73,35 +82,52 @@ export default function AdminLoginPage() {
             text-3xl
             font-bold
             text-[#3B2412]
+            dark:text-white
           "
         >
           Admin Login
         </h1>
 
-        <p className="mb-6 text-sm text-gray-500">
+        <p
+          className="
+            mb-6
+            text-sm
+            text-gray-500
+            dark:text-slate-400
+          "
+        >
           Sign in to manage Luqify e-Library resources.
         </p>
 
-        <form onSubmit={handleSubmit} className="space-y-5">
-
+        <form
+          onSubmit={handleSubmit}
+          className="space-y-5"
+        >
           <div>
             <label
+              htmlFor="admin-email"
               className="
                 mb-2
                 block
                 font-semibold
                 text-[#3B2412]
+                dark:text-white
               "
             >
               Email
             </label>
 
             <input
+              id="admin-email"
               type="email"
               placeholder="admin@example.com"
               value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) =>
+                setEmail(e.target.value)
+              }
               required
+              disabled={loading}
+              autoComplete="email"
               className="
                 w-full
                 rounded-2xl
@@ -110,31 +136,60 @@ export default function AdminLoginPage() {
                 bg-[#FAF7F0]
                 px-4
                 py-3
+                text-[#3B2412]
                 outline-none
+                transition
                 focus:border-[#3B2412]
+                focus:ring-2
+                focus:ring-[#C9A96E]/30
+                disabled:cursor-not-allowed
+                disabled:opacity-60
+                dark:border-slate-700
+                dark:bg-slate-950
+                dark:text-white
               "
             />
           </div>
 
-
           <div>
-            <label
-              className="
-                mb-2
-                block
-                font-semibold
-                text-[#3B2412]
-              "
-            >
-              Password
-            </label>
+            <div className="mb-2 flex items-center justify-between">
+              <label
+                htmlFor="admin-password"
+                className="
+                  block
+                  font-semibold
+                  text-[#3B2412]
+                  dark:text-white
+                "
+              >
+                Password
+              </label>
+
+              <a
+                href="/admin/forgot-password"
+                className="
+                  text-sm
+                  font-semibold
+                  text-[#C9A96E]
+                  transition
+                  hover:underline
+                "
+              >
+                Forgot password?
+              </a>
+            </div>
 
             <input
+              id="admin-password"
               type="password"
               placeholder="********"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setPassword(e.target.value)
+              }
               required
+              disabled={loading}
+              autoComplete="current-password"
               className="
                 w-full
                 rounded-2xl
@@ -143,12 +198,20 @@ export default function AdminLoginPage() {
                 bg-[#FAF7F0]
                 px-4
                 py-3
+                text-[#3B2412]
                 outline-none
+                transition
                 focus:border-[#3B2412]
+                focus:ring-2
+                focus:ring-[#C9A96E]/30
+                disabled:cursor-not-allowed
+                disabled:opacity-60
+                dark:border-slate-700
+                dark:bg-slate-950
+                dark:text-white
               "
             />
           </div>
-
 
           {error && (
             <div
@@ -159,12 +222,13 @@ export default function AdminLoginPage() {
                 text-sm
                 font-semibold
                 text-red-600
+                dark:bg-red-950/30
+                dark:text-red-400
               "
             >
               {error}
             </div>
           )}
-
 
           <button
             type="submit"
@@ -178,13 +242,18 @@ export default function AdminLoginPage() {
               text-white
               transition
               hover:-translate-y-1
+              hover:bg-[#4d301b]
               disabled:cursor-not-allowed
               disabled:opacity-50
+              dark:bg-[#C9A96E]
+              dark:text-slate-950
+              dark:hover:bg-[#d8b97d]
             "
           >
-            {loading ? "Signing in..." : "Sign In"}
+            {loading
+              ? "Signing in..."
+              : "Sign In"}
           </button>
-
         </form>
       </div>
     </main>
