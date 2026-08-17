@@ -1,19 +1,85 @@
 "use client";
 
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
+
+type Theme = "light" | "dark";
+
+type ThemeContextType = {
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+  toggleTheme: () => void;
+};
+
+const ThemeContext = createContext<ThemeContextType | undefined>(
+  undefined
+);
+
+export function useTheme() {
+  const context = useContext(ThemeContext);
+
+  if (!context) {
+    throw new Error("useTheme must be used inside ThemeProvider");
+  }
+
+  return context;
+}
 
 export default function ThemeProvider({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
+  const [theme, setThemeState] = useState<Theme>("light");
+
+  useEffect(() => {
+    const savedTheme = window.localStorage.getItem("luqify-theme");
+
+    const nextTheme: Theme =
+      savedTheme === "dark" ? "dark" : "light";
+
+    setThemeState(nextTheme);
+
+    document.documentElement.classList.toggle(
+      "dark",
+      nextTheme === "dark"
+    );
+  }, []);
+
+  const setTheme = (newTheme: Theme) => {
+    setThemeState(newTheme);
+
+    window.localStorage.setItem(
+      "luqify-theme",
+      newTheme
+    );
+
+    document.documentElement.classList.toggle(
+      "dark",
+      newTheme === "dark"
+    );
+  };
+
+  const toggleTheme = () => {
+    setTheme(
+      theme === "dark" ? "light" : "dark"
+    );
+  };
+
   return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="light"
-      enableSystem={false}
+    <ThemeContext.Provider
+      value={{
+        theme,
+        setTheme,
+        toggleTheme,
+      }}
     >
       {children}
-    </NextThemesProvider>
+    </ThemeContext.Provider>
   );
 }

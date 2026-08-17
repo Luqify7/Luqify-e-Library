@@ -10,7 +10,7 @@ import {
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { programs } from "@/data/programs";
 import { courses } from "@/data/courses";
-
+import { faculties } from "@/data/faculties";
 
 export default async function SemesterPage({
   params,
@@ -21,17 +21,28 @@ export default async function SemesterPage({
     semester: string;
   }>;
 }) {
-
-
   const { slug, year, semester } = await params;
 
-
+  /* =====================================================
+     CURRENT PROGRAMME
+  ===================================================== */
 
   const currentProgram = programs.find(
     (program) => program.slug === slug
   );
 
+  /* =====================================================
+     CURRENT FACULTY
+  ===================================================== */
 
+  const currentFaculty = faculties.find(
+    (faculty) =>
+      faculty.slug === currentProgram?.faculty
+  );
+
+  /* =====================================================
+     COURSES FOR THIS SEMESTER
+  ===================================================== */
 
   const semesterCourses = courses.filter(
     (course) =>
@@ -40,32 +51,27 @@ export default async function SemesterPage({
       course.semester === semester
   );
 
-
+  /* =====================================================
+     DISPLAY NAMES
+  ===================================================== */
 
   const facultyName =
-    currentProgram?.faculty ??
-    "Faculty";
-
-
+    currentFaculty?.name ?? "Faculty";
 
   const programName =
     currentProgram?.name ??
     slug.replaceAll("-", " ");
 
-
-
-  const yearName =
-    year.replaceAll("-", " ");
-
-
+  const yearName = year.replaceAll("-", " ");
 
   const semesterName =
     semester.replaceAll("-", " ");
 
-
+  /* =====================================================
+     PAGE
+  ===================================================== */
 
   return (
-
     <main
       className="
         min-h-screen
@@ -73,56 +79,47 @@ export default async function SemesterPage({
         px-6
         py-16
         text-[#3B2412]
-
         dark:bg-slate-950
         dark:text-white
       "
     >
-
       <section className="mx-auto max-w-7xl">
 
-
+        {/* =================================================
+            BREADCRUMBS
+        ================================================= */}
 
         <Breadcrumbs
-
           items={[
-
             {
               name: "Faculties",
               href: "/faculties",
             },
-
-
             {
               name: facultyName,
-              href: `/faculties/${facultyName}`,
+              href: `/faculties/${
+                currentFaculty?.slug ??
+                currentProgram?.faculty ??
+                ""
+              }`,
             },
-
-
             {
               name: programName,
               href: `/programs/${slug}`,
             },
-
-
             {
               name: yearName,
               href: `/programs/${slug}/${year}`,
             },
-
-
             {
               name: semesterName,
             },
-
           ]}
-
         />
 
-
-
-
-
+        {/* =================================================
+            HERO
+        ================================================= */}
 
         <div
           className="
@@ -133,14 +130,10 @@ export default async function SemesterPage({
             bg-white
             p-10
             shadow-sm
-
             dark:border-slate-800
             dark:bg-slate-900
           "
         >
-
-
-
           <div
             className="
               flex
@@ -151,13 +144,14 @@ export default async function SemesterPage({
             "
           >
 
-
+            {/* ICON */}
 
             <div
               className="
                 flex
                 h-20
                 w-20
+                shrink-0
                 items-center
                 justify-center
                 rounded-3xl
@@ -165,17 +159,12 @@ export default async function SemesterPage({
                 text-white
               "
             >
-
-              <BookOpen size={38}/>
-
+              <BookOpen size={38} />
             </div>
 
-
-
-
+            {/* TEXT */}
 
             <div>
-
               <p
                 className="
                   text-sm
@@ -185,14 +174,8 @@ export default async function SemesterPage({
                   text-[#C9A96E]
                 "
               >
-
                 Course Library
-
               </p>
-
-
-
-
 
               <h1
                 className="
@@ -203,38 +186,23 @@ export default async function SemesterPage({
                   md:text-6xl
                 "
               >
-
                 {semesterName}
-
               </h1>
-
-
-
-
 
               <p
                 className="
                   mt-4
                   text-[#6b5845]
-
                   dark:text-slate-400
                 "
               >
-
-                Browse available courses and access academic resources.
-
+                Browse available courses and access
+                academic resources.
               </p>
-
-
             </div>
-
-
           </div>
 
-
-
-
-
+          {/* COURSE COUNT */}
 
           <div
             className="
@@ -247,24 +215,21 @@ export default async function SemesterPage({
               text-[#C9A96E]
             "
           >
+            <Layers size={18} />
 
-            <Layers size={18}/>
-
-            {semesterCourses.length} Courses Available
-
+            {semesterCourses.length}{" "}
+            {semesterCourses.length === 1
+              ? "Course"
+              : "Courses"}{" "}
+            Available
           </div>
-
-
-
         </div>
 
-
-
-
-
+        {/* =================================================
+            COURSES
+        ================================================= */}
 
         <section className="mt-14">
-
 
           <h2
             className="
@@ -272,165 +237,147 @@ export default async function SemesterPage({
               font-black
             "
           >
-
             Courses
-
           </h2>
 
+          {semesterCourses.length > 0 ? (
+            <div
+              className="
+                mt-8
+                grid
+                gap-8
+                md:grid-cols-2
+              "
+            >
+              {semesterCourses.map(
+                (course) => {
 
+                  /*
+                   * IMPORTANT
+                   *
+                   * The course slug is used in the URL.
+                   *
+                   * Example:
+                   *
+                   * financial-accounting
+                   *
+                   * The course resources page will then
+                   * receive that exact slug and match it
+                   * against the database course value.
+                   */
 
+                  const courseUrl =
+                    `/programs/${slug}/${year}/${semester}/${course.slug}`;
 
-
-
-          <div
-            className="
-              mt-8
-              grid
-              gap-8
-              md:grid-cols-2
-            "
-          >
-
-
-            {
-              semesterCourses.length > 0 ? (
-
-                semesterCourses.map((course)=>(
-
-
-                  <Link
-
-                    key={course.slug}
-
-                    href={`/programs/${slug}/${year}/${semester}/${course.slug}`}
-
-                    className="
-                      group
-                      rounded-[2.5rem]
-                      border
-                      border-[#e8dcc8]
-                      bg-white
-                      p-8
-                      shadow-sm
-                      transition-all
-                      duration-300
-                      hover:-translate-y-2
-                      hover:shadow-xl
-
-                      dark:border-slate-700
-                      dark:bg-slate-900
-                    "
-
-                  >
-
-
-                    <div
+                  return (
+                    <Link
+                      key={course.slug}
+                      href={courseUrl}
                       className="
-                        flex
-                        h-16
-                        w-16
-                        items-center
-                        justify-center
-                        rounded-2xl
-                        bg-[#FAF7F0]
-                        text-[#3B2412]
-
-                        dark:bg-slate-800
-                        dark:text-white
+                        group
+                        rounded-[2.5rem]
+                        border
+                        border-[#e8dcc8]
+                        bg-white
+                        p-8
+                        shadow-sm
+                        transition-all
+                        duration-300
+                        hover:-translate-y-2
+                        hover:shadow-xl
+                        dark:border-slate-700
+                        dark:bg-slate-900
                       "
                     >
 
-                      <GraduationCap size={30}/>
+                      {/* COURSE ICON */}
 
-                    </div>
+                      <div
+                        className="
+                          flex
+                          h-16
+                          w-16
+                          items-center
+                          justify-center
+                          rounded-2xl
+                          bg-[#FAF7F0]
+                          text-[#3B2412]
+                          dark:bg-slate-800
+                          dark:text-white
+                        "
+                      >
+                        <GraduationCap
+                          size={30}
+                        />
+                      </div>
 
+                      {/* COURSE NAME */}
 
+                      <h3
+                        className="
+                          mt-6
+                          text-2xl
+                          font-black
+                        "
+                      >
+                        {course.name}
+                      </h3>
 
+                      {/* OPEN COURSE */}
 
+                      <div
+                        className="
+                          mt-6
+                          flex
+                          items-center
+                          gap-3
+                          font-bold
+                          text-[#C9A96E]
+                          transition-all
+                          duration-300
+                          group-hover:gap-5
+                        "
+                      >
+                        <span>
+                          Open Course
+                        </span>
 
-                    <h3
-                      className="
-                        mt-6
-                        text-2xl
-                        font-black
-                      "
-                    >
+                        <ChevronRight
+                          size={18}
+                          className="
+                            transition-transform
+                            duration-300
+                            group-hover:translate-x-1
+                          "
+                        />
+                      </div>
 
-                      {course.name}
-
-                    </h3>
-
-
-
-
-
-                    <div
-                      className="
-                        mt-6
-                        flex
-                        items-center
-                        gap-3
-                        font-bold
-                        text-[#C9A96E]
-                      "
-                    >
-
-                      <span>
-                        Open Course
-                      </span>
-
-
-                      <ChevronRight size={18}/>
-
-
-                    </div>
-
-
-
-                  </Link>
-
-
-                ))
-
-
-              ) : (
-
-
-                <div
-                  className="
-                    rounded-[2rem]
-                    border
-                    border-[#e8dcc8]
-                    bg-white
-                    p-8
-                    text-slate-500
-
-                    dark:border-slate-700
-                    dark:bg-slate-900
-                    dark:text-slate-400
-                  "
-                >
-
-                  No courses available yet.
-
-                </div>
-
-
-              )
-            }
-
-
-          </div>
-
+                    </Link>
+                  );
+                }
+              )}
+            </div>
+          ) : (
+            <div
+              className="
+                mt-8
+                rounded-[2rem]
+                border
+                border-[#e8dcc8]
+                bg-white
+                p-8
+                text-slate-500
+                dark:border-slate-700
+                dark:bg-slate-900
+                dark:text-slate-400
+              "
+            >
+              No courses available yet.
+            </div>
+          )}
 
         </section>
-
-
       </section>
-
-
     </main>
-
   );
-
 }

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 import Sidebar from "./Sidebar";
 import ThemeToggle from "@/components/ThemeToggle";
@@ -12,11 +13,71 @@ import {
   Search,
 } from "lucide-react";
 
+import { supabase } from "@/lib/supabase";
 
 export default function Navbar() {
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  useEffect(() => {
+    let mounted = true;
+
+    const loadUnreadNotifications = async () => {
+      const { count, error } = await supabase
+        .from("notifications")
+        .select("id", {
+          count: "exact",
+          head: true,
+        })
+        .eq("read", false);
+
+      if (!mounted) {
+        return;
+      }
+
+      if (error) {
+        console.error(
+          "NOTIFICATION COUNT ERROR:",
+          error.message
+        );
+
+        setUnreadCount(0);
+        return;
+      }
+
+      setUnreadCount(count || 0);
+    };
+
+    void loadUnreadNotifications();
+
+    /*
+     * REALTIME NOTIFICATIONS
+     */
+
+    const notificationChannel = supabase
+      .channel("navbar-notifications")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notifications",
+        },
+        () => {
+          void loadUnreadNotifications();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      mounted = false;
+
+      void supabase.removeChannel(
+        notificationChannel
+      );
+    };
+  }, []);
 
   return (
-
     <header
       className="
         sticky
@@ -31,7 +92,6 @@ export default function Navbar() {
         dark:bg-slate-950/90
       "
     >
-
       <div
         className="
           mx-auto
@@ -44,28 +104,15 @@ export default function Navbar() {
           sm:px-6
         "
       >
-
-
         {/* LEFT */}
 
         <div className="flex items-center gap-3">
-
-
-          {/* SIDEBAR BUTTON */}
-
           <Sidebar />
-
-
 
           <Link
             href="/"
-            className="
-              flex
-              items-center
-              gap-3
-            "
+            className="flex items-center gap-3"
           >
-
             <div
               className="
                 flex
@@ -79,7 +126,6 @@ export default function Navbar() {
                 shadow-md
               "
             >
-
               <Image
                 src="/images/luqify-e-library-logo.png"
                 alt="Luqify e-Library"
@@ -88,10 +134,7 @@ export default function Navbar() {
                 priority
                 unoptimized
               />
-
             </div>
-
-
 
             <h1
               className="
@@ -101,24 +144,13 @@ export default function Navbar() {
                 dark:text-white
               "
             >
-
               Luqify
-
               <span className="font-medium">
                 {" "}e-Library
               </span>
-
             </h1>
-
-
           </Link>
-
-
         </div>
-
-
-
-
 
         {/* DESKTOP MENU */}
 
@@ -134,56 +166,40 @@ export default function Navbar() {
             lg:flex
           "
         >
-
           <Link
             href="/"
-            className="hover:text-[#C9A96E]"
+            className="transition hover:text-[#C9A96E]"
           >
             Home
           </Link>
 
-
           <Link
             href="/faculties"
-            className="hover:text-[#C9A96E]"
+            className="transition hover:text-[#C9A96E]"
           >
             Library
           </Link>
 
-
           <Link
             href="/upload"
-            className="hover:text-[#C9A96E]"
+            className="transition hover:text-[#C9A96E]"
           >
             Uploads
           </Link>
 
-
           <Link
             href="/lt7"
-            className="hover:text-[#C9A96E]"
+            className="transition hover:text-[#C9A96E]"
           >
             LT7
           </Link>
-
-
         </nav>
-
-
-
-
-
 
         {/* RIGHT */}
 
-        <div
-          className="
-            flex
-            items-center
-            gap-2
-          "
-        >
+        <div className="flex items-center gap-2">
 
+          {/* SEARCH */}
 
           <Link
             href="/search"
@@ -204,18 +220,16 @@ export default function Navbar() {
               dark:text-white
             "
           >
-
-            <Search size={18}/>
-
+            <Search size={18} />
           </Link>
 
-
-
+          {/* NOTIFICATIONS */}
 
           <Link
             href="/notifications"
             aria-label="Notifications"
             className="
+              relative
               flex
               h-10
               w-10
@@ -231,13 +245,39 @@ export default function Navbar() {
               dark:text-white
             "
           >
+            <Bell size={18} />
 
-            <Bell size={18}/>
-
+            {unreadCount > 0 && (
+              <span
+                className="
+                  absolute
+                  -right-1
+                  -top-1
+                  flex
+                  min-h-5
+                  min-w-5
+                  items-center
+                  justify-center
+                  rounded-full
+                  border-2
+                  border-[#FAF7F0]
+                  bg-red-600
+                  px-1
+                  text-[9px]
+                  font-black
+                  leading-none
+                  text-white
+                  dark:border-slate-950
+                "
+              >
+                {unreadCount > 99
+                  ? "99+"
+                  : unreadCount}
+              </span>
+            )}
           </Link>
 
-
-
+          {/* MESSAGES */}
 
           <Link
             href="/messages"
@@ -258,24 +298,15 @@ export default function Navbar() {
               dark:text-white
             "
           >
-
-            <MessageCircle size={18}/>
-
+            <MessageCircle size={18} />
           </Link>
 
-
+          {/* THEME */}
 
           <ThemeToggle />
 
-
         </div>
-
-
       </div>
-
-
     </header>
-
   );
-
 }

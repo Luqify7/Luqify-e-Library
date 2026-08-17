@@ -1,39 +1,18 @@
 import Link from "next/link";
 import {
   BriefcaseBusiness,
-  Scale,
   GraduationCap,
   Users,
   ArrowRight,
 } from "lucide-react";
 
+import { faculties } from "@/data/faculties";
 
-const faculties = [
-  {
-    name: "Business",
-    description: "Accounting, management, economics and business studies.",
-    icon: BriefcaseBusiness,
-  },
-
-  {
-    name: "Law",
-    description: "Legal studies, principles and academic resources.",
-    icon: Scale,
-  },
-
-  {
-    name: "Education",
-    description: "Learning materials for education programmes.",
-    icon: GraduationCap,
-  },
-
-  {
-    name: "Social Sciences",
-    description: "Resources across social and human studies.",
-    icon: Users,
-  },
-];
-
+const facultyIcons = {
+  commerce: BriefcaseBusiness,
+  education: GraduationCap,
+  "social-sciences": Users,
+};
 
 export default function FacultyPreview() {
   return (
@@ -45,13 +24,7 @@ export default function FacultyPreview() {
         dark:bg-slate-950
       "
     >
-
-      <div
-        className="
-          mx-auto
-          max-w-7xl
-        "
-      >
+      <div className="mx-auto max-w-7xl">
 
         {/* Heading */}
         <div
@@ -64,9 +37,7 @@ export default function FacultyPreview() {
             md:items-end
           "
         >
-
           <div>
-
             <p
               className="
                 text-sm
@@ -78,7 +49,6 @@ export default function FacultyPreview() {
             >
               Explore Content
             </p>
-
 
             <h2
               className="
@@ -93,7 +63,6 @@ export default function FacultyPreview() {
               Explore Faculties
             </h2>
 
-
             <p
               className="
                 mt-4
@@ -106,9 +75,7 @@ export default function FacultyPreview() {
               Browse academic resources organized according
               to your faculty and programme.
             </p>
-
           </div>
-
 
           <Link
             href="/faculties"
@@ -122,7 +89,6 @@ export default function FacultyPreview() {
               dark:text-white
             "
           >
-
             Explore All Faculties
 
             <ArrowRight
@@ -132,12 +98,8 @@ export default function FacultyPreview() {
                 group-hover:translate-x-1
               "
             />
-
           </Link>
-
         </div>
-
-
 
         {/* Faculty Cards */}
         <div
@@ -146,18 +108,21 @@ export default function FacultyPreview() {
             grid
             gap-6
             sm:grid-cols-2
-            lg:grid-cols-4
+            lg:grid-cols-3
           "
         >
-
           {faculties.map((faculty) => {
-
-            const Icon = faculty.icon;
+            const Icon =
+              facultyIcons[
+                faculty.slug as keyof typeof facultyIcons
+              ] ?? GraduationCap;
 
             return (
-              <div
-                key={faculty.name}
+              <Link
+                key={faculty.slug}
+                href={`/faculties/${faculty.slug}`}
                 className="
+                  group
                   rounded-[2rem]
                   border
                   border-[#e8dcc8]
@@ -170,7 +135,6 @@ export default function FacultyPreview() {
                   dark:bg-slate-900
                 "
               >
-
                 <div
                   className="
                     flex
@@ -187,7 +151,6 @@ export default function FacultyPreview() {
                   <Icon size={28} />
                 </div>
 
-
                 <h3
                   className="
                     mt-6
@@ -200,7 +163,6 @@ export default function FacultyPreview() {
                   {faculty.name}
                 </h3>
 
-
                 <p
                   className="
                     mt-3
@@ -210,20 +172,35 @@ export default function FacultyPreview() {
                     dark:text-slate-400
                   "
                 >
-                  {faculty.description}
+                  {faculty.programs.length} programmes available.
+                  Explore programmes, courses and academic resources.
                 </p>
 
+                <div
+                  className="
+                    mt-6
+                    flex
+                    items-center
+                    gap-2
+                    font-semibold
+                    text-[#C9A96E]
+                  "
+                >
+                  Explore Faculty
 
-              </div>
+                  <ArrowRight
+                    size={17}
+                    className="
+                      transition
+                      group-hover:translate-x-1
+                    "
+                  />
+                </div>
+              </Link>
             );
-
           })}
-
         </div>
-
-
       </div>
-
     </section>
   );
 }

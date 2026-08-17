@@ -9,7 +9,7 @@ import {
 
 import Breadcrumbs from "@/components/Breadcrumbs";
 import { programs } from "@/data/programs";
-
+import { faculties } from "@/data/faculties";
 
 export default async function YearPage({
   params,
@@ -19,16 +19,15 @@ export default async function YearPage({
     year: string;
   }>;
 }) {
-
   const { slug, year } = await params;
-
-
 
   const currentProgram = programs.find(
     (program) => program.slug === slug
   );
 
-
+  const currentFaculty = faculties.find(
+    (faculty) => faculty.slug === currentProgram?.faculty
+  );
 
   const semesters = [
     {
@@ -37,7 +36,6 @@ export default async function YearPage({
       description:
         "Access lecture notes, tutorials and examination resources.",
     },
-
     {
       name: "Semester 2",
       slug: "semester-2",
@@ -46,26 +44,17 @@ export default async function YearPage({
     },
   ];
 
-
-
   const yearLabel = year.replaceAll("-", " ");
-
-
 
   const programName =
     currentProgram?.name ??
     slug.replaceAll("-", " ");
 
-
-
   const facultyName =
-    currentProgram?.faculty ??
+    currentFaculty?.name ??
     "Faculty";
 
-
-
   return (
-
     <main
       className="
         min-h-screen
@@ -73,48 +62,31 @@ export default async function YearPage({
         px-6
         py-16
         text-[#3B2412]
-
         dark:bg-slate-950
         dark:text-white
       "
     >
-
       <section className="mx-auto max-w-7xl">
 
-
         <Breadcrumbs
-
           items={[
-
             {
               name: "Faculties",
               href: "/faculties",
             },
-
-
             {
               name: facultyName,
-              href: `/faculties/${facultyName}`,
+              href: `/faculties/${currentFaculty?.slug ?? currentProgram?.faculty ?? ""}`,
             },
-
-
             {
               name: programName,
               href: `/programs/${slug}`,
             },
-
-
             {
               name: yearLabel,
             },
-
           ]}
-
         />
-
-
-
-
 
         <div
           className="
@@ -125,25 +97,19 @@ export default async function YearPage({
             bg-white
             p-10
             shadow-sm
-
             dark:border-slate-800
             dark:bg-slate-900
           "
         >
-
-
           <div
             className="
               flex
               flex-col
               gap-6
-
               md:flex-row
               md:items-center
             "
           >
-
-
             <div
               className="
                 flex
@@ -156,16 +122,10 @@ export default async function YearPage({
                 text-white
               "
             >
-
-              <GraduationCap size={38}/>
-
+              <GraduationCap size={38} />
             </div>
 
-
-
-
             <div>
-
               <p
                 className="
                   text-sm
@@ -178,8 +138,6 @@ export default async function YearPage({
                 Academic Year
               </p>
 
-
-
               <h1
                 className="
                   mt-2
@@ -189,12 +147,8 @@ export default async function YearPage({
                   md:text-6xl
                 "
               >
-
                 {yearLabel}
-
               </h1>
-
-
 
               <p
                 className="
@@ -202,70 +156,38 @@ export default async function YearPage({
                   max-w-2xl
                   leading-7
                   text-[#6b5845]
-
                   dark:text-slate-400
                 "
               >
-
                 Select a semester to access courses,
                 lecture notes, tutorials and examination
                 resources.
-
               </p>
-
-
             </div>
-
-
           </div>
-
-
         </div>
 
-
-
-
-
-
         <div className="mt-14">
-
-
           <div className="mb-8">
-
-
             <h2
               className="
                 text-4xl
                 font-black
               "
             >
-
               Choose Semester
-
             </h2>
-
-
 
             <p
               className="
                 mt-3
                 text-[#6b5845]
-
                 dark:text-slate-400
               "
             >
-
               Select your semester to view available courses.
-
             </p>
-
-
           </div>
-
-
-
-
-
 
           <div
             className="
@@ -274,141 +196,90 @@ export default async function YearPage({
               md:grid-cols-2
             "
           >
-
-
-            {
-              semesters.map((semester)=>(
-
-
-                <Link
-
-                  key={semester.slug}
-
-                  href={`/programs/${slug}/${year}/${semester.slug}`}
-
+            {semesters.map((semester) => (
+              <Link
+                key={semester.slug}
+                href={`/programs/${slug}/${year}/${semester.slug}`}
+                className="
+                  group
+                  rounded-[2.5rem]
+                  border
+                  border-[#e8dcc8]
+                  bg-white
+                  p-8
+                  shadow-sm
+                  transition-all
+                  duration-300
+                  hover:-translate-y-2
+                  hover:shadow-xl
+                  dark:border-slate-700
+                  dark:bg-slate-900
+                "
+              >
+                <div
                   className="
-                    group
-                    rounded-[2.5rem]
-                    border
-                    border-[#e8dcc8]
-                    bg-white
-                    p-8
-                    shadow-sm
-                    transition-all
-                    duration-300
-                    hover:-translate-y-2
-                    hover:shadow-xl
-
-                    dark:border-slate-700
-                    dark:bg-slate-900
+                    flex
+                    h-16
+                    w-16
+                    items-center
+                    justify-center
+                    rounded-2xl
+                    bg-[#FAF7F0]
+                    text-[#3B2412]
+                    dark:bg-slate-800
+                    dark:text-white
                   "
-
                 >
+                  <CalendarDays size={30} />
+                </div>
 
+                <h3
+                  className="
+                    mt-6
+                    text-3xl
+                    font-black
+                  "
+                >
+                  {semester.name}
+                </h3>
 
-                  <div
-                    className="
-                      flex
-                      h-16
-                      w-16
-                      items-center
-                      justify-center
-                      rounded-2xl
-                      bg-[#FAF7F0]
-                      text-[#3B2412]
+                <p
+                  className="
+                    mt-3
+                    text-sm
+                    leading-6
+                    text-[#6b5845]
+                    dark:text-slate-400
+                  "
+                >
+                  {semester.description}
+                </p>
 
-                      dark:bg-slate-800
-                      dark:text-white
-                    "
-                  >
+                <div
+                  className="
+                    mt-6
+                    flex
+                    items-center
+                    gap-3
+                    font-bold
+                    text-[#C9A96E]
+                    transition-all
+                    group-hover:gap-5
+                  "
+                >
+                  <BookOpen size={18} />
 
-                    <CalendarDays size={30}/>
+                  <span>
+                    Open Semester
+                  </span>
 
-                  </div>
-
-
-
-
-
-                  <h3
-                    className="
-                      mt-6
-                      text-3xl
-                      font-black
-                    "
-                  >
-
-                    {semester.name}
-
-                  </h3>
-
-
-
-
-
-                  <p
-                    className="
-                      mt-3
-                      text-sm
-                      leading-6
-                      text-[#6b5845]
-
-                      dark:text-slate-400
-                    "
-                  >
-
-                    {semester.description}
-
-                  </p>
-
-
-
-
-
-
-                  <div
-                    className="
-                      mt-6
-                      flex
-                      items-center
-                      gap-3
-                      font-bold
-                      text-[#C9A96E]
-                      transition-all
-                      group-hover:gap-5
-                    "
-                  >
-
-                    <BookOpen size={18}/>
-
-                    <span>
-                      Open Semester
-                    </span>
-
-                    <ChevronRight size={18}/>
-
-
-                  </div>
-
-
-                </Link>
-
-
-              ))
-            }
-
-
+                  <ChevronRight size={18} />
+                </div>
+              </Link>
+            ))}
           </div>
-
-
         </div>
-
-
       </section>
-
-
     </main>
-
   );
-
 }

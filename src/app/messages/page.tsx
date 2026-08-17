@@ -1,344 +1,327 @@
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+
+
 import {
+  Bell,
   MessageCircle,
-  Users,
-  GraduationCap,
-  BookOpen,
+  Search,
 } from "lucide-react";
 
+import { supabase } from "@/lib/supabase";
 
-const rooms = [
+export default function Navbar() {
+  const [unreadCount, setUnreadCount] = useState(0);
 
-  {
-    title: "Commerce Faculty",
-    description:
-      "Discuss commerce resources and announcements.",
-    icon: Users,
-  },
+  /*
+   * LOAD UNREAD NOTIFICATIONS
+   *
+   * The notifications table uses:
+   *
+   * read = false
+   *
+   * NOT is_read.
+   */
+  useEffect(() => {
+    let mounted = true;
 
+    const loadUnreadNotifications = async () => {
+      const { count, error } = await supabase
+        .from("notifications")
+        .select("id", {
+          count: "exact",
+          head: true,
+        })
+        .eq("read", false);
 
-  {
-    title: "Bachelor of Accountancy",
-    description:
-      "Accounting students resource requests.",
-    icon: GraduationCap,
-  },
+      if (!mounted) {
+        return;
+      }
 
+      if (error) {
+        console.error(
+          "NOTIFICATION COUNT ERROR:",
+          error.message || error
+        );
 
-  {
-    title: "Year 2 Students",
-    description:
-      "Academic discussions and study support.",
-    icon: BookOpen,
-  },
+        setUnreadCount(0);
+        return;
+      }
 
-];
+      setUnreadCount(count || 0);
+    };
 
+    void loadUnreadNotifications();
 
+    /*
+     * REALTIME NOTIFICATIONS
+     *
+     * Whenever a notification is created,
+     * updated or deleted, refresh the badge.
+     */
+    const notificationChannel = supabase
+      .channel("navbar-notifications")
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "notifications",
+        },
+        () => {
+          void loadUnreadNotifications();
+        }
+      )
+      .subscribe();
 
-const messages = [
+    return () => {
+      mounted = false;
 
-  {
-    user: "Student",
-    text:
-      "Does anyone have Cost Accounting notes?",
-    time:
-      "10:30 AM",
-  },
-
-
-  {
-    user: "Student",
-    text:
-      "I uploaded the Accounting past paper.",
-    time:
-      "Yesterday",
-  },
-
-
-];
-
-
-
-export default function MessagesPage() {
-
+      void supabase.removeChannel(
+        notificationChannel
+      );
+    };
+  }, []);
 
   return (
-
-    <main
+    <header
       className="
-        min-h-screen
-        bg-[#FAF7F0]
-        px-6
-        py-16
-        text-[#3B2412]
-        dark:bg-slate-950
-        dark:text-white
+        sticky
+        top-0
+        z-50
+        border-b
+        border-[#e8dcc8]
+        bg-[#FAF7F0]/90
+        backdrop-blur-md
+        shadow-sm
+        dark:border-slate-800
+        dark:bg-slate-950/90
       "
     >
-
-      <section
+      <div
         className="
           mx-auto
-          max-w-6xl
+          flex
+          h-20
+          max-w-7xl
+          items-center
+          justify-between
+          px-4
+          sm:px-6
         "
       >
 
+        {/* LEFT */}
 
+        <div className="flex items-center gap-3">
 
-        <div
-          className="
-            mb-10
-            rounded-[3rem]
-            bg-white
-            p-10
-            shadow-sm
-            dark:bg-slate-900
-          "
-        >
+          {/* SIDEBAR */}
 
-          <div
-            className="
-              flex
-              items-center
-              gap-4
-            "
+          <Sidebar />
+
+          {/* LOGO */}
+
+          <Link
+            href="/"
+            className="flex items-center gap-3"
           >
-
             <div
               className="
-                rounded-2xl
-                bg-[#3B2412]
-                p-4
-                text-white
+                flex
+                h-14
+                w-14
+                items-center
+                justify-center
+                rounded-full
+                bg-[#C9A96E]
+                p-2
+                shadow-md
               "
             >
-
-              <MessageCircle size={28}/>
-
+              <Image
+                src="/images/luqify-e-library-logo.png"
+                alt="Luqify e-Library"
+                width={56}
+                height={56}
+                priority
+                unoptimized
+              />
             </div>
 
-
-            <div>
-
-              <h1
-                className="
-                  text-4xl
-                  font-black
-                "
-              >
-                Messages
-              </h1>
-
-
-              <p
-                className="
-                  mt-2
-                  text-slate-500
-                "
-              >
-                Connect with students and request learning materials.
-              </p>
-
-
-            </div>
-
-
-          </div>
-
-
+            <h1
+              className="
+                text-xl
+                font-black
+                text-[#3B2412]
+                dark:text-white
+              "
+            >
+              Luqify
+              <span className="font-medium">
+                {" "}e-Library
+              </span>
+            </h1>
+          </Link>
         </div>
 
+        {/* DESKTOP MENU */}
 
-
-
-
-        <div
+        <nav
           className="
-            grid
-            gap-6
-            md:grid-cols-3
+            hidden
+            items-center
+            gap-8
+            text-sm
+            font-semibold
+            text-[#3B2412]
+            dark:text-white
+            lg:flex
           "
         >
+          <Link
+            href="/"
+            className="transition hover:text-[#C9A96E]"
+          >
+            Home
+          </Link>
 
-          {
-            rooms.map((room)=>{
+          <Link
+            href="/faculties"
+            className="transition hover:text-[#C9A96E]"
+          >
+            Library
+          </Link>
 
+          <Link
+            href="/upload"
+            className="transition hover:text-[#C9A96E]"
+          >
+            Uploads
+          </Link>
 
-              const Icon = room.icon;
+          <Link
+            href="/lt7"
+            className="transition hover:text-[#C9A96E]"
+          >
+            LT7
+          </Link>
+        </nav>
 
+        {/* RIGHT */}
 
-              return (
+        <div className="flex items-center gap-2">
 
-                <button
+          {/* SEARCH */}
 
-                  key={room.title}
-
-                  className="
-                    rounded-3xl
-                    bg-white
-                    p-6
-                    text-left
-                    shadow-sm
-                    transition
-                    hover:-translate-y-1
-                    hover:shadow-lg
-                    dark:bg-slate-900
-                  "
-
-                >
-
-                  <div
-                    className="
-                      mb-5
-                      flex
-                      h-14
-                      w-14
-                      items-center
-                      justify-center
-                      rounded-2xl
-                      bg-[#FAF7F0]
-                      text-[#C9A96E]
-                      dark:bg-slate-800
-                    "
-                  >
-
-                    <Icon size={26}/>
-
-                  </div>
-
-
-                  <h2
-                    className="
-                      text-lg
-                      font-bold
-                    "
-                  >
-                    {room.title}
-                  </h2>
-
-
-                  <p
-                    className="
-                      mt-2
-                      text-sm
-                      text-slate-500
-                      dark:text-slate-400
-                    "
-                  >
-                    {room.description}
-                  </p>
-
-
-                </button>
-
-              );
-
-
-            })
-          }
-
-
-        </div>
-
-
-
-
-
-        <div
-          className="
-            mt-10
-            rounded-[2rem]
-            bg-white
-            p-8
-            shadow-sm
-            dark:bg-slate-900
-          "
-        >
-
-          <h2
+          <Link
+            href="/search"
+            aria-label="Search resources"
             className="
-              mb-6
-              text-2xl
-              font-black
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-[#C9A96E]
+              text-[#3B2412]
+              transition
+              hover:bg-[#C9A96E]
+              hover:text-white
+              dark:text-white
             "
           >
-            Recent Messages
-          </h2>
+            <Search size={18} />
+          </Link>
 
+          {/* NOTIFICATIONS */}
 
+          <Link
+            href="/notifications"
+            aria-label="Notifications"
+            className="
+              relative
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-[#C9A96E]
+              text-[#3B2412]
+              transition
+              hover:bg-[#C9A96E]
+              hover:text-white
+              dark:text-white
+            "
+          >
+            <Bell size={18} />
 
-          <div className="space-y-5">
+            {unreadCount > 0 && (
+              <span
+                className="
+                  absolute
+                  -right-1
+                  -top-1
+                  flex
+                  min-h-5
+                  min-w-5
+                  items-center
+                  justify-center
+                  rounded-full
+                  border-2
+                  border-[#FAF7F0]
+                  bg-red-600
+                  px-1
+                  text-[9px]
+                  font-black
+                  leading-none
+                  text-white
+                  dark:border-slate-950
+                "
+              >
+                {unreadCount > 99
+                  ? "99+"
+                  : unreadCount}
+              </span>
+            )}
+          </Link>
 
+          {/* MESSAGES */}
 
-            {
-              messages.map((message,index)=>(
+          <Link
+            href="/messages"
+            aria-label="Messages"
+            className="
+              flex
+              h-10
+              w-10
+              items-center
+              justify-center
+              rounded-full
+              border
+              border-[#C9A96E]
+              text-[#3B2412]
+              transition
+              hover:bg-[#C9A96E]
+              hover:text-white
+              dark:text-white
+            "
+          >
+            <MessageCircle size={18} />
+          </Link>
 
+          {/* THEME */}
 
-                <div
-                  key={index}
-                  className="
-                    rounded-2xl
-                    bg-[#FAF7F0]
-                    p-5
-                    dark:bg-slate-800
-                  "
-                >
-
-                  <div
-                    className="
-                      flex
-                      justify-between
-                    "
-                  >
-
-                    <p className="font-bold">
-                      {message.user}
-                    </p>
-
-
-                    <span
-                      className="
-                        text-xs
-                        text-[#C9A96E]
-                      "
-                    >
-                      {message.time}
-                    </span>
-
-
-                  </div>
-
-
-                  <p
-                    className="
-                      mt-2
-                      text-slate-600
-                      dark:text-slate-300
-                    "
-                  >
-                    {message.text}
-                  </p>
-
-
-                </div>
-
-
-              ))
-            }
-
-
-          </div>
-
+          <ThemeToggle />
 
         </div>
-
-
-
-      </section>
-
-
-    </main>
-
+      </div>
+    </header>
   );
-
 }

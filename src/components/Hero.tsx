@@ -42,6 +42,7 @@ export default function Hero() {
     "/images/student-11.jpg",
     "/images/student-12.jpg",
     "/images/student-13.jpg",
+    "/images/student-14.jpg",
   ];
 
 
