@@ -1,17 +1,16 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 import Sidebar from "@/components/Sidebar";
 import ThemeToggle from "@/components/ThemeToggle";
 
-
 import {
-  Bell,
   MessageCircle,
   Search,
+  Bell,
 } from "lucide-react";
 
 import { supabase } from "@/lib/supabase";
@@ -19,15 +18,6 @@ import { supabase } from "@/lib/supabase";
 export default function Navbar() {
   const [unreadCount, setUnreadCount] = useState(0);
 
-  /*
-   * LOAD UNREAD NOTIFICATIONS
-   *
-   * The notifications table uses:
-   *
-   * read = false
-   *
-   * NOT is_read.
-   */
   useEffect(() => {
     let mounted = true;
 
@@ -40,9 +30,7 @@ export default function Navbar() {
         })
         .eq("read", false);
 
-      if (!mounted) {
-        return;
-      }
+      if (!mounted) return;
 
       if (error) {
         console.error(
@@ -54,17 +42,11 @@ export default function Navbar() {
         return;
       }
 
-      setUnreadCount(count || 0);
+      setUnreadCount(count ?? 0);
     };
 
     void loadUnreadNotifications();
 
-    /*
-     * REALTIME NOTIFICATIONS
-     *
-     * Whenever a notification is created,
-     * updated or deleted, refresh the badge.
-     */
     const notificationChannel = supabase
       .channel("navbar-notifications")
       .on(
@@ -82,10 +64,7 @@ export default function Navbar() {
 
     return () => {
       mounted = false;
-
-      void supabase.removeChannel(
-        notificationChannel
-      );
+      void supabase.removeChannel(notificationChannel);
     };
   }, []);
 
@@ -116,16 +95,10 @@ export default function Navbar() {
           sm:px-6
         "
       >
-
         {/* LEFT */}
 
         <div className="flex items-center gap-3">
-
-          {/* SIDEBAR */}
-
           <Sidebar />
-
-          {/* LOGO */}
 
           <Link
             href="/"
@@ -216,9 +189,6 @@ export default function Navbar() {
         {/* RIGHT */}
 
         <div className="flex items-center gap-2">
-
-          {/* SEARCH */}
-
           <Link
             href="/search"
             aria-label="Search resources"
@@ -240,8 +210,6 @@ export default function Navbar() {
           >
             <Search size={18} />
           </Link>
-
-          {/* NOTIFICATIONS */}
 
           <Link
             href="/notifications"
@@ -295,8 +263,6 @@ export default function Navbar() {
             )}
           </Link>
 
-          {/* MESSAGES */}
-
           <Link
             href="/messages"
             aria-label="Messages"
@@ -319,10 +285,7 @@ export default function Navbar() {
             <MessageCircle size={18} />
           </Link>
 
-          {/* THEME */}
-
           <ThemeToggle />
-
         </div>
       </div>
     </header>
