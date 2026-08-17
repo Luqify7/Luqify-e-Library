@@ -189,6 +189,8 @@ export default function Navbar() {
         {/* RIGHT */}
 
         <div className="flex items-center gap-2">
+          {/* SEARCH */}
+
           <Link
             href="/search"
             aria-label="Search resources"
@@ -210,6 +212,8 @@ export default function Navbar() {
           >
             <Search size={18} />
           </Link>
+
+          {/* NOTIFICATIONS */}
 
           <Link
             href="/notifications"
@@ -263,6 +267,8 @@ export default function Navbar() {
             )}
           </Link>
 
+          {/* MESSAGES */}
+
           <Link
             href="/messages"
             aria-label="Messages"
@@ -284,6 +290,8 @@ export default function Navbar() {
           >
             <MessageCircle size={18} />
           </Link>
+
+          {/* THEME */}
 
           <ThemeToggle />
         </div>
