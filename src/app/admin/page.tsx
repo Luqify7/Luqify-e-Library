@@ -24,19 +24,14 @@ type Resource = {
 };
 
 function formatFileSize(bytes?: number | null) {
-  if (!bytes) return "Unknown size";
+  if (!bytes || bytes <= 0) {
+    return "Unknown size";
+  }
 
-  const sizes = [
-    "Bytes",
-    "KB",
-    "MB",
-    "GB",
-  ];
+  const sizes = ["Bytes", "KB", "MB", "GB"];
 
   const index = Math.min(
-    Math.floor(
-      Math.log(bytes) / Math.log(1024)
-    ),
+    Math.floor(Math.log(bytes) / Math.log(1024)),
     sizes.length - 1
   );
 
@@ -45,19 +40,27 @@ function formatFileSize(bytes?: number | null) {
   ).toFixed(1)} ${sizes[index]}`;
 }
 
-export default function AdminUploadPage() {
+export default function AdminPage() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const loadResources = async () => {
+  async function loadResources() {
     setLoading(true);
     setError("");
 
     try {
-      const { supabase } = await import(
+      /*
+       * IMPORTANT:
+       * Supabase is imported only in the browser.
+       * This prevents the client from being created
+       * during Next.js prerendering.
+       */
+      const { createClient } = await import(
         "@/lib/supabase"
       );
+
+      const supabase = createClient();
 
       const {
         data,
@@ -72,14 +75,15 @@ export default function AdminUploadPage() {
       if (fetchError) {
         console.error(
           "ADMIN FETCH ERROR:",
-          fetchError.message
-        );
-
-        setError(
-          "Unable to load resources. Please try again."
+          fetchError
         );
 
         setResources([]);
+        setError(
+          fetchError.message ||
+            "Unable to load resources."
+        );
+
         return;
       }
 
@@ -92,15 +96,14 @@ export default function AdminUploadPage() {
         err
       );
 
+      setResources([]);
       setError(
         "Something went wrong while loading resources."
       );
-
-      setResources([]);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   useEffect(() => {
     void loadResources();
@@ -155,7 +158,13 @@ export default function AdminUploadPage() {
             Dashboard
           </h1>
 
-          <p className="mt-3 text-slate-500 dark:text-slate-400">
+          <p
+            className="
+              mt-3
+              text-slate-500
+              dark:text-slate-400
+            "
+          >
             Manage uploaded resources.
           </p>
         </div>
@@ -265,7 +274,10 @@ export default function AdminUploadPage() {
             >
               <Loader2
                 size={20}
-                className="animate-spin text-[#C9A96E]"
+                className="
+                  animate-spin
+                  text-[#C9A96E]
+                "
               />
 
               Loading resources...
@@ -273,155 +285,153 @@ export default function AdminUploadPage() {
           </div>
         )}
 
-        {/* RESOURCES */}
+        {/* RESOURCE LIST */}
 
-        {!loading &&
-          resources.length > 0 && (
-            <div className="grid gap-6">
-              {resources.map((resource) => (
+        {!loading && resources.length > 0 && (
+          <div className="grid gap-6">
+            {resources.map((resource) => (
+              <div
+                key={resource.id}
+                className="
+                  flex
+                  flex-col
+                  gap-5
+                  rounded-3xl
+                  bg-white
+                  p-6
+                  shadow-sm
+                  transition
+                  hover:-translate-y-1
+                  hover:shadow-lg
+                  dark:bg-slate-900
+                  md:flex-row
+                  md:items-center
+                  md:justify-between
+                "
+              >
+
+                {/* RESOURCE INFO */}
+
                 <div
-                  key={resource.id}
                   className="
                     flex
-                    flex-col
+                    min-w-0
+                    items-center
                     gap-5
-                    rounded-3xl
-                    bg-white
-                    p-6
-                    shadow-sm
-                    transition
-                    hover:-translate-y-1
-                    hover:shadow-lg
-                    dark:bg-slate-900
-                    md:flex-row
-                    md:items-center
-                    md:justify-between
                   "
                 >
-                  {/* RESOURCE INFO */}
-
                   <div
                     className="
                       flex
-                      min-w-0
+                      h-14
+                      w-14
+                      shrink-0
                       items-center
-                      gap-5
+                      justify-center
+                      rounded-2xl
+                      bg-[#FAF7F0]
+                      dark:bg-slate-800
                     "
                   >
-                    <div
-                      className="
-                        flex
-                        h-14
-                        w-14
-                        shrink-0
-                        items-center
-                        justify-center
-                        rounded-2xl
-                        bg-[#FAF7F0]
-                        dark:bg-slate-800
-                      "
-                    >
-                      <FileText
-                        size={28}
-                        className="text-[#C9A96E]"
-                      />
-                    </div>
-
-                    <div className="min-w-0">
-                      <h3
-                        className="
-                          truncate
-                          text-lg
-                          font-bold
-                        "
-                      >
-                        {resource.title ||
-                          "Untitled Resource"}
-                      </h3>
-
-                      <p
-                        className="
-                          truncate
-                          text-sm
-                          text-slate-500
-                          dark:text-slate-400
-                        "
-                      >
-                        {resource.file_name ||
-                          "Unknown file"}
-                      </p>
-
-                      <p
-                        className="
-                          mt-1
-                          text-xs
-                          text-slate-400
-                        "
-                      >
-                        {resource.programme ||
-                          "Unknown programme"}
-
-                        {" • "}
-
-                        {resource.year ||
-                          "Unknown year"}
-                      </p>
-
-                      <p
-                        className="
-                          mt-1
-                          text-xs
-                          text-slate-400
-                        "
-                      >
-                        {formatFileSize(
-                          resource.file_size
-                        )}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* ACTIONS */}
-
-                  <div className="flex shrink-0 gap-3">
-                    {resource.file_url && (
-                      <a
-                        href={resource.file_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="Open resource"
-                        className="
-                          flex
-                          items-center
-                          justify-center
-                          rounded-xl
-                          bg-[#3B2412]
-                          px-4
-                          py-3
-                          text-white
-                          transition
-                          hover:bg-[#4d301b]
-                        "
-                      >
-                        <ExternalLink
-                          size={16}
-                        />
-                      </a>
-                    )}
-
-                    <DeleteResourceButton
-                      id={resource.id}
-                      storagePath={
-                        resource.storage_path
-                      }
+                    <FileText
+                      size={28}
+                      className="text-[#C9A96E]"
                     />
                   </div>
-                </div>
-              ))}
-            </div>
-          )}
 
-        {/* EMPTY */}
+                  <div className="min-w-0">
+                    <h3
+                      className="
+                        truncate
+                        text-lg
+                        font-bold
+                      "
+                    >
+                      {resource.title ||
+                        "Untitled Resource"}
+                    </h3>
+
+                    <p
+                      className="
+                        truncate
+                        text-sm
+                        text-slate-500
+                        dark:text-slate-400
+                      "
+                    >
+                      {resource.file_name ||
+                        "Unknown file"}
+                    </p>
+
+                    <p
+                      className="
+                        mt-1
+                        text-xs
+                        text-slate-400
+                      "
+                    >
+                      {resource.programme ||
+                        "Unknown programme"}
+
+                      {" • "}
+
+                      {resource.year ||
+                        "Unknown year"}
+                    </p>
+
+                    <p
+                      className="
+                        mt-1
+                        text-xs
+                        text-slate-400
+                      "
+                    >
+                      {formatFileSize(
+                        resource.file_size
+                      )}
+                    </p>
+                  </div>
+                </div>
+
+                {/* ACTIONS */}
+
+                <div className="flex shrink-0 gap-3">
+                  {resource.file_url && (
+                    <a
+                      href={resource.file_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label="Open resource"
+                      className="
+                        flex
+                        items-center
+                        justify-center
+                        rounded-xl
+                        bg-[#3B2412]
+                        px-4
+                        py-3
+                        text-white
+                        transition
+                        hover:bg-[#4d301b]
+                      "
+                    >
+                      <ExternalLink size={16} />
+                    </a>
+                  )}
+
+                  <DeleteResourceButton
+                    id={resource.id}
+                    storagePath={
+                      resource.storage_path
+                    }
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* EMPTY STATE */}
 
         {!loading &&
           resources.length === 0 &&
@@ -463,6 +473,7 @@ export default function AdminUploadPage() {
               </p>
             </div>
           )}
+
       </section>
     </main>
   );
