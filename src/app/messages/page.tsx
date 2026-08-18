@@ -34,20 +34,31 @@ export default function MessagesPage() {
   const loadRooms = async () => {
     setLoading(true);
 
-    const { data, error } = await supabase
-      .from("rooms")
-      .select("id, name, description, created_at")
-      .order("created_at", { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from("rooms")
+        .select("id, name, description, created_at")
+        .order("created_at", { ascending: false });
 
-    if (error) {
-      console.error("ROOMS LOAD ERROR:", error);
+      if (error) {
+        console.error("ROOMS LOAD ERROR");
+        console.error("message:", error.message);
+        console.error("details:", error.details);
+        console.error("hint:", error.hint);
+        console.error("code:", error.code);
+        console.error("FULL ERROR:", error);
+
+        setRooms([]);
+        return;
+      }
+
+      setRooms((data ?? []) as Room[]);
+    } catch (error) {
+      console.error("ROOMS LOAD EXCEPTION:", error);
       setRooms([]);
+    } finally {
       setLoading(false);
-      return;
     }
-
-    setRooms((data ?? []) as Room[]);
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -77,35 +88,51 @@ export default function MessagesPage() {
     const name = roomName.trim();
     const description = roomDescription.trim();
 
-    if (!name) return;
+    if (!name || creating) return;
 
     setCreating(true);
 
-    const { data, error } = await supabase
-      .from("rooms")
-      .insert({
-        name,
-        description: description || null,
-      })
-      .select("id, name, description, created_at")
-      .single();
+    try {
+      const { data, error } = await supabase
+        .from("rooms")
+        .insert({
+          name,
+          description: description || null,
+        })
+        .select("id, name, description, created_at")
+        .single();
 
-    if (error) {
-      console.error("CREATE ROOM ERROR:", error);
+      if (error) {
+        console.error("CREATE ROOM ERROR");
+        console.error("message:", error.message);
+        console.error("details:", error.details);
+        console.error("hint:", error.hint);
+        console.error("code:", error.code);
+        console.error("FULL ERROR:", error);
+
+        alert(
+          `Could not create discussion.\n\n${error.message || "Unknown Supabase error"}`
+        );
+
+        return;
+      }
+
+      if (data) {
+        setRooms((current) => [
+          data as Room,
+          ...current.filter((room) => room.id !== data.id),
+        ]);
+      }
+
+      setRoomName("");
+      setRoomDescription("");
+      setShowCreate(false);
+    } catch (error) {
+      console.error("CREATE ROOM EXCEPTION:", error);
+
+      alert("Something went wrong while creating the discussion.");
+    } finally {
       setCreating(false);
-      return;
-    }
-
-    setRoomName("");
-    setRoomDescription("");
-    setShowCreate(false);
-    setCreating(false);
-
-    if (data) {
-      setRooms((current) => [
-        data as Room,
-        ...current,
-      ]);
     }
   };
 
@@ -119,15 +146,9 @@ export default function MessagesPage() {
         dark:text-white
       "
     >
-      {/* SIDEBAR */}
-
       <Sidebar />
 
-      {/* PAGE */}
-
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
-        {/* HERO */}
-
         <section
           className="
             relative
@@ -212,9 +233,8 @@ export default function MessagesPage() {
                     dark:text-slate-400
                   "
                 >
-                  Join a discussion, connect with other
-                  students, and share ideas with the
-                  Luqify community.
+                  Join a discussion, connect with other students, and share
+                  ideas with the Luqify community.
                 </p>
               </div>
             </div>
@@ -249,8 +269,6 @@ export default function MessagesPage() {
             </button>
           </div>
         </section>
-
-        {/* DISCUSSIONS */}
 
         <section className="mt-8">
           <div className="mb-5 flex items-center justify-between">
@@ -294,14 +312,10 @@ export default function MessagesPage() {
                 "
               >
                 {rooms.length}{" "}
-                {rooms.length === 1
-                  ? "discussion"
-                  : "discussions"}
+                {rooms.length === 1 ? "discussion" : "discussions"}
               </span>
             )}
           </div>
-
-          {/* LOADING */}
 
           {loading && (
             <div
@@ -318,7 +332,17 @@ export default function MessagesPage() {
                 dark:bg-slate-900
               "
             >
-              <div className="flex items-center gap-3 text-sm font-semibold text-[#3B2412]/60 dark:text-slate-400">
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-3
+                  text-sm
+                  font-semibold
+                  text-[#3B2412]/60
+                  dark:text-slate-400
+                "
+              >
                 <Loader2
                   size={20}
                   className="animate-spin text-[#C9A96E]"
@@ -327,8 +351,6 @@ export default function MessagesPage() {
               </div>
             </div>
           )}
-
-          {/* EMPTY */}
 
           {!loading && rooms.length === 0 && (
             <div
@@ -386,8 +408,8 @@ export default function MessagesPage() {
                   dark:text-slate-400
                 "
               >
-                Be the first student to start a
-                discussion and get the community talking.
+                Be the first student to start a discussion and get the
+                community talking.
               </p>
 
               <button
@@ -415,8 +437,6 @@ export default function MessagesPage() {
               </button>
             </div>
           )}
-
-          {/* ROOM CARDS */}
 
           {!loading && rooms.length > 0 && (
             <div className="grid gap-4">
@@ -537,8 +557,6 @@ export default function MessagesPage() {
         </section>
       </div>
 
-      {/* CREATE DISCUSSION MODAL */}
-
       {showCreate && (
         <div
           className="
@@ -644,9 +662,7 @@ export default function MessagesPage() {
                 <input
                   id="room-name"
                   value={roomName}
-                  onChange={(event) =>
-                    setRoomName(event.target.value)
-                  }
+                  onChange={(event) => setRoomName(event.target.value)}
                   placeholder="e.g. Accounting Students"
                   maxLength={100}
                   className="
@@ -746,10 +762,7 @@ export default function MessagesPage() {
               >
                 {creating ? (
                   <>
-                    <Loader2
-                      size={18}
-                      className="animate-spin"
-                    />
+                    <Loader2 size={18} className="animate-spin" />
                     Creating...
                   </>
                 ) : (

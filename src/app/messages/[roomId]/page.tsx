@@ -96,13 +96,6 @@ const emojis = [
   "💡",
 ];
 
-/*
- * EACH STUDENT GETS A DIFFERENT CARD COLOUR.
- *
- * The colour is calculated from the student's name/id,
- * meaning the same student keeps the same colour
- * throughout the conversation.
- */
 const studentCardColors = [
   {
     bg: "bg-[#102A43]",
@@ -162,25 +155,16 @@ const studentCardColors = [
   },
 ];
 
-/*
- * Convert a student's name/id into a stable number.
- */
-const getStudentColorIndex = (
-  studentName: string
-) => {
+const getStudentColorIndex = (studentName: string) => {
   let hash = 0;
 
   for (let index = 0; index < studentName.length; index++) {
     hash =
-      (hash * 31 +
-        studentName.charCodeAt(index)) &
+      (hash * 31 + studentName.charCodeAt(index)) &
       0xffffffff;
   }
 
-  return (
-    Math.abs(hash) %
-    studentCardColors.length
-  );
+  return Math.abs(hash) % studentCardColors.length;
 };
 
 export default function MessageRoomPage() {
@@ -198,14 +182,10 @@ export default function MessageRoomPage() {
     useRef<HTMLDivElement | null>(null);
 
   const typingTimeoutRef =
-    useRef<ReturnType<typeof setTimeout> | null>(
-      null
-    );
+    useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const presenceChannelRef =
-    useRef<ReturnType<typeof supabase.channel> | null>(
-      null
-    );
+    useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   const [room, setRoom] =
     useState<Room | null>(null);
@@ -261,9 +241,6 @@ export default function MessageRoomPage() {
   const [typingStudents, setTypingStudents] =
     useState<TypingStudent[]>([]);
 
-  /*
-   * BACK TO MESSAGES
-   */
   const handleBackToMessages = () => {
     setShowMenu(false);
     setShowDeleteConfirm(false);
@@ -277,13 +254,12 @@ export default function MessageRoomPage() {
   };
 
   /*
-   * CREATE / LOAD STUDENT ID
+   * STUDENT ID
    */
   useEffect(() => {
-    let id =
-      window.sessionStorage.getItem(
-        "luqify_message_sender_id"
-      );
+    let id = window.sessionStorage.getItem(
+      "luqify_message_sender_id"
+    );
 
     if (!id) {
       id =
@@ -308,11 +284,9 @@ export default function MessageRoomPage() {
   useEffect(() => {
     if (!roomId) {
       setLoading(false);
-
       setErrorMessage(
         "No discussion room was specified."
       );
-
       return;
     }
 
@@ -322,14 +296,16 @@ export default function MessageRoomPage() {
       setLoading(true);
       setErrorMessage("");
 
-      const roomQuery =
-        await supabase
-          .from("message_rooms")
-          .select(
-            "id, name, description"
-          )
-          .eq("id", roomId)
-          .maybeSingle();
+      /*
+       * DISCUSSIONS COME FROM rooms
+       */
+      const roomQuery = await supabase
+        .from("rooms")
+        .select(
+          "id, name, description"
+        )
+        .eq("id", roomId)
+        .maybeSingle();
 
       if (!mounted) return;
 
@@ -339,57 +315,51 @@ export default function MessageRoomPage() {
           roomQuery.error
         );
 
-        setRoom(null);
-
         setErrorMessage(
           roomQuery.error.message ||
             "Unable to load this discussion."
         );
 
+        setRoom(null);
         setLoading(false);
-
         return;
       }
 
       if (!roomQuery.data) {
-        setRoom(null);
-
         setErrorMessage(
           "This discussion no longer exists."
         );
 
+        setRoom(null);
         setLoading(false);
-
         return;
       }
 
-      const messagesQuery =
-        await supabase
-          .from("messages")
-          .select(
-            `
-              id,
-              room_id,
-              sender_name,
-              message,
-              created_at,
-              message_type,
-              resource_id,
-              resource_name,
-              resource_url,
-              resource_type
-            `
-          )
-          .eq("room_id", roomId)
-          .order("created_at", {
-            ascending: true,
-          });
+      /*
+       * MESSAGES COME FROM messages
+       */
+      const messagesQuery = await supabase
+        .from("messages")
+        .select(`
+          id,
+          room_id,
+          sender_name,
+          message,
+          created_at,
+          message_type,
+          resource_id,
+          resource_name,
+          resource_url,
+          resource_type
+        `)
+        .eq("room_id", roomId)
+        .order("created_at", {
+          ascending: true,
+        });
 
       if (!mounted) return;
 
-      setRoom(
-        roomQuery.data as Room
-      );
+      setRoom(roomQuery.data as Room);
 
       if (messagesQuery.error) {
         console.error(
@@ -399,205 +369,177 @@ export default function MessageRoomPage() {
 
         setErrorMessage(
           messagesQuery.error.message ||
-            "The discussion loaded, but messages could not be loaded."
+            "Messages could not be loaded."
         );
 
         setMessages([]);
       } else {
         setMessages(
-          (messagesQuery.data ||
-            []) as Message[]
+          (messagesQuery.data || []) as Message[]
         );
       }
 
       setLoading(false);
     }
 
-    loadChat();
+    void loadChat();
 
     /*
      * REALTIME MESSAGES
      */
-    const messageChannel =
-      supabase
-        .channel(
-          `messages-room-${roomId}`
-        )
-        .on(
-          "postgres_changes",
-          {
-            event: "INSERT",
-            schema: "public",
-            table: "messages",
-            filter: `room_id=eq.${roomId}`,
-          },
-          (payload) => {
-            const newMessage =
-              payload.new as Message;
+    const messageChannel = supabase
+      .channel(`messages-room-${roomId}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "messages",
+          filter: `room_id=eq.${roomId}`,
+        },
+        (payload) => {
+          const newMessage =
+            payload.new as Message;
 
-            setMessages((current) => {
-              const exists =
-                current.some(
-                  (item) =>
-                    item.id ===
-                    newMessage.id
-                );
+          setMessages((current) => {
+            if (
+              current.some(
+                (item) =>
+                  item.id === newMessage.id
+              )
+            ) {
+              return current;
+            }
 
-              if (exists) {
-                return current;
-              }
-
-              return [
-                ...current,
-                newMessage,
-              ];
-            });
-          }
-        )
-        .subscribe();
+            return [
+              ...current,
+              newMessage,
+            ];
+          });
+        }
+      )
+      .subscribe();
 
     return () => {
       mounted = false;
 
-      supabase.removeChannel(
+      void supabase.removeChannel(
         messageChannel
       );
     };
   }, [roomId]);
 
   /*
-   * REALTIME TYPING PRESENCE
+   * TYPING PRESENCE
    */
   useEffect(() => {
     if (!roomId || !senderId) {
       return;
     }
 
-    const channel =
-      supabase.channel(
-        `typing-room-${roomId}`,
-        {
-          config: {
-            presence: {
-              key: senderId,
-            },
+    const channel = supabase.channel(
+      `typing-room-${roomId}`,
+      {
+        config: {
+          presence: {
+            key: senderId,
           },
-        }
-      );
-
-    presenceChannelRef.current =
-      channel;
-
-    const updateTypingStudents =
-      () => {
-        const state =
-          channel.presenceState();
-
-        const students: TypingStudent[] =
-          [];
-
-        Object.entries(state).forEach(
-          ([key, value]) => {
-            if (key === senderId) {
-              return;
-            }
-
-            const presenceList =
-              Array.isArray(value)
-                ? value
-                : [];
-
-            const isTyping =
-              presenceList.some(
-                (presence) => {
-                  const data =
-                    presence as {
-                      studentId?: string;
-                      typing?: boolean;
-                    };
-
-                  return (
-                    data?.typing === true
-                  );
-                }
-              );
-
-            if (isTyping) {
-              const firstPresence =
-                presenceList[0] as
-                  | {
-                      studentId?: string;
-                    }
-                  | undefined;
-
-              students.push({
-                studentId:
-                  firstPresence
-                    ?.studentId ||
-                  key,
-              });
-            }
-          }
-        );
-
-        setTypingStudents(
-          students
-        );
-      };
-
-    channel.on(
-      "presence",
-      {
-        event: "sync",
-      },
-      updateTypingStudents
-    );
-
-    channel.on(
-      "presence",
-      {
-        event: "join",
-      },
-      updateTypingStudents
-    );
-
-    channel.on(
-      "presence",
-      {
-        event: "leave",
-      },
-      updateTypingStudents
-    );
-
-    channel.subscribe(
-      async (status) => {
-        if (
-          status ===
-          "SUBSCRIBED"
-        ) {
-          try {
-            await channel.track({
-              studentId:
-                senderId,
-              typing: false,
-            });
-          } catch (error) {
-            console.error(
-              "INITIAL PRESENCE ERROR:",
-              error
-            );
-          }
-        }
+        },
       }
     );
 
+    presenceChannelRef.current = channel;
+
+    const updateTypingStudents = () => {
+      const state =
+        channel.presenceState();
+
+      const students: TypingStudent[] = [];
+
+      Object.entries(state).forEach(
+        ([key, value]) => {
+          if (key === senderId) {
+            return;
+          }
+
+          const presenceList =
+            Array.isArray(value)
+              ? value
+              : [];
+
+          const isTyping =
+            presenceList.some(
+              (presence) => {
+                const data =
+                  presence as {
+                    studentId?: string;
+                    typing?: boolean;
+                  };
+
+                return data?.typing === true;
+              }
+            );
+
+          if (isTyping) {
+            const firstPresence =
+              presenceList[0] as
+                | {
+                    studentId?: string;
+                  }
+                | undefined;
+
+            students.push({
+              studentId:
+                firstPresence?.studentId ||
+                key,
+            });
+          }
+        }
+      );
+
+      setTypingStudents(students);
+    };
+
+    channel.on(
+      "presence",
+      { event: "sync" },
+      updateTypingStudents
+    );
+
+    channel.on(
+      "presence",
+      { event: "join" },
+      updateTypingStudents
+    );
+
+    channel.on(
+      "presence",
+      { event: "leave" },
+      updateTypingStudents
+    );
+
+    channel.subscribe(async (status) => {
+      if (status === "SUBSCRIBED") {
+        try {
+          await channel.track({
+            studentId: senderId,
+            typing: false,
+          });
+        } catch (error) {
+          console.error(
+            "INITIAL PRESENCE ERROR:",
+            error
+          );
+        }
+      }
+    });
+
     return () => {
-      presenceChannelRef.current =
-        null;
+      presenceChannelRef.current = null;
 
-      channel.untrack();
+      void channel.untrack();
 
-      supabase.removeChannel(
+      void supabase.removeChannel(
         channel
       );
 
@@ -605,71 +547,50 @@ export default function MessageRoomPage() {
     };
   }, [roomId, senderId]);
 
-  /*
-   * UPDATE TYPING STATUS
-   */
-  const updateTypingStatus =
-    async (
-      isTyping: boolean
-    ) => {
-      const channel =
-        presenceChannelRef.current;
+  const updateTypingStatus = async (
+    isTyping: boolean
+  ) => {
+    const channel =
+      presenceChannelRef.current;
 
-      if (
-        !channel ||
-        !senderId
-      ) {
-        return;
-      }
+    if (!channel || !senderId) {
+      return;
+    }
 
-      try {
-        await channel.track({
-          studentId:
-            senderId,
-          typing: isTyping,
-        });
-      } catch (error) {
-        console.error(
-          "TYPING PRESENCE ERROR:",
-          error
-        );
-      }
-    };
+    try {
+      await channel.track({
+        studentId: senderId,
+        typing: isTyping,
+      });
+    } catch (error) {
+      console.error(
+        "TYPING PRESENCE ERROR:",
+        error
+      );
+    }
+  };
 
-  /*
-   * HANDLE INPUT CHANGE
-   */
   const handleMessageChange = (
     value: string
   ) => {
     setMessage(value);
 
     if (!value.trim()) {
-      if (
-        typingTimeoutRef.current
-      ) {
+      if (typingTimeoutRef.current) {
         clearTimeout(
           typingTimeoutRef.current
         );
 
-        typingTimeoutRef.current =
-          null;
+        typingTimeoutRef.current = null;
       }
 
-      void updateTypingStatus(
-        false
-      );
-
+      void updateTypingStatus(false);
       return;
     }
 
-    void updateTypingStatus(
-      true
-    );
+    void updateTypingStatus(true);
 
-    if (
-      typingTimeoutRef.current
-    ) {
+    if (typingTimeoutRef.current) {
       clearTimeout(
         typingTimeoutRef.current
       );
@@ -677,56 +598,40 @@ export default function MessageRoomPage() {
 
     typingTimeoutRef.current =
       setTimeout(() => {
-        void updateTypingStatus(
-          false
-        );
-
-        typingTimeoutRef.current =
-          null;
+        void updateTypingStatus(false);
+        typingTimeoutRef.current = null;
       }, 2500);
   };
 
-  /*
-   * STOP TYPING
-   */
   const stopTyping = () => {
-    if (
-      typingTimeoutRef.current
-    ) {
+    if (typingTimeoutRef.current) {
       clearTimeout(
         typingTimeoutRef.current
       );
 
-      typingTimeoutRef.current =
-        null;
+      typingTimeoutRef.current = null;
     }
 
-    void updateTypingStatus(
-      false
-    );
+    void updateTypingStatus(false);
   };
 
   /*
    * AUTO SCROLL
    */
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView(
-      {
-        behavior: "smooth",
-      }
-    );
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   }, [messages]);
 
   /*
-   * ESCAPE KEY
+   * ESC
    */
   useEffect(() => {
     const handleKeyDown = (
       event: KeyboardEvent
     ) => {
-      if (
-        event.key !== "Escape"
-      ) {
+      if (event.key !== "Escape") {
         return;
       }
 
@@ -753,78 +658,126 @@ export default function MessageRoomPage() {
   /*
    * SEND MESSAGE
    */
-  const sendMessage =
-    async () => {
-      const cleanMessage =
-        message.trim();
+  const sendMessage = async () => {
+    const cleanMessage =
+      message.trim();
 
-      if (
-        !cleanMessage ||
-        sending ||
-        !senderId ||
-        !roomId
-      ) {
-        return;
-      }
+    if (
+      !cleanMessage ||
+      sending ||
+      !senderId ||
+      !roomId
+    ) {
+      return;
+    }
 
-      stopTyping();
+    stopTyping();
 
-      setSending(true);
-      setErrorMessage("");
+    setSending(true);
+    setErrorMessage("");
 
-      try {
-        const { error } =
-          await supabase
-            .from("messages")
-            .insert({
-              room_id: roomId,
-              sender_name:
-                senderId,
-              message:
-                cleanMessage,
-              message_type:
-                "text",
-            });
+    try {
+      /*
+       * IMPORTANT:
+       * room_id must point to rooms.id
+       */
+      const payload = {
+        room_id: roomId,
+        sender_name: senderId,
+        message: cleanMessage,
+        message_type: "text",
+      };
 
-        if (error) {
-          console.error(
-            "MESSAGE SEND ERROR:",
-            error
-          );
+      console.log(
+        "SENDING MESSAGE:",
+        payload
+      );
 
-          setErrorMessage(
-            error.message ||
-              "Unable to send message."
-          );
+      const result =
+        await supabase
+          .from("messages")
+          .insert(payload)
+          .select(`
+            id,
+            room_id,
+            sender_name,
+            message,
+            created_at,
+            message_type,
+            resource_id,
+            resource_name,
+            resource_url,
+            resource_type
+          `)
+          .single();
 
-          return;
-        }
-
-        setMessage("");
-        setShowEmojiPicker(
-          false
-        );
-        setShowAttachmentMenu(
-          false
-        );
-      } catch (error) {
+      if (result.error) {
         console.error(
-          "UNEXPECTED MESSAGE ERROR:",
-          error
+          "MESSAGE SEND ERROR:",
+          {
+            message:
+              result.error.message,
+            details:
+              result.error.details,
+            hint:
+              result.error.hint,
+            code:
+              result.error.code,
+          }
         );
 
         setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Something went wrong while sending the message."
+          result.error.message ||
+            "Unable to send message."
         );
-      } finally {
-        setSending(false);
+
+        return;
       }
-    };
+
+      /*
+       * Realtime will normally add this.
+       * We also add it locally if necessary.
+       */
+      if (result.data) {
+        setMessages((current) => {
+          if (
+            current.some(
+              (item) =>
+                item.id ===
+                result.data.id
+            )
+          ) {
+            return current;
+          }
+
+          return [
+            ...current,
+            result.data as Message,
+          ];
+        });
+      }
+
+      setMessage("");
+      setShowEmojiPicker(false);
+      setShowAttachmentMenu(false);
+    } catch (error) {
+      console.error(
+        "UNEXPECTED MESSAGE ERROR:",
+        error
+      );
+
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong while sending the message."
+      );
+    } finally {
+      setSending(false);
+    }
+  };
 
   /*
-   * ADD EMOJI
+   * EMOJI
    */
   const addEmoji = (
     emoji: string
@@ -839,21 +792,12 @@ export default function MessageRoomPage() {
    */
   const openResourcePicker =
     async () => {
-      setShowAttachmentMenu(
-        false
-      );
-
+      setShowAttachmentMenu(false);
       setShowEmojiPicker(false);
-
-      setShowResourcePicker(
-        true
-      );
-
+      setShowResourcePicker(true);
       setResourceSearch("");
 
-      if (
-        resources.length > 0
-      ) {
+      if (resources.length > 0) {
         return;
       }
 
@@ -861,32 +805,28 @@ export default function MessageRoomPage() {
       setErrorMessage("");
 
       try {
-        const { data, error } =
-          await supabase
-            .from("resources")
-            .select(
-              `
-                id,
-                title,
-                faculty,
-                programme,
-                year,
-                semester,
-                category,
-                course,
-                file_url,
-                file_type,
-                file_name
-              `
-            )
-            .order(
-              "created_at",
-              {
-                ascending:
-                  false,
-              }
-            )
-            .limit(200);
+        const {
+          data,
+          error,
+        } = await supabase
+          .from("resources")
+          .select(`
+            id,
+            title,
+            faculty,
+            programme,
+            year,
+            semester,
+            category,
+            course,
+            file_url,
+            file_type,
+            file_name
+          `)
+          .order("created_at", {
+            ascending: false,
+          })
+          .limit(200);
 
         if (error) {
           console.error(
@@ -903,8 +843,7 @@ export default function MessageRoomPage() {
         }
 
         setResources(
-          (data ||
-            []) as Resource[]
+          (data || []) as Resource[]
         );
       } catch (error) {
         console.error(
@@ -918,99 +857,117 @@ export default function MessageRoomPage() {
             : "Unable to load library resources."
         );
       } finally {
-        setLoadingResources(
-          false
-        );
+        setLoadingResources(false);
       }
     };
 
   /*
    * SHARE RESOURCE
    */
-  const shareResource =
-    async (
-      resource: Resource
-    ) => {
-      if (
-        sharingResource ||
-        !senderId ||
-        !roomId
-      ) {
-        return;
-      }
+  const shareResource = async (
+    resource: Resource
+  ) => {
+    if (
+      sharingResource ||
+      !senderId ||
+      !roomId
+    ) {
+      return;
+    }
 
-      setSharingResource(true);
-      setErrorMessage("");
+    setSharingResource(true);
+    setErrorMessage("");
 
-      try {
-        const { error } =
-          await supabase
-            .from("messages")
-            .insert({
-              room_id: roomId,
-              sender_name:
-                senderId,
-              message:
-                `Shared a resource: ${resource.title}`,
-              message_type:
-                "resource",
-              resource_id:
-                resource.id,
-              resource_name:
-                resource.title,
-              resource_url:
-                resource.file_url,
-              resource_type:
-                resource.file_type ||
-                "document",
-            });
+    try {
+      const payload = {
+        room_id: roomId,
+        sender_name: senderId,
+        message:
+          `Shared a resource: ${resource.title}`,
+        message_type: "resource",
+        resource_id: resource.id,
+        resource_name: resource.title,
+        resource_url: resource.file_url,
+        resource_type:
+          resource.file_type ||
+          "document",
+      };
 
-        if (error) {
-          console.error(
-            "RESOURCE SHARE ERROR:",
-            error
-          );
+      const result =
+        await supabase
+          .from("messages")
+          .insert(payload)
+          .select(`
+            id,
+            room_id,
+            sender_name,
+            message,
+            created_at,
+            message_type,
+            resource_id,
+            resource_name,
+            resource_url,
+            resource_type
+          `)
+          .single();
 
-          setErrorMessage(
-            error.message ||
-              "Unable to share this resource."
-          );
-
-          return;
-        }
-
-        setShowResourcePicker(
-          false
-        );
-
-        setResourceSearch("");
-      } catch (error) {
+      if (result.error) {
         console.error(
-          "UNEXPECTED RESOURCE SHARE ERROR:",
-          error
+          "RESOURCE SHARE ERROR:",
+          result.error
         );
 
         setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Something went wrong while sharing the resource."
+          result.error.message ||
+            "Unable to share this resource."
         );
-      } finally {
-        setSharingResource(
-          false
-        );
+
+        return;
       }
-    };
+
+      if (result.data) {
+        setMessages((current) => {
+          if (
+            current.some(
+              (item) =>
+                item.id ===
+                result.data.id
+            )
+          ) {
+            return current;
+          }
+
+          return [
+            ...current,
+            result.data as Message,
+          ];
+        });
+      }
+
+      setShowResourcePicker(false);
+      setResourceSearch("");
+    } catch (error) {
+      console.error(
+        "UNEXPECTED RESOURCE SHARE ERROR:",
+        error
+      );
+
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Something went wrong while sharing the resource."
+      );
+    } finally {
+      setSharingResource(false);
+    }
+  };
 
   /*
    * DELETE DISCUSSION
    */
   const deleteDiscussion =
     async () => {
-      if (
-        !room ||
-        deleting
-      ) {
+      if (!room || deleting) {
         return;
       }
 
@@ -1020,14 +977,9 @@ export default function MessageRoomPage() {
       try {
         const { error } =
           await supabase
-            .from(
-              "message_rooms"
-            )
+            .from("rooms")
             .delete()
-            .eq(
-              "id",
-              room.id
-            );
+            .eq("id", room.id);
 
         if (error) {
           console.error(
@@ -1041,19 +993,13 @@ export default function MessageRoomPage() {
           );
 
           setDeleting(false);
-
           return;
         }
 
-        setShowDeleteConfirm(
-          false
-        );
-
+        setShowDeleteConfirm(false);
         setShowMenu(false);
 
-        router.replace(
-          "/messages"
-        );
+        router.replace("/messages");
       } catch (error) {
         console.error(
           "UNEXPECTED DELETE ERROR:",
@@ -1070,9 +1016,6 @@ export default function MessageRoomPage() {
       }
     };
 
-  /*
-   * FORMAT TIME
-   */
   const formatTime = (
     date: string
   ) => {
@@ -1084,9 +1027,6 @@ export default function MessageRoomPage() {
     });
   };
 
-  /*
-   * INITIAL
-   */
   const getInitial = (
     name: string
   ) => {
@@ -1094,14 +1034,10 @@ export default function MessageRoomPage() {
       name
         .trim()
         .charAt(0)
-        .toUpperCase() ||
-      "?"
+        .toUpperCase() || "?"
     );
   };
 
-  /*
-   * FILTER RESOURCES
-   */
   const filteredResources =
     resources.filter(
       (resource) => {
@@ -1131,9 +1067,6 @@ export default function MessageRoomPage() {
       }
     );
 
-  /*
-   * TYPING TEXT
-   */
   const typingText =
     typingStudents.length === 1
       ? `${typingStudents[0].studentId} is typing`
@@ -1188,9 +1121,7 @@ export default function MessageRoomPage() {
 
           <button
             type="button"
-            onClick={
-              handleBackToMessages
-            }
+            onClick={handleBackToMessages}
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#3B2412] px-6 py-3 font-semibold text-white transition hover:-translate-y-0.5"
           >
             <ArrowLeft size={18} />
@@ -1202,7 +1133,7 @@ export default function MessageRoomPage() {
   }
 
   /*
-   * MAIN CHAT
+   * MAIN
    */
   return (
     <main className="min-h-screen bg-[#FAF7F0] text-[#3B2412] dark:bg-slate-950 dark:text-white">
@@ -1213,9 +1144,7 @@ export default function MessageRoomPage() {
 
           <button
             type="button"
-            onClick={
-              handleBackToMessages
-            }
+            onClick={handleBackToMessages}
             className="relative z-[100] flex h-10 w-10 shrink-0 items-center justify-center rounded-full transition hover:bg-[#FAF7F0] dark:hover:bg-slate-800"
             aria-label="Back to Messages"
           >
@@ -1237,7 +1166,6 @@ export default function MessageRoomPage() {
 
             {typingStudents.length > 0 ? (
               <div className="flex items-center gap-2 text-xs font-semibold text-[#C9A96E]">
-
                 <span className="typing-indicator">
                   <span className="typing-dot" />
                   <span className="typing-dot typing-dot-2" />
@@ -1256,7 +1184,6 @@ export default function MessageRoomPage() {
             )}
           </div>
 
-          {/* THREE DOT MENU */}
           <div className="relative z-[80]">
             <button
               type="button"
@@ -1266,19 +1193,11 @@ export default function MessageRoomPage() {
                     !current
                 );
 
-                setShowEmojiPicker(
-                  false
-                );
-
-                setShowAttachmentMenu(
-                  false
-                );
+                setShowEmojiPicker(false);
+                setShowAttachmentMenu(false);
               }}
               className="flex h-10 w-10 items-center justify-center rounded-full transition hover:bg-[#FAF7F0] dark:hover:bg-slate-800"
               aria-label="More options"
-              aria-expanded={
-                showMenu
-              }
             >
               <MoreVertical size={20} />
             </button>
@@ -1290,9 +1209,7 @@ export default function MessageRoomPage() {
                   aria-label="Close menu"
                   className="fixed inset-0 z-[40] h-full w-full cursor-default bg-transparent"
                   onClick={() =>
-                    setShowMenu(
-                      false
-                    )
+                    setShowMenu(false)
                   }
                 />
 
@@ -1300,21 +1217,13 @@ export default function MessageRoomPage() {
                   <button
                     type="button"
                     onClick={() => {
-                      setShowMenu(
-                        false
-                      );
-
-                      setShowDeleteConfirm(
-                        true
-                      );
+                      setShowMenu(false);
+                      setShowDeleteConfirm(true);
                     }}
                     className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:text-red-400 dark:hover:bg-red-950/30"
                   >
                     <Trash2 size={17} />
-
-                    <span>
-                      Delete Discussion
-                    </span>
+                    Delete Discussion
                   </button>
                 </div>
               </>
@@ -1333,10 +1242,8 @@ export default function MessageRoomPage() {
 
           {messages.length === 0 ? (
             <div className="flex min-h-[65vh] flex-col items-center justify-center text-center">
-
               <div className="relative mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-white text-[#C9A96E] shadow-sm dark:bg-slate-900">
                 <div className="absolute inset-0 animate-ping rounded-full bg-[#C9A96E]/10" />
-
                 <MessageCircle size={30} />
               </div>
 
@@ -1351,198 +1258,176 @@ export default function MessageRoomPage() {
           ) : (
             <div className="mx-auto max-w-3xl space-y-3">
 
-              {messages.map(
-                (item) => {
-                  const isMine =
-                    item.sender_name ===
-                    senderId;
+              {messages.map((item) => {
+                const isMine =
+                  item.sender_name ===
+                  senderId;
 
-                  const isResource =
-                    item.message_type ===
-                      "resource" ||
-                    !!item.resource_id;
+                const isResource =
+                  item.message_type ===
+                    "resource" ||
+                  !!item.resource_id;
 
-                  /*
-                   * YOUR MESSAGES = BROWN.
-                   *
-                   * OTHER STUDENTS = stable
-                   * colour based on sender_name.
-                   */
-                  const studentColor =
-                    isMine
-                      ? null
-                      : studentCardColors[
-                          getStudentColorIndex(
-                            item.sender_name
-                          )
-                        ];
+                const studentColor =
+                  isMine
+                    ? null
+                    : studentCardColors[
+                        getStudentColorIndex(
+                          item.sender_name
+                        )
+                      ];
 
-                  return (
+                return (
+                  <div
+                    key={item.id}
+                    className={`flex ${
+                      isMine
+                        ? "justify-end"
+                        : "justify-start"
+                    }`}
+                  >
                     <div
-                      key={item.id}
-                      className={`flex ${
+                      className={`max-w-[88%] md:max-w-[68%] ${
                         isMine
-                          ? "justify-end"
-                          : "justify-start"
+                          ? "ml-12"
+                          : "mr-12"
                       }`}
                     >
-                      <div
-                        className={`max-w-[88%] md:max-w-[68%] ${
-                          isMine
-                            ? "ml-12"
-                            : "mr-12"
-                        }`}
-                      >
 
-                        {/* STUDENT NAME */}
-                        {!isMine && (
-                          <div className="mb-1 ml-2 flex items-center gap-2">
-                            <div
-                              className={`flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-black text-white ${
-                                studentColor?.bg ||
-                                "bg-[#3B2412]"
-                              }`}
-                            >
-                              {getInitial(
-                                item.sender_name
-                              )}
-                            </div>
-
-                            <span className="text-xs font-bold text-[#C9A96E]">
-                              {item.sender_name}
-                            </span>
-                          </div>
-                        )}
-
-                        {/* RESOURCE MESSAGE */}
-                        {isResource ? (
+                      {!isMine && (
+                        <div className="mb-1 ml-2 flex items-center gap-2">
                           <div
-                            className={`overflow-hidden rounded-2xl shadow-sm ${
-                              isMine
-                                ? "rounded-br-md bg-[#3B2412] text-white"
-                                : `rounded-bl-md ${studentColor?.bg || "bg-[#102A43]"} text-white`
+                            className={`flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-black text-white ${
+                              studentColor?.bg ||
+                              "bg-[#3B2412]"
                             }`}
                           >
-                            <div className="flex items-center gap-3 px-4 pt-4">
-
-                              <div
-                                className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
-                                  isMine
-                                    ? "bg-[#C9A96E]/20 text-[#C9A96E]"
-                                    : studentColor?.resourceIcon ||
-                                      "bg-white/10 text-[#C9A96E]"
-                                }`}
-                              >
-                                <FileText
-                                  size={22}
-                                />
-                              </div>
-
-                              <div className="min-w-0 flex-1">
-
-                                <p className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                                  Library Resource
-                                </p>
-
-                                <h3 className="mt-0.5 line-clamp-2 text-sm font-black">
-                                  {item.resource_name ||
-                                    item.message.replace(
-                                      "Shared a resource: ",
-                                      ""
-                                    )}
-                                </h3>
-                              </div>
-                            </div>
-
-                            <div className="px-4 pb-2 pt-3">
-
-                              <div className="rounded-xl bg-black/10 px-3 py-2 dark:bg-white/10">
-
-                                <div className="flex items-center gap-2 text-xs opacity-75">
-
-                                  <BookOpen
-                                    size={13}
-                                  />
-
-                                  <span>
-                                    Shared from Luqify e-Library
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-
-                            {item.resource_url && (
-                              <a
-                                href={
-                                  item.resource_url
-                                }
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className={`flex items-center justify-between border-t px-4 py-3 text-sm font-bold transition ${
-                                  isMine
-                                    ? "border-white/10 hover:bg-white/10"
-                                    : studentColor?.resourceBottom ||
-                                      "border-white/10 hover:bg-white/10"
-                                }`}
-                              >
-                                <span>
-                                  Open Resource
-                                </span>
-
-                                <ExternalLink
-                                  size={16}
-                                />
-                              </a>
+                            {getInitial(
+                              item.sender_name
                             )}
-
-                            <div className="px-4 pb-2 text-right text-[10px] text-white/55">
-                              {formatTime(
-                                item.created_at
-                              )}
-                            </div>
                           </div>
-                        ) : (
-                          /* NORMAL TEXT MESSAGE */
-                          <div
-                            className={`px-4 py-2.5 shadow-sm ${
-                              isMine
-                                ? "rounded-2xl rounded-br-md bg-[#3B2412] text-white"
-                                : `rounded-2xl rounded-bl-md ${
-                                    studentColor?.bg ||
-                                    "bg-[#102A43]"
-                                  } ${
-                                    studentColor?.text ||
-                                    "text-white"
-                                  }`
-                            }`}
-                          >
-                            <p className="whitespace-pre-wrap break-words text-sm leading-6">
-                              {item.message}
-                            </p>
+
+                          <span className="text-xs font-bold text-[#C9A96E]">
+                            {item.sender_name}
+                          </span>
+                        </div>
+                      )}
+
+                      {isResource ? (
+                        <div
+                          className={`overflow-hidden rounded-2xl shadow-sm ${
+                            isMine
+                              ? "rounded-br-md bg-[#3B2412] text-white"
+                              : `rounded-bl-md ${
+                                  studentColor?.bg ||
+                                  "bg-[#102A43]"
+                                } text-white`
+                          }`}
+                        >
+                          <div className="flex items-center gap-3 px-4 pt-4">
 
                             <div
-                              className={`mt-1 text-right text-[10px] ${
+                              className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${
                                 isMine
-                                  ? "text-white/55"
-                                  : studentColor?.meta ||
-                                    "text-white/55"
+                                  ? "bg-[#C9A96E]/20 text-[#C9A96E]"
+                                  : studentColor?.resourceIcon ||
+                                    "bg-white/10 text-[#C9A96E]"
                               }`}
                             >
-                              {formatTime(
-                                item.created_at
-                              )}
+                              <FileText size={22} />
+                            </div>
+
+                            <div className="min-w-0 flex-1">
+                              <p className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                                Library Resource
+                              </p>
+
+                              <h3 className="mt-0.5 line-clamp-2 text-sm font-black">
+                                {item.resource_name ||
+                                  item.message.replace(
+                                    "Shared a resource: ",
+                                    ""
+                                  )}
+                              </h3>
                             </div>
                           </div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                }
-              )}
 
-              <div
-                ref={messagesEndRef}
-              />
+                          <div className="px-4 pb-2 pt-3">
+                            <div className="rounded-xl bg-black/10 px-3 py-2 dark:bg-white/10">
+                              <div className="flex items-center gap-2 text-xs opacity-75">
+                                <BookOpen size={13} />
+
+                                <span>
+                                  Shared from Luqify e-Library
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {item.resource_url && (
+                            <a
+                              href={item.resource_url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className={`flex items-center justify-between border-t px-4 py-3 text-sm font-bold transition ${
+                                isMine
+                                  ? "border-white/10 hover:bg-white/10"
+                                  : studentColor?.resourceBottom ||
+                                    "border-white/10 hover:bg-white/10"
+                              }`}
+                            >
+                              <span>
+                                Open Resource
+                              </span>
+
+                              <ExternalLink size={16} />
+                            </a>
+                          )}
+
+                          <div className="px-4 pb-2 text-right text-[10px] text-white/55">
+                            {formatTime(
+                              item.created_at
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className={`px-4 py-2.5 shadow-sm ${
+                            isMine
+                              ? "rounded-2xl rounded-br-md bg-[#3B2412] text-white"
+                              : `rounded-2xl rounded-bl-md ${
+                                  studentColor?.bg ||
+                                  "bg-[#102A43]"
+                                } ${
+                                  studentColor?.text ||
+                                  "text-white"
+                                }`
+                          }`}
+                        >
+                          <p className="whitespace-pre-wrap break-words text-sm leading-6">
+                            {item.message}
+                          </p>
+
+                          <div
+                            className={`mt-1 text-right text-[10px] ${
+                              isMine
+                                ? "text-white/55"
+                                : studentColor?.meta ||
+                                  "text-white/55"
+                            }`}
+                          >
+                            {formatTime(
+                              item.created_at
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+
+              <div ref={messagesEndRef} />
             </div>
           )}
         </div>
@@ -1552,7 +1437,6 @@ export default function MessageRoomPage() {
 
           <div className="relative mx-auto max-w-3xl">
 
-            {/* EMOJI PICKER */}
             {showEmojiPicker && (
               <div className="absolute bottom-16 left-0 z-[70] w-[min(340px,calc(100vw-24px))] overflow-hidden rounded-2xl border border-[#e8dcc8] bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900">
 
@@ -1561,19 +1445,13 @@ export default function MessageRoomPage() {
                 </div>
 
                 <div className="grid max-h-56 grid-cols-8 gap-1 overflow-y-auto p-3">
-
                   {emojis.map(
-                    (
-                      emoji,
-                      index
-                    ) => (
+                    (emoji, index) => (
                       <button
                         key={`${emoji}-${index}`}
                         type="button"
                         onClick={() =>
-                          addEmoji(
-                            emoji
-                          )
+                          addEmoji(emoji)
                         }
                         className="flex h-9 w-9 items-center justify-center rounded-lg text-xl transition hover:scale-110 hover:bg-[#FAF7F0] dark:hover:bg-slate-800"
                       >
@@ -1585,21 +1463,16 @@ export default function MessageRoomPage() {
               </div>
             )}
 
-            {/* ATTACHMENT MENU */}
             {showAttachmentMenu && (
               <div className="absolute bottom-16 left-11 z-[70] w-60 overflow-hidden rounded-2xl border border-[#e8dcc8] bg-white p-1.5 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
 
                 <button
                   type="button"
-                  onClick={
-                    openResourcePicker
-                  }
+                  onClick={openResourcePicker}
                   className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left transition hover:bg-[#FAF7F0] dark:hover:bg-slate-800"
                 >
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#C9A96E]/15 text-[#C9A96E]">
-                    <BookOpen
-                      size={19}
-                    />
+                    <BookOpen size={19} />
                   </div>
 
                   <div>
@@ -1615,7 +1488,6 @@ export default function MessageRoomPage() {
               </div>
             )}
 
-            {/* INPUT BAR */}
             <div className="flex items-center gap-1.5 rounded-full border border-[#e8dcc8] bg-[#FAF7F0] p-1.5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
 
               <button
@@ -1626,9 +1498,7 @@ export default function MessageRoomPage() {
                       !current
                   );
 
-                  setShowAttachmentMenu(
-                    false
-                  );
+                  setShowAttachmentMenu(false);
                 }}
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-slate-500 transition hover:bg-white hover:text-[#3B2412] dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white"
                 aria-label="Emoji"
@@ -1644,26 +1514,17 @@ export default function MessageRoomPage() {
                   )
                 }
                 onFocus={() => {
-                  setShowEmojiPicker(
-                    false
-                  );
-
-                  setShowAttachmentMenu(
-                    false
-                  );
+                  setShowEmojiPicker(false);
+                  setShowAttachmentMenu(false);
                 }}
-                onBlur={() => {
-                  stopTyping();
-                }}
+                onBlur={stopTyping}
                 onKeyDown={(event) => {
                   if (
-                    event.key ===
-                      "Enter" &&
+                    event.key === "Enter" &&
                     !event.shiftKey
                   ) {
                     event.preventDefault();
-
-                    sendMessage();
+                    void sendMessage();
                   }
                 }}
                 placeholder="Type a message"
@@ -1680,9 +1541,7 @@ export default function MessageRoomPage() {
                       !current
                   );
 
-                  setShowEmojiPicker(
-                    false
-                  );
+                  setShowEmojiPicker(false);
                 }}
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-slate-500 transition hover:bg-white hover:text-[#3B2412] dark:text-slate-300 dark:hover:bg-slate-700 dark:hover:text-white"
                 aria-label="Attach"
@@ -1692,8 +1551,8 @@ export default function MessageRoomPage() {
 
               <button
                 type="button"
-                onClick={
-                  sendMessage
+                onClick={() =>
+                  void sendMessage()
                 }
                 disabled={
                   sending ||
@@ -1722,9 +1581,7 @@ export default function MessageRoomPage() {
             <div className="flex items-center gap-3 border-b border-[#eee5d8] px-5 py-4 dark:border-slate-800">
 
               <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#C9A96E]/15 text-[#C9A96E]">
-                <BookOpen
-                  size={21}
-                />
+                <BookOpen size={21} />
               </div>
 
               <div className="min-w-0 flex-1">
@@ -1740,9 +1597,7 @@ export default function MessageRoomPage() {
               <button
                 type="button"
                 onClick={() =>
-                  setShowResourcePicker(
-                    false
-                  )
+                  setShowResourcePicker(false)
                 }
                 className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-400 transition hover:bg-[#FAF7F0] dark:hover:bg-slate-800"
                 aria-label="Close"
@@ -1761,9 +1616,7 @@ export default function MessageRoomPage() {
                 />
 
                 <input
-                  value={
-                    resourceSearch
-                  }
+                  value={resourceSearch}
                   onChange={(event) =>
                     setResourceSearch(
                       event.target.value
@@ -1782,10 +1635,8 @@ export default function MessageRoomPage() {
                 <div className="flex items-center justify-center py-16">
                   <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#C9A96E]/30 border-t-[#C9A96E]" />
                 </div>
-              ) : filteredResources.length ===
-                0 ? (
+              ) : filteredResources.length === 0 ? (
                 <div className="py-16 text-center">
-
                   <FileText
                     size={38}
                     className="mx-auto mb-4 text-[#C9A96E]"
@@ -1805,15 +1656,13 @@ export default function MessageRoomPage() {
                   {filteredResources.map(
                     (resource) => (
                       <button
-                        key={
-                          resource.id
-                        }
+                        key={resource.id}
                         type="button"
                         disabled={
                           sharingResource
                         }
                         onClick={() =>
-                          shareResource(
+                          void shareResource(
                             resource
                           )
                         }
@@ -1821,37 +1670,25 @@ export default function MessageRoomPage() {
                       >
 
                         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-[#3B2412] text-white">
-                          <FileText
-                            size={21}
-                          />
+                          <FileText size={21} />
                         </div>
 
                         <div className="min-w-0 flex-1">
 
                           <h3 className="line-clamp-2 text-sm font-black">
-                            {
-                              resource.title
-                            }
+                            {resource.title}
                           </h3>
 
                           <p className="mt-1 truncate text-xs text-slate-500 dark:text-slate-400">
-                            {
-                              resource.course
-                            }
+                            {resource.course}
                             {" • "}
-                            {
-                              resource.semester
-                            }
+                            {resource.semester}
                           </p>
 
                           <p className="mt-0.5 truncate text-[11px] text-[#C9A96E]">
-                            {
-                              resource.category
-                            }
+                            {resource.category}
                             {" • "}
-                            {
-                              resource.year
-                            }
+                            {resource.year}
                           </p>
                         </div>
 
@@ -1879,17 +1716,13 @@ export default function MessageRoomPage() {
             <div className="mb-5 flex items-start justify-between gap-4">
 
               <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-red-50 text-red-600 dark:bg-red-950/30 dark:text-red-400">
-                <Trash2
-                  size={22}
-                />
+                <Trash2 size={22} />
               </div>
 
               <button
                 type="button"
                 onClick={() =>
-                  setShowDeleteConfirm(
-                    false
-                  )
+                  setShowDeleteConfirm(false)
                 }
                 disabled={deleting}
                 className="flex h-9 w-9 items-center justify-center rounded-full text-slate-400 transition hover:bg-[#FAF7F0] hover:text-slate-600 disabled:cursor-not-allowed dark:hover:bg-slate-800 dark:hover:text-slate-200"
@@ -1917,9 +1750,7 @@ export default function MessageRoomPage() {
               <button
                 type="button"
                 onClick={() =>
-                  setShowDeleteConfirm(
-                    false
-                  )
+                  setShowDeleteConfirm(false)
                 }
                 disabled={deleting}
                 className="flex-1 rounded-xl border border-[#e8dcc8] px-4 py-3 text-sm font-semibold transition hover:bg-[#FAF7F0] disabled:cursor-not-allowed disabled:opacity-50 dark:border-slate-700 dark:hover:bg-slate-800"
@@ -1929,8 +1760,8 @@ export default function MessageRoomPage() {
 
               <button
                 type="button"
-                onClick={
-                  deleteDiscussion
+                onClick={() =>
+                  void deleteDiscussion()
                 }
                 disabled={deleting}
                 className="flex-1 rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
