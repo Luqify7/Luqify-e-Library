@@ -7,6 +7,8 @@ import {
   FileImage,
   FileSpreadsheet,
   FileArchive,
+  FileVideo,
+  FileAudio,
   File as FileIcon,
   Download,
   ExternalLink,
@@ -15,6 +17,8 @@ import {
   Inbox,
   ChevronRight,
   Home,
+  Play,
+  Headphones,
 } from "lucide-react";
 
 import { createServerSupabase } from "@/lib/supabase-server";
@@ -45,23 +49,9 @@ interface BreadcrumbItem {
    NORMALIZATION
 ========================================================= */
 
-/*
- * Converts ANY of these:
- *
- * year-2
- * Year 2
- * YEAR 2
- * year_2
- *
- * into:
- *
- * year 2
- *
- * This lets the page compare database values and URL
- * values safely.
- */
-
-function normalizeValue(value: string | null | undefined) {
+function normalizeValue(
+  value: string | null | undefined
+) {
   if (!value) return "";
 
   return value
@@ -71,35 +61,19 @@ function normalizeValue(value: string | null | undefined) {
     .replace(/\s+/g, " ");
 }
 
-/*
- * Used for displaying slugs nicely.
- */
-
-function formatSlug(value: string | null | undefined) {
+function formatSlug(
+  value: string | null | undefined
+) {
   if (!value) return "";
 
   return value
     .replace(/[_-]+/g, " ")
     .replace(/\s+/g, " ")
     .trim()
-    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+    .replace(/\b\w/g, (letter) =>
+      letter.toUpperCase()
+    );
 }
-
-/*
- * Checks whether a database value matches a URL value.
- *
- * Example:
- *
- * database = "Year 2"
- * URL      = "year-2"
- *
- * TRUE
- *
- * database = "Essentials of Christianity"
- * URL      = "essentials-of-christianity"
- *
- * TRUE
- */
 
 function matchesValue(
   databaseValue: string | null | undefined,
@@ -120,7 +94,13 @@ function matchesValue(
 function formatFileSize(bytes: number) {
   if (!bytes || bytes <= 0) return "0 B";
 
-  const units = ["B", "KB", "MB", "GB", "TB"];
+  const units = [
+    "B",
+    "KB",
+    "MB",
+    "GB",
+    "TB",
+  ];
 
   const exponent = Math.min(
     Math.floor(Math.log(bytes) / Math.log(1024)),
@@ -146,17 +126,9 @@ function formatDate(dateString: string) {
   );
 }
 
-/*
- * Gets the real file extension from the filename first.
- *
- * This is important because Supabase may store:
- *
- * application/vnd.openxmlformats...
- *
- * instead of:
- *
- * docx
- */
+/* =========================================================
+   FILE EXTENSION
+========================================================= */
 
 function getFileExtension(
   fileName: string,
@@ -174,59 +146,105 @@ function getFileExtension(
     return filenameExtension;
   }
 
-  const mime = fileType.toLowerCase();
+  const mime = (
+    fileType || ""
+  ).toLowerCase();
 
-  if (mime === "application/pdf") return "pdf";
+  if (mime === "application/pdf")
+    return "pdf";
 
-  if (mime === "application/msword") {
+  if (mime === "application/msword")
     return "doc";
-  }
 
   if (
     mime ===
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  ) {
+  )
     return "docx";
-  }
 
-  if (mime === "application/vnd.ms-powerpoint") {
+  if (
+    mime === "application/vnd.ms-powerpoint"
+  )
     return "ppt";
-  }
 
   if (
     mime ===
     "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-  ) {
+  )
     return "pptx";
-  }
 
   if (
-    mime ===
-    "application/vnd.ms-excel"
-  ) {
+    mime === "application/vnd.ms-excel"
+  )
     return "xls";
-  }
 
   if (
     mime ===
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  ) {
+  )
     return "xlsx";
-  }
 
-  if (mime === "text/plain") {
+  if (mime === "text/plain")
     return "txt";
-  }
 
-  if (mime === "application/zip") {
+  if (
+    mime === "application/zip"
+  )
     return "zip";
-  }
 
-  if (mime.startsWith("image/")) {
+  if (mime.startsWith("image/"))
     return mime.split("/")[1];
-  }
+
+  if (mime.startsWith("video/"))
+    return mime.split("/")[1];
+
+  if (mime.startsWith("audio/"))
+    return mime.split("/")[1];
 
   return "";
+}
+
+/* =========================================================
+   FILE TYPE CHECKS
+========================================================= */
+
+function isVideo(
+  fileName: string,
+  fileType: string
+) {
+  const extension = getFileExtension(
+    fileName,
+    fileType
+  );
+
+  return [
+    "mp4",
+    "webm",
+    "ogg",
+    "ogv",
+    "mov",
+    "m4v",
+  ].includes(extension);
+}
+
+function isAudio(
+  fileName: string,
+  fileType: string
+) {
+  const extension = getFileExtension(
+    fileName,
+    fileType
+  );
+
+  return [
+    "mp3",
+    "wav",
+    "ogg",
+    "oga",
+    "m4a",
+    "aac",
+    "flac",
+  ].includes(extension);
 }
 
 /* =========================================================
@@ -253,6 +271,32 @@ function getFileIcon(
     ].includes(extension)
   ) {
     return FileImage;
+  }
+
+  if (
+    [
+      "mp4",
+      "webm",
+      "ogg",
+      "ogv",
+      "mov",
+      "m4v",
+    ].includes(extension)
+  ) {
+    return FileVideo;
+  }
+
+  if (
+    [
+      "mp3",
+      "wav",
+      "oga",
+      "m4a",
+      "aac",
+      "flac",
+    ].includes(extension)
+  ) {
+    return FileAudio;
   }
 
   if (
@@ -343,6 +387,32 @@ function getBadgeColor(
 
   if (
     [
+      "mp4",
+      "webm",
+      "ogg",
+      "ogv",
+      "mov",
+      "m4v",
+    ].includes(extension)
+  ) {
+    return "bg-pink-100 text-pink-700 dark:bg-pink-950 dark:text-pink-300";
+  }
+
+  if (
+    [
+      "mp3",
+      "wav",
+      "oga",
+      "m4a",
+      "aac",
+      "flac",
+    ].includes(extension)
+  ) {
+    return "bg-indigo-100 text-indigo-700 dark:bg-indigo-950 dark:text-indigo-300";
+  }
+
+  if (
+    [
       "zip",
       "rar",
       "7z",
@@ -354,70 +424,6 @@ function getBadgeColor(
   }
 
   return "bg-[#FAF7F0] text-[#3B2412] dark:bg-slate-800 dark:text-slate-200";
-}
-
-/* =========================================================
-   VIEW URL
-========================================================= */
-
-function getViewUrl(
-  fileUrl: string,
-  fileName: string,
-  fileType: string
-) {
-  const extension = getFileExtension(
-    fileName,
-    fileType
-  );
-
-  /*
-   * These can be opened directly by browsers.
-   */
-
-  const browserPreviewTypes = [
-    "pdf",
-    "jpg",
-    "jpeg",
-    "png",
-    "gif",
-    "webp",
-    "svg",
-    "txt",
-  ];
-
-  if (
-    browserPreviewTypes.includes(extension)
-  ) {
-    return fileUrl;
-  }
-
-  /*
-   * Microsoft Office files.
-   *
-   * Supabase's raw URL may download the file instead
-   * of displaying it.
-   *
-   * Microsoft Office Viewer lets the browser display it.
-   */
-
-  const officeTypes = [
-    "doc",
-    "docx",
-    "ppt",
-    "pptx",
-    "xls",
-    "xlsx",
-  ];
-
-  if (
-    officeTypes.includes(extension)
-  ) {
-    return `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(
-      fileUrl
-    )}`;
-  }
-
-  return fileUrl;
 }
 
 /* =========================================================
@@ -528,32 +534,9 @@ export default async function ResourcesPage({
     category,
   } = await searchParams;
 
-  /*
-   * =======================================================
-   * FETCH ALL RESOURCES
-   * =======================================================
-   *
-   * IMPORTANT:
-   *
-   * We intentionally DO NOT put the filters directly
-   * into the Supabase query.
-   *
-   * Why?
-   *
-   * Your database contains a mixture of values such as:
-   *
-   * year-2
-   * Year 2
-   *
-   * semester-1
-   * Semester 1
-   *
-   * Essentials of Christianity
-   * essentials-of-christianity
-   *
-   * We fetch the resources and perform normalized
-   * matching below.
-   */
+  /* =======================================================
+     FETCH RESOURCES
+  ======================================================= */
 
   const {
     data,
@@ -565,137 +548,74 @@ export default async function ResourcesPage({
       ascending: false,
     });
 
-  console.log(
-    "========================================"
-  );
-  console.log(
-    "RESOURCE PAGE FILTERS"
-  );
-  console.log(
-    "========================================"
-  );
-
-  console.log({
-    faculty,
-    programme,
-    year,
-    semester,
-    course,
-    category,
-  });
-
-  console.log(
-    "========================================"
-  );
-  console.log(
-    "ALL RESOURCES FROM DATABASE"
-  );
-  console.log(
-    "========================================"
-  );
-
-  console.log(data);
-
-  console.log(
-    "========================================"
-  );
-  console.log(
-    "DATABASE ERROR"
-  );
-  console.log(
-    "========================================"
-  );
-
-  console.log(error);
-
-  /*
-   * =======================================================
-   * FILTER RESOURCES
-   * =======================================================
-   */
-
   const allResources: Resource[] =
     error || !data
       ? []
       : (data as Resource[]);
 
-  const resources = allResources.filter(
-    (resource) => {
-      /*
-       * If a filter wasn't supplied,
-       * automatically accept that field.
-       */
+  /* =======================================================
+     FILTER
+  ======================================================= */
 
-      const facultyMatch =
-        !faculty ||
-        matchesValue(
-          resource.faculty,
-          faculty
+  const resources =
+    allResources.filter(
+      (resource) => {
+        const facultyMatch =
+          !faculty ||
+          matchesValue(
+            resource.faculty,
+            faculty
+          );
+
+        const programmeMatch =
+          !programme ||
+          matchesValue(
+            resource.programme,
+            programme
+          );
+
+        const yearMatch =
+          !year ||
+          matchesValue(
+            resource.year,
+            year
+          );
+
+        const semesterMatch =
+          !semester ||
+          matchesValue(
+            resource.semester,
+            semester
+          );
+
+        const courseMatch =
+          !course ||
+          matchesValue(
+            resource.course,
+            course
+          );
+
+        const categoryMatch =
+          !category ||
+          matchesValue(
+            resource.category,
+            category
+          );
+
+        return (
+          facultyMatch &&
+          programmeMatch &&
+          yearMatch &&
+          semesterMatch &&
+          courseMatch &&
+          categoryMatch
         );
+      }
+    );
 
-      const programmeMatch =
-        !programme ||
-        matchesValue(
-          resource.programme,
-          programme
-        );
-
-      const yearMatch =
-        !year ||
-        matchesValue(
-          resource.year,
-          year
-        );
-
-      const semesterMatch =
-        !semester ||
-        matchesValue(
-          resource.semester,
-          semester
-        );
-
-      const courseMatch =
-        !course ||
-        matchesValue(
-          resource.course,
-          course
-        );
-
-      const categoryMatch =
-        !category ||
-        matchesValue(
-          resource.category,
-          category
-        );
-
-      return (
-        facultyMatch &&
-        programmeMatch &&
-        yearMatch &&
-        semesterMatch &&
-        courseMatch &&
-        categoryMatch
-      );
-    }
-  );
-
-  console.log(
-    "========================================"
-  );
-  console.log(
-    "MATCHED RESOURCES"
-  );
-  console.log(
-    "========================================"
-  );
-
-  console.log(resources);
-
-  /*
-   * =======================================================
-   * BREADCRUMBS
-   * =======================================================
-   */
+  /* =======================================================
+     BREADCRUMBS
+  ======================================================= */
 
   const breadcrumbItems: BreadcrumbItem[] =
     [];
@@ -736,29 +656,18 @@ export default async function ResourcesPage({
     });
   }
 
-  /*
-   * =======================================================
-   * PAGE TITLE
-   * =======================================================
-   */
-
-  const pageTitle = category
-    ? formatSlug(category)
-    : course
-    ? formatSlug(course)
-    : semester
-    ? formatSlug(semester)
-    : year
-    ? formatSlug(year)
-    : programme
-    ? formatSlug(programme)
-    : "Resources";
-
-  /*
-   * =======================================================
-   * ACTIVE FILTERS
-   * =======================================================
-   */
+  const pageTitle =
+    category
+      ? formatSlug(category)
+      : course
+      ? formatSlug(course)
+      : semester
+      ? formatSlug(semester)
+      : year
+      ? formatSlug(year)
+      : programme
+      ? formatSlug(programme)
+      : "Resources";
 
   const activeFilters = [
     faculty,
@@ -769,13 +678,13 @@ export default async function ResourcesPage({
     category,
   ]
     .filter(Boolean)
-    .map((item) => formatSlug(item));
+    .map((item) =>
+      formatSlug(item)
+    );
 
-  /*
-   * =======================================================
-   * UI
-   * =======================================================
-   */
+  /* =======================================================
+     UI
+  ======================================================= */
 
   return (
     <main
@@ -795,9 +704,7 @@ export default async function ResourcesPage({
           items={breadcrumbItems}
         />
 
-        {/* =================================================
-            HEADER
-        ================================================= */}
+        {/* HEADER */}
 
         <div
           className="
@@ -821,7 +728,6 @@ export default async function ResourcesPage({
               md:justify-between
             "
           >
-
             <div
               className="
                 flex
@@ -829,7 +735,6 @@ export default async function ResourcesPage({
                 gap-6
               "
             >
-
               <div
                 className="
                   flex
@@ -847,7 +752,6 @@ export default async function ResourcesPage({
               </div>
 
               <div>
-
                 <p
                   className="
                     text-sm
@@ -912,11 +816,8 @@ export default async function ResourcesPage({
                     )}
                   </div>
                 )}
-
               </div>
             </div>
-
-            {/* RESOURCE COUNT */}
 
             <div
               className="
@@ -933,14 +834,12 @@ export default async function ResourcesPage({
                 dark:bg-slate-800
               "
             >
-
               <FileText
                 size={22}
                 className="text-[#C9A96E]"
               />
 
               <div>
-
                 <p
                   className="
                     text-2xl
@@ -967,21 +866,16 @@ export default async function ResourcesPage({
                     ? "Resource"
                     : "Resources"}
                 </p>
-
               </div>
             </div>
-
           </div>
         </div>
 
-        {/* =================================================
-            RESOURCE GRID
-        ================================================= */}
+        {/* RESOURCE GRID */}
 
         <div className="mt-14">
 
           {resources.length === 0 ? (
-
             <div
               className="
                 flex
@@ -1000,7 +894,6 @@ export default async function ResourcesPage({
                 dark:bg-slate-900
               "
             >
-
               <div
                 className="
                   flex
@@ -1042,11 +935,8 @@ export default async function ResourcesPage({
                 check another course or
                 category.
               </p>
-
             </div>
-
           ) : (
-
             <div
               className="
                 grid
@@ -1055,10 +945,8 @@ export default async function ResourcesPage({
                 xl:grid-cols-3
               "
             >
-
               {resources.map(
                 (resource) => {
-
                   const FileTypeIcon =
                     getFileIcon(
                       resource.file_name,
@@ -1077,9 +965,14 @@ export default async function ResourcesPage({
                       resource.file_type
                     );
 
-                  const viewUrl =
-                    getViewUrl(
-                      resource.file_url,
+                  const video =
+                    isVideo(
+                      resource.file_name,
+                      resource.file_type
+                    );
+
+                  const audio =
+                    isAudio(
                       resource.file_name,
                       resource.file_type
                     );
@@ -1116,7 +1009,6 @@ export default async function ResourcesPage({
                           gap-4
                         "
                       >
-
                         <div
                           className="
                             flex
@@ -1152,7 +1044,6 @@ export default async function ResourcesPage({
                           {extension ||
                             "FILE"}
                         </span>
-
                       </div>
 
                       {/* TITLE */}
@@ -1181,6 +1072,98 @@ export default async function ResourcesPage({
                         {resource.file_name}
                       </p>
 
+                      {/* VIDEO PREVIEW */}
+
+                      {video && (
+                        <div
+                          className="
+                            mt-6
+                            overflow-hidden
+                            rounded-2xl
+                            bg-black
+                          "
+                        >
+                          <video
+                            controls
+                            preload="metadata"
+                            playsInline
+                            className="
+                              aspect-video
+                              w-full
+                            "
+                          >
+                            <source
+                              src={
+                                resource.file_url
+                              }
+                              type={
+                                resource.file_type ||
+                                undefined
+                              }
+                            />
+
+                            Your browser does not
+                            support video playback.
+                          </video>
+                        </div>
+                      )}
+
+                      {/* AUDIO PREVIEW */}
+
+                      {audio && (
+                        <div
+                          className="
+                            mt-6
+                            rounded-2xl
+                            border
+                            border-[#e8dcc8]
+                            bg-[#FAF7F0]
+                            p-5
+                            dark:border-slate-700
+                            dark:bg-slate-800
+                          "
+                        >
+                          <div
+                            className="
+                              mb-3
+                              flex
+                              items-center
+                              gap-2
+                              text-sm
+                              font-bold
+                              text-[#3B2412]
+                              dark:text-white
+                            "
+                          >
+                            <Headphones
+                              size={18}
+                              className="text-[#C9A96E]"
+                            />
+
+                            Audio Tutorial
+                          </div>
+
+                          <audio
+                            controls
+                            preload="metadata"
+                            className="w-full"
+                          >
+                            <source
+                              src={
+                                resource.file_url
+                              }
+                              type={
+                                resource.file_type ||
+                                undefined
+                              }
+                            />
+
+                            Your browser does not
+                            support audio playback.
+                          </audio>
+                        </div>
+                      )}
+
                       {/* RESOURCE INFO */}
 
                       <div
@@ -1196,7 +1179,6 @@ export default async function ResourcesPage({
                           dark:text-slate-400
                         "
                       >
-
                         <span
                           className="
                             flex
@@ -1228,7 +1210,6 @@ export default async function ResourcesPage({
                             resource.created_at
                           )}
                         </span>
-
                       </div>
 
                       {/* COURSE */}
@@ -1264,10 +1245,12 @@ export default async function ResourcesPage({
                         "
                       >
 
-                        {/* OPEN */}
+                        {/* PLAY / OPEN */}
 
                         <a
-                          href={viewUrl}
+                          href={
+                            resource.file_url
+                          }
                           target="_blank"
                           rel="noopener noreferrer"
                           className="
@@ -1289,11 +1272,23 @@ export default async function ResourcesPage({
                             hover:bg-[#2a1a0d]
                           "
                         >
-                          <ExternalLink
-                            size={16}
-                          />
+                          {video ? (
+                            <Play size={16} />
+                          ) : audio ? (
+                            <Headphones
+                              size={16}
+                            />
+                          ) : (
+                            <ExternalLink
+                              size={16}
+                            />
+                          )}
 
-                          Open
+                          {video
+                            ? "Play"
+                            : audio
+                            ? "Listen"
+                            : "Open"}
                         </a>
 
                         {/* DOWNLOAD */}
@@ -1335,20 +1330,16 @@ export default async function ResourcesPage({
 
                           Download
                         </a>
-
                       </div>
 
                     </div>
                   );
                 }
               )}
-
             </div>
-
           )}
 
         </div>
-
       </section>
     </main>
   );

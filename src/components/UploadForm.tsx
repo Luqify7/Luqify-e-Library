@@ -4,6 +4,9 @@ import {
   UploadCloud,
   FileText,
   CheckCircle,
+  Film,
+  Image as ImageIcon,
+  FileArchive,
 } from "lucide-react";
 
 import { useState } from "react";
@@ -60,13 +63,63 @@ export default function UploadForm() {
     }));
   }
 
+  function getFileIcon() {
+    if (!selectedFile) {
+      return (
+        <UploadCloud
+          size={35}
+          className="text-[#C9A96E]"
+        />
+      );
+    }
+
+    const type = selectedFile.type;
+
+    if (type.startsWith("video/")) {
+      return (
+        <Film
+          size={35}
+          className="text-[#C9A96E]"
+        />
+      );
+    }
+
+    if (type.startsWith("image/")) {
+      return (
+        <ImageIcon
+          size={35}
+          className="text-[#C9A96E]"
+        />
+      );
+    }
+
+    if (
+      type === "application/zip" ||
+      type === "application/x-zip-compressed"
+    ) {
+      return (
+        <FileArchive
+          size={35}
+          className="text-[#C9A96E]"
+        />
+      );
+    }
+
+    return (
+      <FileText
+        size={35}
+        className="text-[#C9A96E]"
+      />
+    );
+  }
+
   async function handleSubmit(
     e: React.FormEvent
   ) {
     e.preventDefault();
 
     if (!selectedFile) {
-      alert("Please select a file");
+      alert("Please select a file.");
       return;
     }
 
@@ -79,7 +132,7 @@ export default function UploadForm() {
       !form.semester ||
       !form.category
     ) {
-      alert("Please complete all fields");
+      alert("Please complete all fields.");
       return;
     }
 
@@ -101,14 +154,16 @@ export default function UploadForm() {
       }
 
       // -----------------------------------------
-      // UPLOAD FILE
+      // SAFE FILE NAME
       // -----------------------------------------
 
       const safeFileName =
-        selectedFile.name.replace(
-          /\s+/g,
-          "-"
-        );
+        selectedFile.name
+          .replace(/\s+/g, "-")
+          .replace(
+            /[^a-zA-Z0-9._-]/g,
+            ""
+          );
 
       const storagePath =
         `${Date.now()}-${safeFileName}`;
@@ -118,6 +173,20 @@ export default function UploadForm() {
         storagePath
       );
 
+      console.log(
+        "File type:",
+        selectedFile.type
+      );
+
+      console.log(
+        "File size:",
+        selectedFile.size
+      );
+
+      // -----------------------------------------
+      // UPLOAD TO SUPABASE STORAGE
+      // -----------------------------------------
+
       const {
         error: uploadError,
       } = await supabase.storage
@@ -126,7 +195,14 @@ export default function UploadForm() {
           storagePath,
           selectedFile,
           {
+            cacheControl: "3600",
             upsert: false,
+
+            // IMPORTANT:
+            // Preserve the actual MIME type.
+            contentType:
+              selectedFile.type ||
+              "application/octet-stream",
           }
         );
 
@@ -146,26 +222,54 @@ export default function UploadForm() {
           storagePath
         );
 
+      const publicUrl =
+        publicUrlData.publicUrl;
+
+      if (!publicUrl) {
+        throw new Error(
+          "Could not generate the resource URL."
+        );
+      }
+
       // -----------------------------------------
       // INSERT RESOURCE
       // -----------------------------------------
 
       const resourceData = {
-        title: form.title,
+        title: form.title.trim(),
+
         faculty: selectedFaculty,
+
         programme: selectedProgramme,
+
         year: form.year,
+
         semester: form.semester,
+
         category: form.category,
+
         course: form.course,
-        file_url:
-          publicUrlData.publicUrl,
+
+        file_url: publicUrl,
+
+        /*
+         * Keep the REAL MIME TYPE.
+         *
+         * Example:
+         * video/mp4
+         * application/pdf
+         * image/png
+         */
         file_type:
-          selectedFile.type,
+          selectedFile.type ||
+          "application/octet-stream",
+
         file_name:
           selectedFile.name,
+
         storage_path:
           storagePath,
+
         file_size:
           selectedFile.size,
       };
@@ -188,7 +292,7 @@ export default function UploadForm() {
       }
 
       // -----------------------------------------
-      // CREATE GLOBAL NOTIFICATION
+      // GLOBAL NOTIFICATION
       // -----------------------------------------
 
       const {
@@ -214,19 +318,6 @@ export default function UploadForm() {
           "NOTIFICATION CREATION ERROR:",
           notificationError
         );
-
-        /*
-         * The resource has already been
-         * uploaded successfully.
-         *
-         * Therefore we do NOT fail the
-         * upload if notification creation
-         * fails.
-         */
-      } else {
-        console.log(
-          "NOTIFICATION CREATED SUCCESSFULLY"
-        );
       }
 
       // -----------------------------------------
@@ -234,7 +325,6 @@ export default function UploadForm() {
       // -----------------------------------------
 
       setSubmitted(true);
-
     } catch (error: any) {
       console.error(
         "UPLOAD FAILED:",
@@ -258,9 +348,8 @@ export default function UploadForm() {
 
       alert(
         error?.message ||
-          "Upload failed"
+          "Upload failed."
       );
-
     } finally {
       setLoading(false);
     }
@@ -273,10 +362,13 @@ export default function UploadForm() {
         border
         border-[#e8dcc8]
         bg-white
-        p-8
+        p-6
         shadow-xl
+        transition-colors
+        sm:p-8
         dark:border-slate-800
         dark:bg-slate-900
+        dark:shadow-black/30
       "
     >
       {submitted ? (
@@ -290,10 +382,23 @@ export default function UploadForm() {
             text-center
           "
         >
-          <CheckCircle
-            size={60}
-            className="text-[#C9A96E]"
-          />
+          <div
+            className="
+              flex
+              h-20
+              w-20
+              items-center
+              justify-center
+              rounded-full
+              bg-[#C9A96E]/10
+              dark:bg-[#C9A96E]/15
+            "
+          >
+            <CheckCircle
+              size={60}
+              className="text-[#C9A96E]"
+            />
+          </div>
 
           <h2
             className="
@@ -310,6 +415,7 @@ export default function UploadForm() {
           <p
             className="
               mt-3
+              max-w-md
               text-[#6b5844]
               dark:text-slate-300
             "
@@ -317,6 +423,38 @@ export default function UploadForm() {
             Your resource is now available
             in Luqify e-Library.
           </p>
+
+          <button
+            type="button"
+            onClick={() => {
+              setSubmitted(false);
+              setSelectedFile(null);
+
+              setForm({
+                title: "",
+                course: "",
+                year: "",
+                semester: "",
+                category: "",
+              });
+            }}
+            className="
+              mt-8
+              rounded-2xl
+              bg-[#3B2412]
+              px-6
+              py-3
+              font-bold
+              text-white
+              transition
+              hover:-translate-y-1
+              hover:bg-[#4d301b]
+              dark:bg-[#C9A96E]
+              dark:text-[#24170d]
+            "
+          >
+            Upload Another Resource
+          </button>
         </div>
       ) : (
         <form
@@ -326,7 +464,15 @@ export default function UploadForm() {
           {/* FACULTY */}
 
           <div>
-            <label className="mb-2 block font-semibold text-[#3B2412] dark:text-white">
+            <label
+              className="
+                mb-2
+                block
+                font-semibold
+                text-[#3B2412]
+                dark:text-slate-100
+              "
+            >
               Faculty
             </label>
 
@@ -354,9 +500,15 @@ export default function UploadForm() {
                 bg-[#FAF7F0]
                 px-4
                 py-3
+                text-[#3B2412]
+                outline-none
+                transition
+                focus:border-[#C9A96E]
+                focus:ring-2
+                focus:ring-[#C9A96E]/20
                 dark:border-slate-700
                 dark:bg-slate-800
-                dark:text-white
+                dark:text-slate-100
               "
             >
               <option value="">
@@ -379,7 +531,15 @@ export default function UploadForm() {
           {/* PROGRAMME */}
 
           <div>
-            <label className="mb-2 block font-semibold text-[#3B2412] dark:text-white">
+            <label
+              className="
+                mb-2
+                block
+                font-semibold
+                text-[#3B2412]
+                dark:text-slate-100
+              "
+            >
               Programme
             </label>
 
@@ -406,11 +566,17 @@ export default function UploadForm() {
                 bg-[#FAF7F0]
                 px-4
                 py-3
+                text-[#3B2412]
+                outline-none
+                transition
+                focus:border-[#C9A96E]
+                focus:ring-2
+                focus:ring-[#C9A96E]/20
                 disabled:cursor-not-allowed
                 disabled:opacity-50
                 dark:border-slate-700
                 dark:bg-slate-800
-                dark:text-white
+                dark:text-slate-100
               "
             >
               <option value="">
@@ -433,83 +599,133 @@ export default function UploadForm() {
           {/* YEAR + SEMESTER */}
 
           <div className="grid gap-5 md:grid-cols-2">
-            <select
-              name="year"
-              value={form.year}
-              disabled={!selectedProgramme}
-              onChange={handleChange}
-              className="
-                rounded-2xl
-                border
-                border-[#d9c7aa]
-                bg-[#FAF7F0]
-                px-4
-                py-3
-                disabled:cursor-not-allowed
-                disabled:opacity-50
-                dark:border-slate-700
-                dark:bg-slate-800
-                dark:text-white
-              "
-            >
-              <option value="">
+            <div>
+              <label
+                className="
+                  mb-2
+                  block
+                  font-semibold
+                  text-[#3B2412]
+                  dark:text-slate-100
+                "
+              >
                 Academic Year
-              </option>
+              </label>
 
-              <option value="year-1">
-                Year 1
-              </option>
+              <select
+                name="year"
+                value={form.year}
+                disabled={!selectedProgramme}
+                onChange={handleChange}
+                className="
+                  w-full
+                  rounded-2xl
+                  border
+                  border-[#d9c7aa]
+                  bg-[#FAF7F0]
+                  px-4
+                  py-3
+                  text-[#3B2412]
+                  outline-none
+                  transition
+                  focus:border-[#C9A96E]
+                  focus:ring-2
+                  focus:ring-[#C9A96E]/20
+                  disabled:cursor-not-allowed
+                  disabled:opacity-50
+                  dark:border-slate-700
+                  dark:bg-slate-800
+                  dark:text-slate-100
+                "
+              >
+                <option value="">
+                  Select Academic Year
+                </option>
 
-              <option value="year-2">
-                Year 2
-              </option>
+                <option value="year-1">
+                  Year 1
+                </option>
 
-              <option value="year-3">
-                Year 3
-              </option>
+                <option value="year-2">
+                  Year 2
+                </option>
 
-              <option value="year-4">
-                Year 4
-              </option>
-            </select>
+                <option value="year-3">
+                  Year 3
+                </option>
 
-            <select
-              name="semester"
-              value={form.semester}
-              disabled={!selectedProgramme}
-              onChange={handleChange}
-              className="
-                rounded-2xl
-                border
-                border-[#d9c7aa]
-                bg-[#FAF7F0]
-                px-4
-                py-3
-                disabled:cursor-not-allowed
-                disabled:opacity-50
-                dark:border-slate-700
-                dark:bg-slate-800
-                dark:text-white
-              "
-            >
-              <option value="">
+                <option value="year-4">
+                  Year 4
+                </option>
+              </select>
+            </div>
+
+            <div>
+              <label
+                className="
+                  mb-2
+                  block
+                  font-semibold
+                  text-[#3B2412]
+                  dark:text-slate-100
+                "
+              >
                 Semester
-              </option>
+              </label>
 
-              <option value="semester-1">
-                Semester 1
-              </option>
+              <select
+                name="semester"
+                value={form.semester}
+                disabled={!selectedProgramme}
+                onChange={handleChange}
+                className="
+                  w-full
+                  rounded-2xl
+                  border
+                  border-[#d9c7aa]
+                  bg-[#FAF7F0]
+                  px-4
+                  py-3
+                  text-[#3B2412]
+                  outline-none
+                  transition
+                  focus:border-[#C9A96E]
+                  focus:ring-2
+                  focus:ring-[#C9A96E]/20
+                  disabled:cursor-not-allowed
+                  disabled:opacity-50
+                  dark:border-slate-700
+                  dark:bg-slate-800
+                  dark:text-slate-100
+                "
+              >
+                <option value="">
+                  Select Semester
+                </option>
 
-              <option value="semester-2">
-                Semester 2
-              </option>
-            </select>
+                <option value="semester-1">
+                  Semester 1
+                </option>
+
+                <option value="semester-2">
+                  Semester 2
+                </option>
+              </select>
+            </div>
           </div>
 
           {/* COURSE */}
 
           <div>
-            <label className="mb-2 block font-semibold text-[#3B2412] dark:text-white">
+            <label
+              className="
+                mb-2
+                block
+                font-semibold
+                text-[#3B2412]
+                dark:text-slate-100
+              "
+            >
               Course
             </label>
 
@@ -531,11 +747,17 @@ export default function UploadForm() {
                 bg-[#FAF7F0]
                 px-4
                 py-3
+                text-[#3B2412]
+                outline-none
+                transition
+                focus:border-[#C9A96E]
+                focus:ring-2
+                focus:ring-[#C9A96E]/20
                 disabled:cursor-not-allowed
                 disabled:opacity-50
                 dark:border-slate-700
                 dark:bg-slate-800
-                dark:text-white
+                dark:text-slate-100
               "
             >
               <option value="">
@@ -545,8 +767,7 @@ export default function UploadForm() {
                   ? "Select Academic Year First"
                   : !form.semester
                   ? "Select Semester First"
-                  : availableCourses.length ===
-                    0
+                  : availableCourses.length === 0
                   ? "No courses found"
                   : "Select Course"}
               </option>
@@ -562,121 +783,273 @@ export default function UploadForm() {
                 )
               )}
             </select>
+
+            {selectedProgramme &&
+              form.year &&
+              form.semester &&
+              availableCourses.length === 0 && (
+                <p
+                  className="
+                    mt-2
+                    text-xs
+                    font-medium
+                    text-amber-600
+                    dark:text-amber-400
+                  "
+                >
+                  No courses are currently
+                  available for this programme,
+                  year and semester.
+                </p>
+              )}
           </div>
 
           {/* RESOURCE TYPE */}
 
-          <select
-            name="category"
-            value={form.category}
-            onChange={handleChange}
-            className="
-              w-full
-              rounded-2xl
-              border
-              border-[#d9c7aa]
-              bg-[#FAF7F0]
-              px-4
-              py-3
-              dark:border-slate-700
-              dark:bg-slate-800
-              dark:text-white
-            "
-          >
-            <option value="">
+          <div>
+            <label
+              className="
+                mb-2
+                block
+                font-semibold
+                text-[#3B2412]
+                dark:text-slate-100
+              "
+            >
               Resource Type
-            </option>
+            </label>
 
-            <option value="Lecture Notes">
-              Lecture Notes
-            </option>
+            <select
+              name="category"
+              value={form.category}
+              onChange={handleChange}
+              className="
+                w-full
+                rounded-2xl
+                border
+                border-[#d9c7aa]
+                bg-[#FAF7F0]
+                px-4
+                py-3
+                text-[#3B2412]
+                outline-none
+                transition
+                focus:border-[#C9A96E]
+                focus:ring-2
+                focus:ring-[#C9A96E]/20
+                dark:border-slate-700
+                dark:bg-slate-800
+                dark:text-slate-100
+              "
+            >
+              <option value="">
+                Select Resource Type
+              </option>
 
-            <option value="Tutorials">
-              Tutorials
-            </option>
+              <option value="Lecture Notes">
+                Lecture Notes
+              </option>
 
-            <option value="Past Papers">
-              Past Papers
-            </option>
+              <option value="Tutorials">
+                Tutorials
+              </option>
 
-            <option value="Presentation Slides">
-              Presentation Slides
-            </option>
+              <option value="Past Papers">
+                Past Papers
+              </option>
 
-            <option value="Study Guides">
-              Study Guides
-            </option>
-          </select>
+              <option value="Presentation Slides">
+                Presentation Slides
+              </option>
+
+              <option value="Study Guides">
+                Study Guides
+              </option>
+            </select>
+          </div>
 
           {/* TITLE */}
 
-          <input
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            placeholder="Resource Title"
-            className="
-              w-full
-              rounded-2xl
-              border
-              border-[#d9c7aa]
-              bg-[#FAF7F0]
-              px-4
-              py-3
-              dark:border-slate-700
-              dark:bg-slate-800
-              dark:text-white
-            "
-          />
+          <div>
+            <label
+              className="
+                mb-2
+                block
+                font-semibold
+                text-[#3B2412]
+                dark:text-slate-100
+              "
+            >
+              Resource Title
+            </label>
+
+            <input
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              placeholder="Enter resource title"
+              className="
+                w-full
+                rounded-2xl
+                border
+                border-[#d9c7aa]
+                bg-[#FAF7F0]
+                px-4
+                py-3
+                text-[#3B2412]
+                placeholder:text-slate-400
+                outline-none
+                transition
+                focus:border-[#C9A96E]
+                focus:ring-2
+                focus:ring-[#C9A96E]/20
+                dark:border-slate-700
+                dark:bg-slate-800
+                dark:text-slate-100
+                dark:placeholder:text-slate-500
+              "
+            />
+          </div>
 
           {/* FILE */}
 
-          <label
-            className="
-              flex
-              cursor-pointer
-              flex-col
-              items-center
-              justify-center
-              gap-3
-              rounded-2xl
-              border-2
-              border-dashed
-              border-[#C9A96E]
-              bg-[#FAF7F0]
-              p-8
-              text-center
-              dark:bg-slate-800
-            "
-          >
-            <UploadCloud
-              size={35}
-              className="text-[#C9A96E]"
-            />
+          <div>
+            <label
+              className="
+                mb-2
+                block
+                font-semibold
+                text-[#3B2412]
+                dark:text-slate-100
+              "
+            >
+              Tutorial / Resource File
+            </label>
 
-            <span className="font-semibold dark:text-white">
-              Browse Files
-            </span>
+            <label
+              className="
+                flex
+                cursor-pointer
+                flex-col
+                items-center
+                justify-center
+                gap-3
+                rounded-2xl
+                border-2
+                border-dashed
+                border-[#C9A96E]
+                bg-[#FAF7F0]
+                p-8
+                text-center
+                transition
+                hover:bg-[#f4eddf]
+                dark:bg-slate-800
+                dark:hover:bg-slate-700
+              "
+            >
+              <div
+                className="
+                  flex
+                  h-16
+                  w-16
+                  items-center
+                  justify-center
+                  rounded-2xl
+                  bg-[#C9A96E]/10
+                  dark:bg-[#C9A96E]/15
+                "
+              >
+                {getFileIcon()}
+              </div>
 
-            {selectedFile && (
-              <span className="text-sm font-semibold text-[#3B2412] dark:text-slate-200">
-                {selectedFile.name}
+              <span
+                className="
+                  font-bold
+                  text-[#3B2412]
+                  dark:text-slate-100
+                "
+              >
+                Browse Files
               </span>
-            )}
 
-            <input
-              type="file"
-              accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx"
-              onChange={(e) => {
-                if (e.target.files) {
-                  setSelectedFile(
-                    e.target.files[0]
-                  );
-                }
-              }}
-              className="hidden"
-            />
-          </label>
+              <span
+                className="
+                  max-w-md
+                  text-xs
+                  leading-5
+                  text-slate-500
+                  dark:text-slate-400
+                "
+              >
+                PDF, Word, PowerPoint, Excel,
+                Images, Video, Audio or ZIP
+              </span>
+
+              <span
+                className="
+                  text-[11px]
+                  text-slate-400
+                  dark:text-slate-500
+                "
+              >
+                Tutorials, notes, assignments,
+                videos and study materials
+              </span>
+
+              {selectedFile && (
+                <span
+                  className="
+                    max-w-full
+                    truncate
+                    rounded-xl
+                    bg-[#C9A96E]/10
+                    px-4
+                    py-2
+                    text-sm
+                    font-semibold
+                    text-[#3B2412]
+                    dark:bg-[#C9A96E]/15
+                    dark:text-slate-100
+                  "
+                >
+                  {selectedFile.name}
+                </span>
+              )}
+
+              <input
+                type="file"
+                accept="
+                  .pdf,
+                  .doc,
+                  .docx,
+                  .ppt,
+                  .pptx,
+                  .xls,
+                  .xlsx,
+                  .jpg,
+                  .jpeg,
+                  .png,
+                  .webp,
+                  .gif,
+                  .zip,
+                  .mp4,
+                  .webm,
+                  .mov,
+                  .mp3,
+                  .wav
+                "
+                onChange={(e) => {
+                  const file =
+                    e.target.files?.[0];
+
+                  if (file) {
+                    setSelectedFile(file);
+                  }
+                }}
+                className="hidden"
+              />
+            </label>
+          </div>
 
           {/* SUBMIT */}
 
@@ -694,10 +1067,16 @@ export default function UploadForm() {
               py-4
               font-bold
               text-white
+              shadow-sm
               transition
               hover:-translate-y-1
+              hover:bg-[#4d301b]
+              hover:shadow-lg
               disabled:cursor-not-allowed
               disabled:opacity-50
+              dark:bg-[#C9A96E]
+              dark:text-[#24170d]
+              dark:hover:bg-[#d5b77d]
             "
           >
             <FileText size={20} />
