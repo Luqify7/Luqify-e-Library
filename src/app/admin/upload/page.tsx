@@ -114,11 +114,14 @@ export default function AdminUploadPage() {
       className="
         min-h-screen
         bg-[#FAF7F0]
-        px-6
-        py-16
+        px-4
+        py-10
         text-[#3B2412]
+        transition-colors
+        sm:px-6
+        sm:py-16
         dark:bg-slate-950
-        dark:text-white
+        dark:text-slate-100
       "
     >
       <section className="mx-auto max-w-7xl">
@@ -127,12 +130,19 @@ export default function AdminUploadPage() {
 
         <div
           className="
-            mb-10
-            rounded-[3rem]
+            mb-8
+            rounded-[2rem]
             bg-white
-            p-10
+            p-6
             shadow-sm
+            transition-colors
+            sm:mb-10
+            sm:rounded-[3rem]
+            sm:p-10
+            dark:border
+            dark:border-slate-800
             dark:bg-slate-900
+            dark:shadow-black/20
           "
         >
           <p
@@ -150,9 +160,13 @@ export default function AdminUploadPage() {
           <h1
             className="
               mt-3
-              text-4xl
+              text-3xl
               font-black
-              sm:text-5xl
+              text-[#3B2412]
+              transition-colors
+              sm:text-4xl
+              md:text-5xl
+              dark:text-white
             "
           >
             Resource Manager
@@ -161,32 +175,47 @@ export default function AdminUploadPage() {
           <p
             className="
               mt-3
-              text-slate-500
-              dark:text-slate-400
+              text-sm
+              leading-6
+              text-slate-600
+              dark:text-slate-300
             "
           >
             View and manage uploaded resources.
           </p>
         </div>
 
-        {/* TOTAL */}
+        {/* TOTAL RESOURCES */}
 
         <div
           className="
-            mb-10
-            rounded-[2rem]
+            mb-8
+            rounded-[1.75rem]
             bg-[#3B2412]
-            p-8
+            p-6
             text-white
+            shadow-sm
+            sm:mb-10
+            sm:rounded-[2rem]
+            sm:p-8
           "
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-sm uppercase opacity-70">
+              <p
+                className="
+                  text-xs
+                  font-semibold
+                  uppercase
+                  tracking-wider
+                  text-white/70
+                  sm:text-sm
+                "
+              >
                 Total Resources
               </p>
 
-              <h2 className="mt-2 text-5xl font-black">
+              <h2 className="mt-2 text-4xl font-black sm:text-5xl">
                 {loading ? "—" : resources.length}
               </h2>
             </div>
@@ -196,17 +225,21 @@ export default function AdminUploadPage() {
               onClick={() => void loadResources()}
               disabled={loading}
               aria-label="Refresh resources"
+              title="Refresh resources"
               className="
                 flex
                 h-12
                 w-12
+                shrink-0
                 items-center
                 justify-center
                 rounded-xl
                 border
                 border-white/20
+                text-white
                 transition
                 hover:bg-white/10
+                hover:scale-105
                 disabled:cursor-not-allowed
                 disabled:opacity-50
               "
@@ -236,10 +269,10 @@ export default function AdminUploadPage() {
               p-5
               text-sm
               font-semibold
-              text-red-600
-              dark:border-red-900
-              dark:bg-red-950/30
-              dark:text-red-400
+              text-red-700
+              dark:border-red-900/70
+              dark:bg-red-950/40
+              dark:text-red-300
             "
           >
             {error}
@@ -258,7 +291,10 @@ export default function AdminUploadPage() {
               rounded-3xl
               bg-white
               shadow-sm
+              dark:border
+              dark:border-slate-800
               dark:bg-slate-900
+              dark:shadow-black/20
             "
           >
             <div
@@ -268,8 +304,8 @@ export default function AdminUploadPage() {
                 gap-3
                 text-sm
                 font-semibold
-                text-slate-500
-                dark:text-slate-400
+                text-slate-600
+                dark:text-slate-300
               "
             >
               <Loader2
@@ -288,7 +324,7 @@ export default function AdminUploadPage() {
         {/* RESOURCES */}
 
         {!loading && resources.length > 0 && (
-          <div className="grid gap-6">
+          <div className="grid gap-5 sm:gap-6">
             {resources.map((resource) => (
               <div
                 key={resource.id}
@@ -298,12 +334,18 @@ export default function AdminUploadPage() {
                   gap-5
                   rounded-3xl
                   bg-white
-                  p-6
+                  p-5
                   shadow-sm
                   transition
                   hover:-translate-y-1
                   hover:shadow-lg
+                  sm:p-6
+                  dark:border
+                  dark:border-slate-800
                   dark:bg-slate-900
+                  dark:shadow-black/20
+                  dark:hover:border-slate-700
+                  dark:hover:shadow-black/30
                   md:flex-row
                   md:items-center
                   md:justify-between
@@ -314,14 +356,17 @@ export default function AdminUploadPage() {
                     flex
                     min-w-0
                     items-center
-                    gap-5
+                    gap-4
+                    sm:gap-5
                   "
                 >
+                  {/* FILE ICON */}
+
                   <div
                     className="
                       flex
-                      h-14
-                      w-14
+                      h-12
+                      w-12
                       shrink-0
                       items-center
                       justify-center
@@ -331,17 +376,22 @@ export default function AdminUploadPage() {
                     "
                   >
                     <FileText
-                      size={28}
+                      size={26}
                       className="text-[#C9A96E]"
                     />
                   </div>
+
+                  {/* RESOURCE INFO */}
 
                   <div className="min-w-0">
                     <h3
                       className="
                         truncate
-                        text-lg
+                        text-base
                         font-bold
+                        text-[#3B2412]
+                        sm:text-lg
+                        dark:text-white
                       "
                     >
                       {resource.title ||
@@ -352,8 +402,8 @@ export default function AdminUploadPage() {
                       className="
                         truncate
                         text-sm
-                        text-slate-500
-                        dark:text-slate-400
+                        text-slate-600
+                        dark:text-slate-300
                       "
                     >
                       {resource.file_name ||
@@ -364,7 +414,8 @@ export default function AdminUploadPage() {
                       className="
                         mt-1
                         text-xs
-                        text-slate-400
+                        text-slate-500
+                        dark:text-slate-400
                       "
                     >
                       {resource.programme ||
@@ -380,7 +431,9 @@ export default function AdminUploadPage() {
                       className="
                         mt-1
                         text-xs
-                        text-slate-400
+                        font-medium
+                        text-slate-500
+                        dark:text-slate-400
                       "
                     >
                       {formatFileSize(
@@ -390,13 +443,28 @@ export default function AdminUploadPage() {
                   </div>
                 </div>
 
-                <div className="flex shrink-0 gap-3">
+                {/* ACTIONS */}
+
+                <div
+                  className="
+                    flex
+                    shrink-0
+                    gap-3
+                    border-t
+                    border-slate-100
+                    pt-4
+                    dark:border-slate-800
+                    md:border-0
+                    md:pt-0
+                  "
+                >
                   {resource.file_url && (
                     <a
                       href={resource.file_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="Open resource"
+                      title="Open resource"
                       className="
                         flex
                         items-center
@@ -408,6 +476,7 @@ export default function AdminUploadPage() {
                         text-white
                         transition
                         hover:bg-[#4d301b]
+                        hover:scale-105
                       "
                     >
                       <ExternalLink size={16} />
@@ -437,10 +506,11 @@ export default function AdminUploadPage() {
                 bg-white
                 p-10
                 text-center
-                text-slate-500
                 shadow-sm
+                dark:border
+                dark:border-slate-800
                 dark:bg-slate-900
-                dark:text-slate-400
+                dark:shadow-black/20
               "
             >
               <FileText
@@ -463,7 +533,14 @@ export default function AdminUploadPage() {
                 No resources available.
               </h3>
 
-              <p className="mt-2 text-sm">
+              <p
+                className="
+                  mt-2
+                  text-sm
+                  text-slate-600
+                  dark:text-slate-300
+                "
+              >
                 Uploaded resources will appear here.
               </p>
             </div>
