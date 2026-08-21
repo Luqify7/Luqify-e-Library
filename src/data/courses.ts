@@ -1,4 +1,5 @@
 ﻿export const courses = [
+
   // =====================================
   // FACULTY OF COMMERCE
   // BACHELOR OF COMMERCE ACCOUNTING
@@ -54,6 +55,7 @@
     semester: "semester-1",
   },
 
+
   // YEAR 1 - SEMESTER 2
 
   {
@@ -104,6 +106,7 @@
     semester: "semester-2",
   },
 
+
   // YEAR 2 - SEMESTER 1
 
   {
@@ -147,12 +150,13 @@
   },
 
   {
-  slug: "cost-accounting-fundamentals",
-  name: "Cost Accounting Fundamentals",
-  program: "accounting",
-  year: "year-2",
-  semester: "semester-1",
- },
+    slug: "cost-accounting-fundamentals",
+    name: "Cost Accounting Fundamentals",
+    program: "accounting",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
 
   // YEAR 2 - SEMESTER 2
 
@@ -204,6 +208,7 @@
     semester: "semester-2",
   },
 
+
   // YEAR 3 - SEMESTER 1
 
   {
@@ -253,6 +258,7 @@
     year: "year-3",
     semester: "semester-1",
   },
+
 
   // YEAR 3 - SEMESTER 2
 
@@ -312,6 +318,7 @@
     semester: "semester-2",
   },
 
+
   // YEAR 4 - SEMESTER 1
 
   {
@@ -329,6 +336,7 @@
     year: "year-4",
     semester: "semester-1",
   },
+
 
   // YEAR 4 - SEMESTER 2
 
@@ -383,8 +391,7 @@
 
   // =====================================
   // FACULTY OF EDUCATION
-  // BACHELOR OF ARTS EDUCATION
-  // LITERATURE & LINGUISTICS
+  // BACHELOR OF ARTS EDUCATION - LITERATURE & LINGUISTICS
   // =====================================
 
   // YEAR 1 - SEMESTER 1
@@ -437,6 +444,7 @@
     semester: "semester-1",
   },
 
+
   // YEAR 1 - SEMESTER 2
 
   {
@@ -486,6 +494,7 @@
     year: "year-1",
     semester: "semester-2",
   },
+
 
   // YEAR 2 - SEMESTER 1
 
@@ -545,6 +554,7 @@
     semester: "semester-1",
   },
 
+
   // YEAR 2 - SEMESTER 2
 
   {
@@ -603,6 +613,7 @@
     semester: "semester-2",
   },
 
+
   // YEAR 3 - SEMESTER 1
 
   {
@@ -660,6 +671,7 @@
     year: "year-3",
     semester: "semester-1",
   },
+
 
   // YEAR 3 - SEMESTER 2
 
@@ -727,6 +739,7 @@
     semester: "semester-2",
   },
 
+
   // YEAR 4 - SEMESTER 1
 
   {
@@ -744,6 +757,7 @@
     year: "year-4",
     semester: "semester-1",
   },
+
 
   // YEAR 4 - SEMESTER 2
 
@@ -802,886 +816,842 @@
     year: "year-4",
     semester: "semester-2",
   },
-  
-    // =====================================
-// FACULTY OF COMMERCE
-// BACHELOR OF COMMERCE INSURANCE
-// =====================================
-
-
-// =====================================
-// YEAR 1 - SEMESTER 1
-// =====================================
-
-{
-  slug: "insurance-academic-writing",
-  name: "Academic Writing",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-accounting-fundamental",
-  name: "Accounting Fundamental",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-business-mathematics",
-  name: "Business Mathematics",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-co-operative-management-fundamental",
-  name: "Co-operative Management Fundamental",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-end-user-computing",
-  name: "End-User Computing",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-old-testament",
-  name: "Old Testament",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-
-// =====================================
-// YEAR 1 - SEMESTER 2
-// =====================================
-
-{
-  slug: "insurance-business-communication",
-  name: "Business Communication",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-business-statistics",
-  name: "Business Statistics",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-business-law",
-  name: "Business Law",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-financial-accounting",
-  name: "Financial Accounting",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-organisational-behaviour",
-  name: "Organisational Behaviour",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-new-testament",
-  name: "New Testament",
-  program: "insurance",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-
-// =====================================
-// YEAR 2 - SEMESTER 1
-// =====================================
-
-{
-  slug: "insurance-corporate-law",
-  name: "Corporate Law",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-human-resource-management-fundamentals",
-  name: "Human Resource Management Fundamentals",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-malawi-taxation",
-  name: "Malawi Taxation",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-micro-economics",
-  name: "Micro Economics",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-essentials-of-christianity",
-  name: "Essentials of Christianity",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-fundamentals",
-  name: "Insurance Fundamentals",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-
-// =====================================
-// YEAR 2 - SEMESTER 2
-// =====================================
-
-{
-  slug: "insurance-banking-fundamentals",
-  name: "Banking Fundamentals",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-macro-economics",
-  name: "Macro Economics",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-marketing-fundamentals",
-  name: "Marketing Fundamentals",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-project-management",
-  name: "Project Management",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-cost-and-budgetary-control",
-  name: "Cost and Budgetary Control",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-developing-christian-worldviews",
-  name: "Developing Christian Worldviews",
-  program: "insurance",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-
-// =====================================
-// YEAR 3 - SEMESTER 1
-// =====================================
-
-{
-  slug: "insurance-electronic-business",
-  name: "Electronic Business (E-Business)",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-ethics-and-governance",
-  name: "Ethics and Governance",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-audit-and-assurance",
-  name: "Audit and Assurance",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "personal-lines",
-  name: "Personal Lines",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-research-methods",
-  name: "Research Methods",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-entrepreneurship-1",
-  name: "Entrepreneurship 1",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-
-// =====================================
-// YEAR 3 - SEMESTER 2
-// =====================================
-
-{
-  slug: "insurance-broking",
-  name: "Insurance Broking",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-law",
-  name: "Insurance Law",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-risk-management",
-  name: "Insurance Risk Management",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "liability-insurance",
-  name: "Liability Insurance",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "claims-insurance",
-  name: "Claims Insurance",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-entrepreneurship-2",
-  name: "Entrepreneurship 2",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-thesis-proposal",
-  name: "Thesis Proposal",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "investment-planning",
-  name: "Investment Planning",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "healthcare-insurance",
-  name: "Healthcare Insurance",
-  program: "insurance",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-
-// =====================================
-// YEAR 4 - SEMESTER 1
-// =====================================
-
-{
-  slug: "insurance-work-placement-industrial-attachment",
-  name: "Work Placement (Industrial Attachment)",
-  program: "insurance",
-  year: "year-4",
-  semester: "semester-1",
-},
-
-{
-  slug: "insurance-thesis-writing-supervision",
-  name: "Thesis Writing (Supervision)",
-  program: "insurance",
-  year: "year-4",
-  semester: "semester-1",
-},
-
-
-// =====================================
-// YEAR 4 - SEMESTER 2
-// =====================================
-
-{
-  slug: "underwriting-practice",
-  name: "Underwriting Practice",
-  program: "insurance",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "motor-insurance",
-  name: "Motor Insurance",
-  program: "insurance",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "property-insurance",
-  name: "Property Insurance",
-  program: "insurance",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-marketing",
-  name: "Insurance Marketing",
-  program: "insurance",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "insurance-entrepreneurship-3",
-  name: "Entrepreneurship 3",
-  program: "insurance",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "marine-insurance",
-  name: "Marine Insurance",
-  program: "insurance",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "reinsurance",
-  name: "Reinsurance",
-  program: "insurance",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "applications-insurance",
-  name: "Applications Insurance",
-  program: "insurance",
-  year: "year-4",
-  semester: "semester-2",
-},
-// =====================================
-// FACULTY OF COMMERCE
-// BACHELOR OF COMMERCE HUMAN RESOURCE MANAGEMENT
-// OFFICIAL MAGU CURRICULUM
-// =====================================
-
-
-// =====================================
-// YEAR 1 - SEMESTER 1
-// MAGU SEMESTER 1
-// =====================================
-
-{
-  slug: "hrm-academic-writing",
-  name: "Academic Writing",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-accounting-fundamental",
-  name: "Accounting Fundamental",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-business-mathematics",
-  name: "Business Mathematics",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-co-operative-management-fundamental",
-  name: "Co-operative Management Fundamental",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-end-user-computing",
-  name: "End-User Computing",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-old-testament",
-  name: "Old Testament",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-
-// =====================================
-// YEAR 1 - SEMESTER 2
-// MAGU SEMESTER 2
-// =====================================
-
-{
-  slug: "hrm-business-communication",
-  name: "Business Communication",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-business-statistics",
-  name: "Business Statistics",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-business-law",
-  name: "Business Law",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-financial-accounting",
-  name: "Financial Accounting",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-organisational-behaviour",
-  name: "Organisational Behaviour",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-new-testament",
-  name: "New Testament",
-  program: "human-resource-management",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-
-// =====================================
-// YEAR 2 - SEMESTER 1
-// MAGU SEMESTER 3
-// =====================================
-
-{
-  slug: "hrm-corporate-law",
-  name: "Corporate Law",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "human-resource-management-fundamentals",
-  name: "Human Resource Management Fundamentals",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-malawi-taxation",
-  name: "Malawi Taxation",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-micro-economics",
-  name: "Micro Economics",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-essentials-of-christianity",
-  name: "Essentials of Christianity",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-
-// =====================================
-// YEAR 2 - SEMESTER 2
-// MAGU SEMESTER 4
-// =====================================
-
-{
-  slug: "hrm-banking-fundamentals",
-  name: "Banking Fundamentals",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-macro-economics",
-  name: "Macro Economics",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-marketing-fundamentals",
-  name: "Marketing Fundamentals",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-project-management",
-  name: "Project Management",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "human-resource-planning",
-  name: "Human Resource Planning",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-developing-christian-worldviews",
-  name: "Developing Christian Worldviews",
-  program: "human-resource-management",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-
-// =====================================
-// YEAR 3 - SEMESTER 1
-// MAGU SEMESTER 5
-// =====================================
-
-{
-  slug: "hrm-ethics-and-governance",
-  name: "Ethics and Governance",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-public-administration-fundamentals",
-  name: "Public Administration Fundamentals",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-research-methods",
-  name: "Research Methods",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "human-resource-management-metrics-and-analytics-fundamentals",
-  name: "Human Resource Management Metrics and Analytics Fundamentals",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "employee-motivation",
-  name: "Employee Motivation",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "performance-management",
-  name: "Performance Management",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-entrepreneurship-1",
-  name: "Entrepreneurship 1",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-
-// =====================================
-// YEAR 3 - SEMESTER 2
-// MAGU SEMESTER 6
-// =====================================
-
-{
-  slug: "employment-law",
-  name: "Employment Law",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "human-resource-development",
-  name: "Human Resource Development",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "industrial-relations",
-  name: "Industrial Relations",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "negotiation-and-conflict-management",
-  name: "Negotiation and Conflict Management",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "strategic-management",
-  name: "Strategic Management",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-entrepreneurship-2",
-  name: "Entrepreneurship 2",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-thesis-proposal",
-  name: "Thesis Proposal",
-  program: "human-resource-management",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-
-// =====================================
-// YEAR 4 - SEMESTER 1
-// MAGU SEMESTER 7
-// =====================================
-
-{
-  slug: "hrm-thesis-writing-supervision",
-  name: "Thesis Writing (Supervision)",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-1",
-},
-
-{
-  slug: "hrm-work-placement-industrial-attachment",
-  name: "Work Placement (Industrial Attachment)",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-1",
-},
-
-
-// =====================================
-// YEAR 4 - SEMESTER 2
-// MAGU SEMESTER 8
-// =====================================
-
-{
-  slug: "human-resource-management-metrics-and-analytics",
-  name: "Human Resource Management Metrics and Analytics",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "intellectual-capital-and-workplace-learner",
-  name: "Intellectual Capital and Workplace Learner",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "managing-change-in-organisations",
-  name: "Managing Change in Organisations",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "strategic-human-resource-management",
-  name: "Strategic Human Resource Management",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "hrm-entrepreneurship-3",
-  name: "Entrepreneurship 3",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-
-// =====================================
-// YEAR 4 - SEMESTER 2
-// ELECTIVES
-// =====================================
-
-{
-  slug: "remote-working",
-  name: "Remote Working",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "talent-management",
-  name: "Talent Management",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "international-human-resource-management",
-  name: "International Human Resource Management",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "administrative-law",
-  name: "Administrative Law",
-  program: "human-resource-management",
-  year: "year-4",
-  semester: "semester-2",
-},
+
+
+  // =====================================
+  // FACULTY OF COMMERCE
+  // BACHELOR OF COMMERCE INSURANCE
+  // =====================================
+
+  // YEAR 1 - SEMESTER 1
+
+  {
+    slug: "insurance-academic-writing",
+    name: "Academic Writing",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-accounting-fundamental",
+    name: "Accounting Fundamental",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-business-mathematics",
+    name: "Business Mathematics",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-co-operative-management-fundamental",
+    name: "Co-operative Management Fundamental",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-end-user-computing",
+    name: "End-User Computing",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-old-testament",
+    name: "Old Testament",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 1 - SEMESTER 2
+
+  {
+    slug: "insurance-business-communication",
+    name: "Business Communication",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-business-statistics",
+    name: "Business Statistics",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-business-law",
+    name: "Business Law",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-financial-accounting",
+    name: "Financial Accounting",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-organisational-behaviour",
+    name: "Organisational Behaviour",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-new-testament",
+    name: "New Testament",
+    program: "insurance",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 2 - SEMESTER 1
+
+  {
+    slug: "insurance-corporate-law",
+    name: "Corporate Law",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-human-resource-management-fundamentals",
+    name: "Human Resource Management Fundamentals",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-malawi-taxation",
+    name: "Malawi Taxation",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-micro-economics",
+    name: "Micro Economics",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-essentials-of-christianity",
+    name: "Essentials of Christianity",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-fundamentals",
+    name: "Insurance Fundamentals",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 2 - SEMESTER 2
+
+  {
+    slug: "insurance-banking-fundamentals",
+    name: "Banking Fundamentals",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-macro-economics",
+    name: "Macro Economics",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-marketing-fundamentals",
+    name: "Marketing Fundamentals",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-project-management",
+    name: "Project Management",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-cost-and-budgetary-control",
+    name: "Cost and Budgetary Control",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-developing-christian-worldviews",
+    name: "Developing Christian Worldviews",
+    program: "insurance",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 3 - SEMESTER 1
+
+  {
+    slug: "insurance-electronic-business",
+    name: "Electronic Business (E-Business)",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-ethics-and-governance",
+    name: "Ethics and Governance",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-audit-and-assurance",
+    name: "Audit and Assurance",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "personal-lines",
+    name: "Personal Lines",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-research-methods",
+    name: "Research Methods",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-entrepreneurship-1",
+    name: "Entrepreneurship 1",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 3 - SEMESTER 2
+
+  {
+    slug: "insurance-broking",
+    name: "Insurance Broking",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-law",
+    name: "Insurance Law",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-risk-management",
+    name: "Insurance Risk Management",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "liability-insurance",
+    name: "Liability Insurance",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "claims-insurance",
+    name: "Claims Insurance",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-entrepreneurship-2",
+    name: "Entrepreneurship 2",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-thesis-proposal",
+    name: "Thesis Proposal",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "investment-planning",
+    name: "Investment Planning",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "healthcare-insurance",
+    name: "Healthcare Insurance",
+    program: "insurance",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 4 - SEMESTER 1
+
+  {
+    slug: "insurance-work-placement-industrial-attachment",
+    name: "Work Placement (Industrial Attachment)",
+    program: "insurance",
+    year: "year-4",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "insurance-thesis-writing-supervision",
+    name: "Thesis Writing (Supervision)",
+    program: "insurance",
+    year: "year-4",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 4 - SEMESTER 2
+
+  {
+    slug: "underwriting-practice",
+    name: "Underwriting Practice",
+    program: "insurance",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "motor-insurance",
+    name: "Motor Insurance",
+    program: "insurance",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "property-insurance",
+    name: "Property Insurance",
+    program: "insurance",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-marketing",
+    name: "Insurance Marketing",
+    program: "insurance",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "insurance-entrepreneurship-3",
+    name: "Entrepreneurship 3",
+    program: "insurance",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "marine-insurance",
+    name: "Marine Insurance",
+    program: "insurance",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "reinsurance",
+    name: "Reinsurance",
+    program: "insurance",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "applications-insurance",
+    name: "Applications Insurance",
+    program: "insurance",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+
+  // =====================================
+  // FACULTY OF COMMERCE
+  // BACHELOR OF COMMERCE HUMAN RESOURCE MANAGEMENT
+  // =====================================
+
+  // YEAR 1 - SEMESTER 1
+
+  {
+    slug: "hrm-academic-writing",
+    name: "Academic Writing",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-accounting-fundamental",
+    name: "Accounting Fundamental",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-business-mathematics",
+    name: "Business Mathematics",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-co-operative-management-fundamental",
+    name: "Co-operative Management Fundamental",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-end-user-computing",
+    name: "End-User Computing",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-old-testament",
+    name: "Old Testament",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 1 - SEMESTER 2
+
+  {
+    slug: "hrm-business-communication",
+    name: "Business Communication",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-business-statistics",
+    name: "Business Statistics",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-business-law",
+    name: "Business Law",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-financial-accounting",
+    name: "Financial Accounting",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-organisational-behaviour",
+    name: "Organisational Behaviour",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-new-testament",
+    name: "New Testament",
+    program: "human-resource-management",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 2 - SEMESTER 1
+
+  {
+    slug: "hrm-corporate-law",
+    name: "Corporate Law",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "human-resource-management-fundamentals",
+    name: "Human Resource Management Fundamentals",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-malawi-taxation",
+    name: "Malawi Taxation",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-micro-economics",
+    name: "Micro Economics",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-essentials-of-christianity",
+    name: "Essentials of Christianity",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 2 - SEMESTER 2
+
+  {
+    slug: "hrm-banking-fundamentals",
+    name: "Banking Fundamentals",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-macro-economics",
+    name: "Macro Economics",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-marketing-fundamentals",
+    name: "Marketing Fundamentals",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-project-management",
+    name: "Project Management",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "human-resource-planning",
+    name: "Human Resource Planning",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-developing-christian-worldviews",
+    name: "Developing Christian Worldviews",
+    program: "human-resource-management",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 3 - SEMESTER 1
+
+  {
+    slug: "hrm-ethics-and-governance",
+    name: "Ethics and Governance",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-public-administration-fundamentals",
+    name: "Public Administration Fundamentals",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-research-methods",
+    name: "Research Methods",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "human-resource-management-metrics-and-analytics-fundamentals",
+    name: "Human Resource Management Metrics and Analytics Fundamentals",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "employee-motivation",
+    name: "Employee Motivation",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "performance-management",
+    name: "Performance Management",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-entrepreneurship-1",
+    name: "Entrepreneurship 1",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 3 - SEMESTER 2
+
+  {
+    slug: "employment-law",
+    name: "Employment Law",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "human-resource-development",
+    name: "Human Resource Development",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "industrial-relations",
+    name: "Industrial Relations",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "negotiation-and-conflict-management",
+    name: "Negotiation and Conflict Management",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "strategic-management",
+    name: "Strategic Management",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-entrepreneurship-2",
+    name: "Entrepreneurship 2",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-thesis-proposal",
+    name: "Thesis Proposal",
+    program: "human-resource-management",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 4 - SEMESTER 1
+
+  {
+    slug: "hrm-thesis-writing-supervision",
+    name: "Thesis Writing (Supervision)",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "hrm-work-placement-industrial-attachment",
+    name: "Work Placement (Industrial Attachment)",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 4 - SEMESTER 2
+
+  {
+    slug: "human-resource-management-metrics-and-analytics",
+    name: "Human Resource Management Metrics and Analytics",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "intellectual-capital-and-workplace-learner",
+    name: "Intellectual Capital and Workplace Learner",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "managing-change-in-organisations",
+    name: "Managing Change in Organisations",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "strategic-human-resource-management",
+    name: "Strategic Human Resource Management",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "hrm-entrepreneurship-3",
+    name: "Entrepreneurship 3",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "remote-working",
+    name: "Remote Working",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "talent-management",
+    name: "Talent Management",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "international-human-resource-management",
+    name: "International Human Resource Management",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "administrative-law",
+    name: "Administrative Law",
+    program: "human-resource-management",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+
   // =====================================
   // FACULTY OF COMMERCE
   // BACHELOR OF COMMERCE BANKING AND FINANCE
@@ -1737,6 +1707,7 @@
     semester: "semester-1",
   },
 
+
   // YEAR 1 - SEMESTER 2
 
   {
@@ -1786,6 +1757,7 @@
     year: "year-1",
     semester: "semester-2",
   },
+
 
   // YEAR 2 - SEMESTER 1
 
@@ -1837,6 +1809,7 @@
     semester: "semester-1",
   },
 
+
   // YEAR 2 - SEMESTER 2
 
   {
@@ -1887,6 +1860,7 @@
     semester: "semester-2",
   },
 
+
   // YEAR 3 - SEMESTER 1
 
   {
@@ -1936,6 +1910,7 @@
     year: "year-3",
     semester: "semester-1",
   },
+
 
   // YEAR 3 - SEMESTER 2
 
@@ -1995,6 +1970,7 @@
     semester: "semester-2",
   },
 
+
   // YEAR 4 - SEMESTER 1
 
   {
@@ -2012,6 +1988,7 @@
     year: "year-4",
     semester: "semester-1",
   },
+
 
   // YEAR 4 - SEMESTER 2
 
@@ -2062,12 +2039,16 @@
     year: "year-4",
     semester: "semester-2",
   },
-    // =====================================
+
+  // =====================================
   // FACULTY OF COMMERCE
   // BACHELOR OF COMMERCE BUSINESS ADMINISTRATION
   // =====================================
 
+
+  // =====================================
   // YEAR 1 - SEMESTER 1
+  // =====================================
 
   {
     slug: "ba-academic-writing",
@@ -2117,27 +2098,14 @@
     semester: "semester-1",
   },
 
-  // YEAR 1 - SEMESTER 2
 
-  {
-    slug: "ba-business-communication",
-    name: "Business Communication",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-2",
-  },
+  // =====================================
+  // YEAR 1 - SEMESTER 2
+  // =====================================
 
   {
     slug: "ba-business-statistics",
     name: "Business Statistics",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-business-law",
-    name: "Business Law",
     program: "business-administration",
     year: "year-1",
     semester: "semester-2",
@@ -2167,7 +2135,27 @@
     semester: "semester-2",
   },
 
+  {
+    slug: "ba-business-law",
+    name: "Business Law",
+    program: "business-administration",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "ba-business-communication",
+    name: "Business Communication",
+    program: "business-administration",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+
+  // =====================================
   // YEAR 2 - SEMESTER 1
+  // MAGU CORE + USER-CONFIRMED COST ACCOUNTING
+  // =====================================
 
   {
     slug: "ba-corporate-law",
@@ -2217,7 +2205,10 @@
     semester: "semester-1",
   },
 
+
+  // =====================================
   // YEAR 2 - SEMESTER 2
+  // =====================================
 
   {
     slug: "ba-banking-fundamentals",
@@ -2252,6 +2243,14 @@
   },
 
   {
+    slug: "ba-supply-chain-management-fundamental",
+    name: "Supply Chain Management Fundamental",
+    program: "business-administration",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
     slug: "ba-cost-and-budgetary-control",
     name: "Cost and Budgetary Control",
     program: "business-administration",
@@ -2267,7 +2266,34 @@
     semester: "semester-2",
   },
 
+
+  // =====================================
   // YEAR 3 - SEMESTER 1
+  // =====================================
+
+  {
+    slug: "ba-research-methods",
+    name: "Research Methods",
+    program: "business-administration",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "ba-leadership-development",
+    name: "Leadership Development",
+    program: "business-administration",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "ba-entrepreneurship-1",
+    name: "Entrepreneurship 1",
+    program: "business-administration",
+    year: "year-3",
+    semester: "semester-1",
+  },
 
   {
     slug: "ba-electronic-business",
@@ -2286,78 +2312,17 @@
   },
 
   {
-    slug: "ba-audit-and-assurance",
-    name: "Audit and Assurance",
+    slug: "ba-public-administration-fundamentals",
+    name: "Public Administration Fundamentals",
     program: "business-administration",
     year: "year-3",
     semester: "semester-1",
   },
 
-  {
-    slug: "ba-risk-management",
-    name: "Risk Management",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-1",
-  },
 
-  {
-    slug: "ba-research-methods",
-    name: "Research Methods",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-entrepreneurship-1",
-    name: "Entrepreneurship 1",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-1",
-  },
-
+  // =====================================
   // YEAR 3 - SEMESTER 2
-
-  {
-    slug: "ba-business-analysis",
-    name: "Business Analysis",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-financial-reporting",
-    name: "Financial Reporting",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-management-accounting",
-    name: "Management Accounting",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-financial-management",
-    name: "Financial Management",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-public-finance",
-    name: "Public Finance",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
+  // =====================================
 
   {
     slug: "ba-entrepreneurship-2",
@@ -2375,7 +2340,58 @@
     semester: "semester-2",
   },
 
+  {
+    slug: "ba-financial-management",
+    name: "Financial Management",
+    program: "business-administration",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "ba-development-studies",
+    name: "Development Studies",
+    program: "business-administration",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "ba-international-business-management",
+    name: "International Business Management",
+    program: "business-administration",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "ba-strategic-management",
+    name: "Strategic Management",
+    program: "business-administration",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "ba-negotiations-and-conflict-management",
+    name: "Negotiations and Conflict Management",
+    program: "business-administration",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "ba-productions-and-operations-management",
+    name: "Productions and Operations Management",
+    program: "business-administration",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+
+  // =====================================
   // YEAR 4 - SEMESTER 1
+  // =====================================
 
   {
     slug: "ba-work-placement-industrial-attachment",
@@ -2393,35 +2409,38 @@
     semester: "semester-1",
   },
 
+
+  // =====================================
   // YEAR 4 - SEMESTER 2
+  // =====================================
 
   {
-    slug: "ba-strategic-management",
-    name: "Strategic Management",
+    slug: "ba-occupational-health-and-safety",
+    name: "Occupational Health and Safety",
     program: "business-administration",
     year: "year-4",
     semester: "semester-2",
   },
 
   {
-    slug: "ba-organisational-development",
-    name: "Organisational Development",
+    slug: "ba-public-relations",
+    name: "Public Relations",
     program: "business-administration",
     year: "year-4",
     semester: "semester-2",
   },
 
   {
-    slug: "ba-business-policy",
-    name: "Business Policy",
+    slug: "ba-managerial-economics",
+    name: "Managerial Economics",
     program: "business-administration",
     year: "year-4",
     semester: "semester-2",
   },
 
   {
-    slug: "ba-strategic-human-resource-management",
-    name: "Strategic Human Resource Management",
+    slug: "ba-performance-management",
+    name: "Performance Management",
     program: "business-administration",
     year: "year-4",
     semester: "semester-2",
@@ -2434,7 +2453,16 @@
     year: "year-4",
     semester: "semester-2",
   },
-    // =====================================
+
+  {
+    slug: "ba-management-consulting",
+    name: "Management Consulting",
+    program: "business-administration",
+    year: "year-4",
+    semester: "semester-2",
+  },
+  
+  // =====================================
   // FACULTY OF COMMERCE
   // BACHELOR OF COMMERCE MARKETING
   // =====================================
@@ -2489,6 +2517,7 @@
     semester: "semester-1",
   },
 
+
   // YEAR 1 - SEMESTER 2
 
   {
@@ -2538,6 +2567,7 @@
     year: "year-1",
     semester: "semester-2",
   },
+
 
   // YEAR 2 - SEMESTER 1
 
@@ -2589,6 +2619,7 @@
     semester: "semester-1",
   },
 
+
   // YEAR 2 - SEMESTER 2
 
   {
@@ -2639,6 +2670,7 @@
     semester: "semester-2",
   },
 
+
   // YEAR 3 - SEMESTER 1
 
   {
@@ -2688,6 +2720,7 @@
     year: "year-3",
     semester: "semester-1",
   },
+
 
   // YEAR 3 - SEMESTER 2
 
@@ -2747,6 +2780,7 @@
     semester: "semester-2",
   },
 
+
   // YEAR 4 - SEMESTER 1
 
   {
@@ -2764,6 +2798,7 @@
     year: "year-4",
     semester: "semester-1",
   },
+
 
   // YEAR 4 - SEMESTER 2
 
@@ -2814,10 +2849,11 @@
     year: "year-4",
     semester: "semester-2",
   },
-    // =====================================
+
+
+  // =====================================
   // FACULTY OF COMMERCE
-  // BACHELOR OF COMMERCE
-  // MONITORING AND EVALUATION
+  // BACHELOR OF COMMERCE MONITORING AND EVALUATION
   // =====================================
 
   // YEAR 1 - SEMESTER 1
@@ -3138,313 +3174,11 @@
     year: "year-4",
     semester: "semester-2",
   },
-    // =====================================
-  // FACULTY OF COMMERCE
-  // BACHELOR OF COMMERCE
-  // BUSINESS ADMINISTRATION
+
+
   // =====================================
-
-  // YEAR 1 - SEMESTER 1
-
-  {
-    slug: "ba-academic-writing",
-    name: "Academic Writing",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-accounting-fundamental",
-    name: "Accounting Fundamental",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-business-mathematics",
-    name: "Business Mathematics",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-co-operative-management-fundamental",
-    name: "Co-operative Management Fundamental",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-end-user-computing",
-    name: "End-User Computing",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-old-testament",
-    name: "Old Testament",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-1",
-  },
-
-
-  // YEAR 1 - SEMESTER 2
-
-  {
-    slug: "ba-business-statistics",
-    name: "Business Statistics",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-financial-accounting",
-    name: "Financial Accounting",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-organisational-behaviour",
-    name: "Organisational Behaviour",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-new-testament",
-    name: "New Testament",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-business-law",
-    name: "Business Law",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-business-communication",
-    name: "Business Communication",
-    program: "business-administration",
-    year: "year-1",
-    semester: "semester-2",
-  },
-
-
-  // YEAR 2 - SEMESTER 1
-
-  {
-    slug: "ba-corporate-law",
-    name: "Corporate Law",
-    program: "business-administration",
-    year: "year-2",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-human-resource-management-fundamentals",
-    name: "Human Resource Management Fundamentals",
-    program: "business-administration",
-    year: "year-2",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-malawi-taxation",
-    name: "Malawi Taxation",
-    program: "business-administration",
-    year: "year-2",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-micro-economics",
-    name: "Micro Economics",
-    program: "business-administration",
-    year: "year-2",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-essentials-of-christianity",
-    name: "Essentials of Christianity",
-    program: "business-administration",
-    year: "year-2",
-    semester: "semester-1",
-  },
-
-
-  // YEAR 2 - SEMESTER 2
-
-  {
-    slug: "ba-banking-fundamentals",
-    name: "Banking Fundamentals",
-    program: "business-administration",
-    year: "year-2",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-macro-economics",
-    name: "Macro Economics",
-    program: "business-administration",
-    year: "year-2",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-marketing-fundamentals",
-    name: "Marketing Fundamentals",
-    program: "business-administration",
-    year: "year-2",
-    semester: "semester-2",
-  },
-
-
-  // YEAR 3 - SEMESTER 1
-
-  // MAGU's published programme record has no courses
-  // listed for Semester 5.
-
-
-  // YEAR 3 - SEMESTER 2
-
-  {
-    slug: "ba-financial-management",
-    name: "Financial Management",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-development-studies",
-    name: "Development Studies",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-international-business-management",
-    name: "International Business Management",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-strategic-management",
-    name: "Strategic Management",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-negotiations-and-conflict-management",
-    name: "Negotiations and Conflict Management",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-productions-and-operations-management",
-    name: "Productions and Operations Management",
-    program: "business-administration",
-    year: "year-3",
-    semester: "semester-2",
-  },
-
-
-  // YEAR 4 - SEMESTER 1
-
-  {
-    slug: "ba-work-placement-industrial-attachment",
-    name: "Work Placement (Industrial Attachment)",
-    program: "business-administration",
-    year: "year-4",
-    semester: "semester-1",
-  },
-
-  {
-    slug: "ba-thesis-writing-supervision",
-    name: "Thesis Writing (Supervision)",
-    program: "business-administration",
-    year: "year-4",
-    semester: "semester-1",
-  },
-
-
-  // YEAR 4 - SEMESTER 2
-
-  {
-    slug: "ba-occupational-health-and-safety",
-    name: "Occupational Health and Safety",
-    program: "business-administration",
-    year: "year-4",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-public-relations",
-    name: "Public Relations",
-    program: "business-administration",
-    year: "year-4",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-managerial-economics",
-    name: "Managerial Economics",
-    program: "business-administration",
-    year: "year-4",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-performance-management",
-    name: "Performance Management",
-    program: "business-administration",
-    year: "year-4",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-entrepreneurship-3",
-    name: "Entrepreneurship 3",
-    program: "business-administration",
-    year: "year-4",
-    semester: "semester-2",
-  },
-
-  {
-    slug: "ba-management-consulting",
-    name: "Management Consulting",
-    program: "business-administration",
-    year: "year-4",
-    semester: "semester-2",
-  },
-    // =====================================
   // FACULTY OF COMMERCE AND MANAGEMENT
-  // BACHELOR OF SCIENCE
-  // BUSINESS INFORMATION SYSTEMS
+  // BACHELOR OF SCIENCE BUSINESS INFORMATION SYSTEMS
   // =====================================
 
   // YEAR 1 - SEMESTER 1
@@ -3781,7 +3515,9 @@
     year: "year-4",
     semester: "semester-2",
   },
-    // =====================================
+
+
+  // =====================================
   // FACULTY OF EDUCATION
   // BACHELOR OF EDUCATION (HUMANITIES)
   // =====================================
@@ -3836,6 +3572,23 @@
     semester: "semester-1",
   },
 
+  {
+    slug: "foundations-of-social-studies",
+    name: "Foundations of Social Studies",
+    program: "education-humanities",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "history-of-malawi",
+    name: "History of Malawi",
+    program: "education-humanities",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+
   // YEAR 1 - SEMESTER 2
 
   {
@@ -3885,6 +3638,31 @@
     year: "year-1",
     semester: "semester-2",
   },
+
+  {
+    slug: "life-skills-education",
+    name: "Life Skills Education",
+    program: "education-humanities",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "population-and-reproductive-health-issues-in-malawi",
+    name: "Population and Reproductive Health Issues in Malawi",
+    program: "education-humanities",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "history-of-east-and-central-africa",
+    name: "History of East and Central Africa",
+    program: "education-humanities",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
 
   // YEAR 2 - SEMESTER 1
 
@@ -3936,6 +3714,39 @@
     semester: "semester-1",
   },
 
+  {
+    slug: "themes-in-african-history",
+    name: "Themes in African History",
+    program: "education-humanities",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "individual-and-society",
+    name: "Individual and Society",
+    program: "education-humanities",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "economic-history-of-africa",
+    name: "Economic History of Africa",
+    program: "education-humanities",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "human-rights-and-responsibilities",
+    name: "Human Rights and Responsibilities",
+    program: "education-humanities",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+
   // YEAR 2 - SEMESTER 2
 
   {
@@ -3985,6 +3796,55 @@
     year: "year-2",
     semester: "semester-2",
   },
+
+  {
+    slug: "europe-since-1789",
+    name: "Europe since 1789",
+    program: "education-humanities",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "bedhum-general-teaching-methods",
+    name: "General Teaching Methods",
+    program: "education-humanities",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "citizenship-studies",
+    name: "Citizenship Studies",
+    program: "education-humanities",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "bedhum-child-and-adolescent-psychology",
+    name: "Child and Adolescent Psychology",
+    program: "education-humanities",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "cultural-studies",
+    name: "Cultural Studies",
+    program: "education-humanities",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "women-in-african-history",
+    name: "Women in African History",
+    program: "education-humanities",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
 
   // YEAR 3 - SEMESTER 1
 
@@ -4036,6 +3896,47 @@
     semester: "semester-1",
   },
 
+  {
+    slug: "comparative-government-studies",
+    name: "Comparative Government Studies",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "bedhum-environmental-studies",
+    name: "Environmental Studies",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "concepts-of-world-civilization",
+    name: "Concepts of World Civilization",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "the-african-diaspora",
+    name: "The African Diaspora",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "bedhum-testing-measurement-and-evaluation",
+    name: "Testing, Measurement, and Evaluation",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+
   // YEAR 3 - SEMESTER 2
 
   {
@@ -4086,6 +3987,55 @@
     semester: "semester-2",
   },
 
+  {
+    slug: "development-studies",
+    name: "Development Studies",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "bedhum-curriculum-studies",
+    name: "Curriculum Studies",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "development-and-underdevelopment-in-the-third-world",
+    name: "Development and Underdevelopment in the Third World",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "a-survey-of-world-pre-history",
+    name: "A Survey of World Pre-History",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "the-rise-of-atlantic-europe",
+    name: "The Rise of Atlantic Europe",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "methods-of-teaching-humanities-subjects",
+    name: "Methods of Teaching Humanities Subjects",
+    program: "education-humanities",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+
   // YEAR 4 - SEMESTER 1
 
   {
@@ -4103,6 +4053,7 @@
     year: "year-4",
     semester: "semester-1",
   },
+
 
   // YEAR 4 - SEMESTER 2
 
@@ -4145,10 +4096,51 @@
     year: "year-4",
     semester: "semester-2",
   },
-    // =====================================
+
+  {
+    slug: "global-issues",
+    name: "Global Issues",
+    program: "education-humanities",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "bedhum-educational-guidance-and-counselling",
+    name: "Educational Guidance and Counselling",
+    program: "education-humanities",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "bedhum-education-leadership-and-management",
+    name: "Education, Leadership and Management",
+    program: "education-humanities",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "history-of-usa-since-1776",
+    name: "History of USA since 1776",
+    program: "education-humanities",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "history-of-science-and-technology",
+    name: "History of Science and Technology",
+    program: "education-humanities",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+
+  // =====================================
   // FACULTY OF EDUCATION
-  // BACHELOR OF EDUCATION SCIENCE
-  // MATHEMATICS & COMPUTER STUDIES
+  // BACHELOR OF EDUCATION SCIENCE - MATHEMATICS & COMPUTER STUDIES
   // =====================================
 
   // YEAR 1 - SEMESTER 1
@@ -4573,437 +4565,11 @@
     year: "year-4",
     semester: "semester-2",
   },
+
+
   // =====================================
-// FACULTY OF EDUCATION
-// BACHELOR OF EDUCATION (HUMANITIES)
-// =====================================
-
-// YEAR 1 - SEMESTER 1
-
-{
-  slug: "bedhum-old-testament",
-  name: "Old Testament",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-history-of-education-in-malawi",
-  name: "History of Education in Malawi",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "foundations-of-social-studies",
-  name: "Foundations of Social Studies",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "history-of-malawi",
-  name: "History of Malawi",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-communication-skills",
-  name: "Communication Skills",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-basic-computing-skills",
-  name: "Basic Computing Skills",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-
-// YEAR 1 - SEMESTER 2
-
-{
-  slug: "bedhum-sociology-of-education",
-  name: "Sociology of Education",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "life-skills-education",
-  name: "Life Skills Education",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "population-and-reproductive-health-issues-in-malawi",
-  name: "Population and Reproductive Health Issues in Malawi",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "history-of-east-and-central-africa",
-  name: "History of East and Central Africa",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-psychology-of-education",
-  name: "Psychology of Education",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-new-testament",
-  name: "New Testament",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-philosophy-of-education",
-  name: "Philosophy of Education",
-  program: "education-humanities",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-
-// YEAR 2 - SEMESTER 1
-
-{
-  slug: "themes-in-african-history",
-  name: "Themes in African History",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-essentials-of-christianity",
-  name: "Essentials of Christianity",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "individual-and-society",
-  name: "Individual and Society",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-special-needs-education",
-  name: "Special Needs Education",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-instruction-media-and-technology",
-  name: "Instruction, Media, and Technology",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "economic-history-of-africa",
-  name: "Economic History of Africa",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "human-rights-and-responsibilities",
-  name: "Human Rights and Responsibilities",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-
-// YEAR 2 - SEMESTER 2
-
-{
-  slug: "europe-since-1789",
-  name: "Europe since 1789",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-developing-christian-worldviews",
-  name: "Developing Christian Worldviews",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-general-teaching-methods",
-  name: "General Teaching Methods",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "citizenship-studies",
-  name: "Citizenship Studies",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-child-and-adolescent-psychology",
-  name: "Child and Adolescent Psychology",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "cultural-studies",
-  name: "Cultural Studies",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "women-in-african-history",
-  name: "Women in African History",
-  program: "education-humanities",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-
-// YEAR 3 - SEMESTER 1
-
-{
-  slug: "comparative-government-studies",
-  name: "Comparative Government Studies",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-environmental-studies",
-  name: "Environmental Studies",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "concepts-of-world-civilization",
-  name: "Concepts of World Civilization",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "the-african-diaspora",
-  name: "The African Diaspora",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-testing-measurement-and-evaluation",
-  name: "Testing, Measurement, and Evaluation",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-entrepreneurship-1",
-  name: "Entrepreneurship 1",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-research-methods",
-  name: "Research Methods",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-
-// YEAR 3 - SEMESTER 2
-
-{
-  slug: "development-studies",
-  name: "Development Studies",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-curriculum-studies",
-  name: "Curriculum Studies",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "development-and-underdevelopment-in-the-third-world",
-  name: "Development and Underdevelopment in the Third World",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "a-survey-of-world-pre-history",
-  name: "A Survey of World Pre-History",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "the-rise-of-atlantic-europe",
-  name: "The Rise of Atlantic Europe",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "methods-of-teaching-humanities-subjects",
-  name: "Methods of Teaching Humanities Subjects",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-education-research-proposal-writing",
-  name: "Education Research Proposal Writing",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-entrepreneurship-2",
-  name: "Entrepreneurship 2",
-  program: "education-humanities",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-
-// YEAR 4 - SEMESTER 1
-
-{
-  slug: "bedhum-education-research-thesis-writing",
-  name: "Education Research Thesis Writing",
-  program: "education-humanities",
-  year: "year-4",
-  semester: "semester-1",
-},
-
-{
-  slug: "bedhum-teaching-practice",
-  name: "Teaching Practice",
-  program: "education-humanities",
-  year: "year-4",
-  semester: "semester-1",
-},
-
-
-// YEAR 4 - SEMESTER 2
-
-{
-  slug: "global-issues",
-  name: "Global Issues",
-  program: "education-humanities",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-educational-guidance-and-counselling",
-  name: "Educational Guidance and Counselling",
-  program: "education-humanities",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-education-leadership-and-management",
-  name: "Education, Leadership and Management",
-  program: "education-humanities",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "history-of-usa-since-1776",
-  name: "History of USA since 1776",
-  program: "education-humanities",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "bedhum-entrepreneurship-3",
-  name: "Entrepreneurship 3",
-  program: "education-humanities",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "history-of-science-and-technology",
-  name: "History of Science and Technology",
-  program: "education-humanities",
-  year: "year-4",
-  semester: "semester-2",
-},
-    // =====================================
   // FACULTY OF SOCIAL SCIENCES
-  // BACHELOR OF SOCIAL SCIENCE
-  // IN COMMUNITY DEVELOPMENT
+  // BACHELOR OF SOCIAL SCIENCE IN COMMUNITY DEVELOPMENT
   // =====================================
 
   // YEAR 1 - SEMESTER 1
@@ -5404,949 +4970,977 @@
     year: "year-4",
     semester: "semester-2",
   },
+
+
   // =====================================
-// FACULTY OF SOCIAL SCIENCES
-// BACHELOR OF SOCIAL SCIENCE IN
-// EARLY CHILDHOOD DEVELOPMENT
-// =====================================
-
-// YEAR 1 - SEMESTER 1
-
-{
-  slug: "ecd-basic-computing-skills",
-  name: "Basic Computing Skills",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "ecd-communication-skills",
-  name: "Communication Skills",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "introduction-to-early-childhood-development",
-  name: "Introduction to Early Childhood Development",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "ecd-old-testament",
-  name: "Old Testament",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "child-growth-and-development",
-  name: "Child Growth and Development",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-issues-in-contemporary-malawi-ecd",
-  name: "Social Issues in Contemporary Malawi",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-// YEAR 1 - SEMESTER 2
-
-{
-  slug: "ecd-new-testament",
-  name: "New Testament",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "child-health-nutrition-and-safety",
-  name: "Child Health, Nutrition and Safety",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "early-childhood-curriculum",
-  name: "Early Childhood Curriculum",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "childrens-play-and-learning",
-  name: "Children's Play and Learning",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "psychology-of-early-childhood",
-  name: "Psychology of Early Childhood",
-  program: "early-childhood-development",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-// YEAR 2 - SEMESTER 1
-
-{
-  slug: "ecd-developmental-assessment",
-  name: "Developmental Assessment",
-  program: "early-childhood-development",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "early-childhood-education-methods",
-  name: "Early Childhood Education Methods",
-  program: "early-childhood-development",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "family-and-community-partnerships",
-  name: "Family and Community Partnerships",
-  program: "early-childhood-development",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "special-needs-in-early-childhood",
-  name: "Special Needs in Early Childhood",
-  program: "early-childhood-development",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "ecd-essentials-of-christianity",
-  name: "Essentials of Christianity",
-  program: "early-childhood-development",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-// YEAR 2 - SEMESTER 2
-
-{
-  slug: "developing-christian-worldviews-ecd",
-  name: "Developing Christian Worldviews",
-  program: "early-childhood-development",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "early-childhood-programme-management",
-  name: "Early Childhood Programme Management",
-  program: "early-childhood-development",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "research-methods-ecd",
-  name: "Research Methods",
-  program: "early-childhood-development",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "ecd-community-development",
-  name: "Community Development",
-  program: "early-childhood-development",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "ecd-project-management",
-  name: "Project Management",
-  program: "early-childhood-development",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-// YEAR 3 - SEMESTER 1
-
-{
-  slug: "advanced-child-development",
-  name: "Advanced Child Development",
-  program: "early-childhood-development",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "early-childhood-policy-and-advocacy",
-  name: "Early Childhood Policy and Advocacy",
-  program: "early-childhood-development",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "ecd-research-methods",
-  name: "Research Methods",
-  program: "early-childhood-development",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "entrepreneurship-1-ecd",
-  name: "Entrepreneurship 1",
-  program: "early-childhood-development",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-// YEAR 3 - SEMESTER 2
-
-{
-  slug: "early-childhood-leadership-and-management",
-  name: "Early Childhood Leadership and Management",
-  program: "early-childhood-development",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "ecd-monitoring-and-evaluation",
-  name: "Monitoring and Evaluation",
-  program: "early-childhood-development",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "early-childhood-research-proposal",
-  name: "Early Childhood Research Proposal",
-  program: "early-childhood-development",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "entrepreneurship-2-ecd",
-  name: "Entrepreneurship 2",
-  program: "early-childhood-development",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-// YEAR 4 - SEMESTER 1
-
-{
-  slug: "ecd-thesis-writing",
-  name: "Thesis Writing",
-  program: "early-childhood-development",
-  year: "year-4",
-  semester: "semester-1",
-},
-
-{
-  slug: "ecd-fieldwork",
-  name: "Fieldwork",
-  program: "early-childhood-development",
-  year: "year-4",
-  semester: "semester-1",
-},
-
-// YEAR 4 - SEMESTER 2
-
-{
-  slug: "ecd-advanced-practice",
-  name: "Advanced Early Childhood Practice",
-  program: "early-childhood-development",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "ecd-programme-evaluation",
-  name: "Early Childhood Programme Evaluation",
-  program: "early-childhood-development",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "entrepreneurship-3-ecd",
-  name: "Entrepreneurship 3",
-  program: "early-childhood-development",
-  year: "year-4",
-  semester: "semester-2",
-},
-// =====================================
-// FACULTY OF SOCIAL SCIENCES
-// BACHELOR OF SOCIAL SCIENCE IN SOCIAL WORK
-// =====================================
-
-// YEAR 1 - SEMESTER 1
-
-{
-  slug: "social-work-basic-computing-skills",
-  name: "Basic Computing Skills",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "introduction-to-social-work",
-  name: "Introduction to Social Work",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-work-communication-skills",
-  name: "Communication Skills",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-work-old-testament",
-  name: "Old Testament",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-issues-in-contemporary-malawi-social-work",
-  name: "Social Issues in Contemporary Malawi",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "introduction-to-sociology",
-  name: "Introduction to Sociology",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-// YEAR 1 - SEMESTER 2
-
-{
-  slug: "social-work-new-testament",
-  name: "New Testament",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "human-growth-and-development",
-  name: "Human Growth and Development",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-theory-and-practice",
-  name: "Social Work Theory and Practice",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-psychology",
-  name: "Social Psychology",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "introduction-to-community-development-social-work",
-  name: "Introduction to Community Development",
-  program: "social-work",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-// YEAR 2 - SEMESTER 1
-
-{
-  slug: "social-work-casework",
-  name: "Social Work Casework",
-  program: "social-work",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-work-group-work",
-  name: "Social Work Group Work",
-  program: "social-work",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-welfare-policy",
-  name: "Social Welfare Policy",
-  program: "social-work",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-work-research-methods",
-  name: "Research Methods",
-  program: "social-work",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "essentials-of-christianity-social-work",
-  name: "Essentials of Christianity",
-  program: "social-work",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-// YEAR 2 - SEMESTER 2
-
-{
-  slug: "developing-christian-worldviews-social-work",
-  name: "Developing Christian Worldviews",
-  program: "social-work",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-community-practice",
-  name: "Social Work Community Practice",
-  program: "social-work",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-counselling",
-  name: "Social Work Counselling",
-  program: "social-work",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-project-management",
-  name: "Project Management",
-  program: "social-work",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-human-rights",
-  name: "Human Rights and Social Justice",
-  program: "social-work",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-// YEAR 3 - SEMESTER 1
-
-{
-  slug: "social-work-medical-practice",
-  name: "Medical Social Work",
-  program: "social-work",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-work-child-care",
-  name: "Child Care and Protection",
-  program: "social-work",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-work-family-welfare",
-  name: "Family Welfare",
-  program: "social-work",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-work-mental-health",
-  name: "Social Work and Mental Health",
-  program: "social-work",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-work-entrepreneurship-1",
-  name: "Entrepreneurship 1",
-  program: "social-work",
-  year: "year-3",
-  semester: "semester-1",
-},
-
-// YEAR 3 - SEMESTER 2
-
-{
-  slug: "social-work-community-development",
-  name: "Advanced Community Development",
-  program: "social-work",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-monitoring-and-evaluation",
-  name: "Monitoring and Evaluation",
-  program: "social-work",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-research-proposal",
-  name: "Social Work Research Proposal",
-  program: "social-work",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-entrepreneurship-2",
-  name: "Entrepreneurship 2",
-  program: "social-work",
-  year: "year-3",
-  semester: "semester-2",
-},
-
-// YEAR 4 - SEMESTER 1
-
-{
-  slug: "social-work-field-practicum",
-  name: "Social Work Field Practicum",
-  program: "social-work",
-  year: "year-4",
-  semester: "semester-1",
-},
-
-{
-  slug: "social-work-thesis",
-  name: "Social Work Thesis",
-  program: "social-work",
-  year: "year-4",
-  semester: "semester-1",
-},
-
-// YEAR 4 - SEMESTER 2
-
-{
-  slug: "advanced-social-work-practice",
-  name: "Advanced Social Work Practice",
-  program: "social-work",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-policy-analysis",
-  name: "Social Work Policy Analysis",
-  program: "social-work",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-programme-management",
-  name: "Social Work Programme Management",
-  program: "social-work",
-  year: "year-4",
-  semester: "semester-2",
-},
-
-{
-  slug: "social-work-entrepreneurship-3",
-  name: "Entrepreneurship 3",
-  program: "social-work",
-  year: "year-4",
-  semester: "semester-2",
-},
-// =====================================
-// FACULTY OF SOCIAL SCIENCES
-// DIPLOMA IN EARLY CHILDHOOD DEVELOPMENT
-// =====================================
-
-// YEAR 1 - SEMESTER 1
-
-{
-  slug: "diploma-ecd-basic-computing-skills",
-  name: "Basic Computing Skills",
-  program: "diploma-early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-ecd-communication-skills",
-  name: "Communication Skills",
-  program: "diploma-early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-introduction-to-early-childhood-development",
-  name: "Introduction to Early Childhood Development",
-  program: "diploma-early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-ecd-old-testament",
-  name: "Old Testament",
-  program: "diploma-early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-child-growth-and-development",
-  name: "Child Growth and Development",
-  program: "diploma-early-childhood-development",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-// YEAR 1 - SEMESTER 2
-
-{
-  slug: "diploma-ecd-new-testament",
-  name: "New Testament",
-  program: "diploma-early-childhood-development",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-child-health-nutrition-and-safety",
-  name: "Child Health, Nutrition and Safety",
-  program: "diploma-early-childhood-development",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-early-childhood-curriculum",
-  name: "Early Childhood Curriculum",
-  program: "diploma-early-childhood-development",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-childrens-play-and-learning",
-  name: "Children's Play and Learning",
-  program: "diploma-early-childhood-development",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-psychology-of-early-childhood",
-  name: "Psychology of Early Childhood",
-  program: "diploma-early-childhood-development",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-// YEAR 2 - SEMESTER 1
-
-{
-  slug: "diploma-ecd-developmental-assessment",
-  name: "Developmental Assessment",
-  program: "diploma-early-childhood-development",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-early-childhood-education-methods",
-  name: "Early Childhood Education Methods",
-  program: "diploma-early-childhood-development",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-family-and-community-partnerships",
-  name: "Family and Community Partnerships",
-  program: "diploma-early-childhood-development",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-special-needs-in-early-childhood",
-  name: "Special Needs in Early Childhood",
-  program: "diploma-early-childhood-development",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-ecd-essentials-of-christianity",
-  name: "Essentials of Christianity",
-  program: "diploma-early-childhood-development",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-// YEAR 2 - SEMESTER 2
-
-{
-  slug: "diploma-developing-christian-worldviews-ecd",
-  name: "Developing Christian Worldviews",
-  program: "diploma-early-childhood-development",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-early-childhood-programme-management",
-  name: "Early Childhood Programme Management",
-  program: "diploma-early-childhood-development",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-ecd-project-management",
-  name: "Project Management",
-  program: "diploma-early-childhood-development",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-ecd-community-development",
-  name: "Community Development",
-  program: "diploma-early-childhood-development",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-ecd-field-practicum",
-  name: "Field Practicum",
-  program: "diploma-early-childhood-development",
-  year: "year-2",
-  semester: "semester-2",
-},
-// =====================================
-// FACULTY OF SOCIAL SCIENCES
-// DIPLOMA IN SOCIAL WORK
-// =====================================
-
-// YEAR 1 - SEMESTER 1
-
-{
-  slug: "diploma-social-work-basic-computing-skills",
-  name: "Basic Computing Skills",
-  program: "diploma-social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-introduction-to-social-work",
-  name: "Introduction to Social Work",
-  program: "diploma-social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-social-work-communication-skills",
-  name: "Communication Skills",
-  program: "diploma-social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-social-work-old-testament",
-  name: "Old Testament",
-  program: "diploma-social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-introduction-to-sociology",
-  name: "Introduction to Sociology",
-  program: "diploma-social-work",
-  year: "year-1",
-  semester: "semester-1",
-},
-
-// YEAR 1 - SEMESTER 2
-
-{
-  slug: "diploma-social-work-new-testament",
-  name: "New Testament",
-  program: "diploma-social-work",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-human-growth-and-development",
-  name: "Human Growth and Development",
-  program: "diploma-social-work",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-social-work-theory-and-practice",
-  name: "Social Work Theory and Practice",
-  program: "diploma-social-work",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-social-psychology",
-  name: "Social Psychology",
-  program: "diploma-social-work",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-community-development",
-  name: "Introduction to Community Development",
-  program: "diploma-social-work",
-  year: "year-1",
-  semester: "semester-2",
-},
-
-// YEAR 2 - SEMESTER 1
-
-{
-  slug: "diploma-social-work-casework",
-  name: "Social Work Casework",
-  program: "diploma-social-work",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-social-work-group-work",
-  name: "Social Work Group Work",
-  program: "diploma-social-work",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-social-welfare-policy",
-  name: "Social Welfare Policy",
-  program: "diploma-social-work",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-social-work-research-methods",
-  name: "Research Methods",
-  program: "diploma-social-work",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-{
-  slug: "diploma-social-work-essentials-of-christianity",
-  name: "Essentials of Christianity",
-  program: "diploma-social-work",
-  year: "year-2",
-  semester: "semester-1",
-},
-
-// YEAR 2 - SEMESTER 2
-
-{
-  slug: "diploma-developing-christian-worldviews-social-work",
-  name: "Developing Christian Worldviews",
-  program: "diploma-social-work",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-social-work-community-practice",
-  name: "Social Work Community Practice",
-  program: "diploma-social-work",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-social-work-counselling",
-  name: "Social Work Counselling",
-  program: "diploma-social-work",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-social-work-project-management",
-  name: "Project Management",
-  program: "diploma-social-work",
-  year: "year-2",
-  semester: "semester-2",
-},
-
-{
-  slug: "diploma-social-work-field-practicum",
-  name: "Field Practicum",
-  program: "diploma-social-work",
-  year: "year-2",
-  semester: "semester-2",
-},
-]
+  // FACULTY OF SOCIAL SCIENCES
+  // BACHELOR OF SOCIAL SCIENCE IN EARLY CHILDHOOD DEVELOPMENT
+  // =====================================
+
+  // YEAR 1 - SEMESTER 1
+
+  {
+    slug: "ecd-basic-computing-skills",
+    name: "Basic Computing Skills",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "ecd-communication-skills",
+    name: "Communication Skills",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "introduction-to-early-childhood-development",
+    name: "Introduction to Early Childhood Development",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "ecd-old-testament",
+    name: "Old Testament",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "child-growth-and-development",
+    name: "Child Growth and Development",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-issues-in-contemporary-malawi-ecd",
+    name: "Social Issues in Contemporary Malawi",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 1 - SEMESTER 2
+
+  {
+    slug: "ecd-new-testament",
+    name: "New Testament",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "child-health-nutrition-and-safety",
+    name: "Child Health, Nutrition and Safety",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "early-childhood-curriculum",
+    name: "Early Childhood Curriculum",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "childrens-play-and-learning",
+    name: "Children's Play and Learning",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "psychology-of-early-childhood",
+    name: "Psychology of Early Childhood",
+    program: "early-childhood-development",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 2 - SEMESTER 1
+
+  {
+    slug: "ecd-developmental-assessment",
+    name: "Developmental Assessment",
+    program: "early-childhood-development",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "early-childhood-education-methods",
+    name: "Early Childhood Education Methods",
+    program: "early-childhood-development",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "family-and-community-partnerships",
+    name: "Family and Community Partnerships",
+    program: "early-childhood-development",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "special-needs-in-early-childhood",
+    name: "Special Needs in Early Childhood",
+    program: "early-childhood-development",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "ecd-essentials-of-christianity",
+    name: "Essentials of Christianity",
+    program: "early-childhood-development",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 2 - SEMESTER 2
+
+  {
+    slug: "developing-christian-worldviews-ecd",
+    name: "Developing Christian Worldviews",
+    program: "early-childhood-development",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "early-childhood-programme-management",
+    name: "Early Childhood Programme Management",
+    program: "early-childhood-development",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "research-methods-ecd",
+    name: "Research Methods",
+    program: "early-childhood-development",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "ecd-community-development",
+    name: "Community Development",
+    program: "early-childhood-development",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "ecd-project-management",
+    name: "Project Management",
+    program: "early-childhood-development",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 3 - SEMESTER 1
+
+  {
+    slug: "advanced-child-development",
+    name: "Advanced Child Development",
+    program: "early-childhood-development",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "early-childhood-policy-and-advocacy",
+    name: "Early Childhood Policy and Advocacy",
+    program: "early-childhood-development",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "ecd-research-methods",
+    name: "Research Methods",
+    program: "early-childhood-development",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "entrepreneurship-1-ecd",
+    name: "Entrepreneurship 1",
+    program: "early-childhood-development",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 3 - SEMESTER 2
+
+  {
+    slug: "early-childhood-leadership-and-management",
+    name: "Early Childhood Leadership and Management",
+    program: "early-childhood-development",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "ecd-monitoring-and-evaluation",
+    name: "Monitoring and Evaluation",
+    program: "early-childhood-development",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "early-childhood-research-proposal",
+    name: "Early Childhood Research Proposal",
+    program: "early-childhood-development",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "entrepreneurship-2-ecd",
+    name: "Entrepreneurship 2",
+    program: "early-childhood-development",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 4 - SEMESTER 1
+
+  {
+    slug: "ecd-thesis-writing",
+    name: "Thesis Writing",
+    program: "early-childhood-development",
+    year: "year-4",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "ecd-fieldwork",
+    name: "Fieldwork",
+    program: "early-childhood-development",
+    year: "year-4",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 4 - SEMESTER 2
+
+  {
+    slug: "ecd-advanced-practice",
+    name: "Advanced Early Childhood Practice",
+    program: "early-childhood-development",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "ecd-programme-evaluation",
+    name: "Early Childhood Programme Evaluation",
+    program: "early-childhood-development",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "entrepreneurship-3-ecd",
+    name: "Entrepreneurship 3",
+    program: "early-childhood-development",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+
+  // =====================================
+  // FACULTY OF SOCIAL SCIENCES
+  // BACHELOR OF SOCIAL SCIENCE IN SOCIAL WORK
+  // =====================================
+
+  // YEAR 1 - SEMESTER 1
+
+  {
+    slug: "social-work-basic-computing-skills",
+    name: "Basic Computing Skills",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "introduction-to-social-work",
+    name: "Introduction to Social Work",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-work-communication-skills",
+    name: "Communication Skills",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-work-old-testament",
+    name: "Old Testament",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-issues-in-contemporary-malawi-social-work",
+    name: "Social Issues in Contemporary Malawi",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "introduction-to-sociology",
+    name: "Introduction to Sociology",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 1 - SEMESTER 2
+
+  {
+    slug: "social-work-new-testament",
+    name: "New Testament",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "human-growth-and-development",
+    name: "Human Growth and Development",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-theory-and-practice",
+    name: "Social Work Theory and Practice",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-psychology",
+    name: "Social Psychology",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "introduction-to-community-development-social-work",
+    name: "Introduction to Community Development",
+    program: "social-work",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 2 - SEMESTER 1
+
+  {
+    slug: "social-work-casework",
+    name: "Social Work Casework",
+    program: "social-work",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-work-group-work",
+    name: "Social Work Group Work",
+    program: "social-work",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-welfare-policy",
+    name: "Social Welfare Policy",
+    program: "social-work",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-work-research-methods",
+    name: "Research Methods",
+    program: "social-work",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "essentials-of-christianity-social-work",
+    name: "Essentials of Christianity",
+    program: "social-work",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 2 - SEMESTER 2
+
+  {
+    slug: "developing-christian-worldviews-social-work",
+    name: "Developing Christian Worldviews",
+    program: "social-work",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-community-practice",
+    name: "Social Work Community Practice",
+    program: "social-work",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-counselling",
+    name: "Social Work Counselling",
+    program: "social-work",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-project-management",
+    name: "Project Management",
+    program: "social-work",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-human-rights",
+    name: "Human Rights and Social Justice",
+    program: "social-work",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 3 - SEMESTER 1
+
+  {
+    slug: "social-work-medical-practice",
+    name: "Medical Social Work",
+    program: "social-work",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-work-child-care",
+    name: "Child Care and Protection",
+    program: "social-work",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-work-family-welfare",
+    name: "Family Welfare",
+    program: "social-work",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-work-mental-health",
+    name: "Social Work and Mental Health",
+    program: "social-work",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-work-entrepreneurship-1",
+    name: "Entrepreneurship 1",
+    program: "social-work",
+    year: "year-3",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 3 - SEMESTER 2
+
+  {
+    slug: "social-work-community-development",
+    name: "Advanced Community Development",
+    program: "social-work",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-monitoring-and-evaluation",
+    name: "Monitoring and Evaluation",
+    program: "social-work",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-research-proposal",
+    name: "Social Work Research Proposal",
+    program: "social-work",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-entrepreneurship-2",
+    name: "Entrepreneurship 2",
+    program: "social-work",
+    year: "year-3",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 4 - SEMESTER 1
+
+  {
+    slug: "social-work-field-practicum",
+    name: "Social Work Field Practicum",
+    program: "social-work",
+    year: "year-4",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "social-work-thesis",
+    name: "Social Work Thesis",
+    program: "social-work",
+    year: "year-4",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 4 - SEMESTER 2
+
+  {
+    slug: "advanced-social-work-practice",
+    name: "Advanced Social Work Practice",
+    program: "social-work",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-policy-analysis",
+    name: "Social Work Policy Analysis",
+    program: "social-work",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-programme-management",
+    name: "Social Work Programme Management",
+    program: "social-work",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "social-work-entrepreneurship-3",
+    name: "Entrepreneurship 3",
+    program: "social-work",
+    year: "year-4",
+    semester: "semester-2",
+  },
+
+
+  // =====================================
+  // FACULTY OF SOCIAL SCIENCES
+  // DIPLOMA IN EARLY CHILDHOOD DEVELOPMENT
+  // =====================================
+
+  // YEAR 1 - SEMESTER 1
+
+  {
+    slug: "diploma-ecd-basic-computing-skills",
+    name: "Basic Computing Skills",
+    program: "diploma-early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-ecd-communication-skills",
+    name: "Communication Skills",
+    program: "diploma-early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-introduction-to-early-childhood-development",
+    name: "Introduction to Early Childhood Development",
+    program: "diploma-early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-ecd-old-testament",
+    name: "Old Testament",
+    program: "diploma-early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-child-growth-and-development",
+    name: "Child Growth and Development",
+    program: "diploma-early-childhood-development",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 1 - SEMESTER 2
+
+  {
+    slug: "diploma-ecd-new-testament",
+    name: "New Testament",
+    program: "diploma-early-childhood-development",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-child-health-nutrition-and-safety",
+    name: "Child Health, Nutrition and Safety",
+    program: "diploma-early-childhood-development",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-early-childhood-curriculum",
+    name: "Early Childhood Curriculum",
+    program: "diploma-early-childhood-development",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-childrens-play-and-learning",
+    name: "Children's Play and Learning",
+    program: "diploma-early-childhood-development",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-psychology-of-early-childhood",
+    name: "Psychology of Early Childhood",
+    program: "diploma-early-childhood-development",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 2 - SEMESTER 1
+
+  {
+    slug: "diploma-ecd-developmental-assessment",
+    name: "Developmental Assessment",
+    program: "diploma-early-childhood-development",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-early-childhood-education-methods",
+    name: "Early Childhood Education Methods",
+    program: "diploma-early-childhood-development",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-family-and-community-partnerships",
+    name: "Family and Community Partnerships",
+    program: "diploma-early-childhood-development",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-special-needs-in-early-childhood",
+    name: "Special Needs in Early Childhood",
+    program: "diploma-early-childhood-development",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-ecd-essentials-of-christianity",
+    name: "Essentials of Christianity",
+    program: "diploma-early-childhood-development",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 2 - SEMESTER 2
+
+  {
+    slug: "diploma-developing-christian-worldviews-ecd",
+    name: "Developing Christian Worldviews",
+    program: "diploma-early-childhood-development",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-early-childhood-programme-management",
+    name: "Early Childhood Programme Management",
+    program: "diploma-early-childhood-development",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-ecd-project-management",
+    name: "Project Management",
+    program: "diploma-early-childhood-development",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-ecd-community-development",
+    name: "Community Development",
+    program: "diploma-early-childhood-development",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-ecd-field-practicum",
+    name: "Field Practicum",
+    program: "diploma-early-childhood-development",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+
+  // =====================================
+  // FACULTY OF SOCIAL SCIENCES
+  // DIPLOMA IN SOCIAL WORK
+  // =====================================
+
+  // YEAR 1 - SEMESTER 1
+
+  {
+    slug: "diploma-social-work-basic-computing-skills",
+    name: "Basic Computing Skills",
+    program: "diploma-social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-introduction-to-social-work",
+    name: "Introduction to Social Work",
+    program: "diploma-social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-social-work-communication-skills",
+    name: "Communication Skills",
+    program: "diploma-social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-social-work-old-testament",
+    name: "Old Testament",
+    program: "diploma-social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-introduction-to-sociology",
+    name: "Introduction to Sociology",
+    program: "diploma-social-work",
+    year: "year-1",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 1 - SEMESTER 2
+
+  {
+    slug: "diploma-social-work-new-testament",
+    name: "New Testament",
+    program: "diploma-social-work",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-human-growth-and-development",
+    name: "Human Growth and Development",
+    program: "diploma-social-work",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-social-work-theory-and-practice",
+    name: "Social Work Theory and Practice",
+    program: "diploma-social-work",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-social-psychology",
+    name: "Social Psychology",
+    program: "diploma-social-work",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-community-development",
+    name: "Introduction to Community Development",
+    program: "diploma-social-work",
+    year: "year-1",
+    semester: "semester-2",
+  },
+
+
+  // YEAR 2 - SEMESTER 1
+
+  {
+    slug: "diploma-social-work-casework",
+    name: "Social Work Casework",
+    program: "diploma-social-work",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-social-work-group-work",
+    name: "Social Work Group Work",
+    program: "diploma-social-work",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-social-welfare-policy",
+    name: "Social Welfare Policy",
+    program: "diploma-social-work",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-social-work-research-methods",
+    name: "Research Methods",
+    program: "diploma-social-work",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+  {
+    slug: "diploma-social-work-essentials-of-christianity",
+    name: "Essentials of Christianity",
+    program: "diploma-social-work",
+    year: "year-2",
+    semester: "semester-1",
+  },
+
+
+  // YEAR 2 - SEMESTER 2
+
+  {
+    slug: "diploma-developing-christian-worldviews-social-work",
+    name: "Developing Christian Worldviews",
+    program: "diploma-social-work",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-social-work-community-practice",
+    name: "Social Work Community Practice",
+    program: "diploma-social-work",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-social-work-counselling",
+    name: "Social Work Counselling",
+    program: "diploma-social-work",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-social-work-project-management",
+    name: "Project Management",
+    program: "diploma-social-work",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+  {
+    slug: "diploma-social-work-field-practicum",
+    name: "Field Practicum",
+    program: "diploma-social-work",
+    year: "year-2",
+    semester: "semester-2",
+  },
+
+];

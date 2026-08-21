@@ -23,37 +23,68 @@ export default async function SemesterPage({
 }) {
   const { slug, year, semester } = await params;
 
-  /* =====================================================
-     CURRENT PROGRAMME
-  ===================================================== */
+  // =====================================================
+  // CURRENT PROGRAMME
+  // =====================================================
 
   const currentProgram = programs.find(
     (program) => program.slug === slug
   );
 
-  /* =====================================================
-     CURRENT FACULTY
-  ===================================================== */
+  // =====================================================
+  // CURRENT FACULTY
+  // =====================================================
 
   const currentFaculty = faculties.find(
-    (faculty) =>
-      faculty.slug === currentProgram?.faculty
+    (faculty) => faculty.slug === currentProgram?.faculty
   );
 
-  /* =====================================================
-     COURSES FOR THIS SEMESTER
-  ===================================================== */
+  // =====================================================
+  // PROGRAMME IDENTIFIERS
+  //
+  // The URL normally uses the programme slug.
+  // We also allow the programme name as a fallback.
+  // =====================================================
 
-  const semesterCourses = courses.filter(
-    (course) =>
-      course.program === slug &&
-      course.year === year &&
-      course.semester === semester
+  const programIdentifiers = new Set(
+    [
+      slug,
+      currentProgram?.slug,
+      currentProgram?.name,
+    ]
+      .filter(Boolean)
+      .map((value) =>
+        String(value).trim().toLowerCase()
+      )
   );
 
-  /* =====================================================
-     DISPLAY NAMES
-  ===================================================== */
+  // =====================================================
+  // COURSES FOR THIS YEAR + SEMESTER
+  // =====================================================
+
+  const semesterCourses = courses.filter((course) => {
+    const courseProgram = String(course.program ?? "")
+      .trim()
+      .toLowerCase();
+
+    const courseYear = String(course.year ?? "")
+      .trim()
+      .toLowerCase();
+
+    const courseSemester = String(course.semester ?? "")
+      .trim()
+      .toLowerCase();
+
+    return (
+      programIdentifiers.has(courseProgram) &&
+      courseYear === year.trim().toLowerCase() &&
+      courseSemester === semester.trim().toLowerCase()
+    );
+  });
+
+  // =====================================================
+  // DISPLAY NAMES
+  // =====================================================
 
   const facultyName =
     currentFaculty?.name ?? "Faculty";
@@ -62,14 +93,24 @@ export default async function SemesterPage({
     currentProgram?.name ??
     slug.replaceAll("-", " ");
 
-  const yearName = year.replaceAll("-", " ");
+  const yearName =
+    year.replaceAll("-", " ");
 
   const semesterName =
     semester.replaceAll("-", " ");
 
-  /* =====================================================
-     PAGE
-  ===================================================== */
+  // =====================================================
+  // FACULTY SLUG
+  // =====================================================
+
+  const facultySlug =
+    currentFaculty?.slug ??
+    currentProgram?.faculty ??
+    "";
+
+  // =====================================================
+  // PAGE
+  // =====================================================
 
   return (
     <main
@@ -97,11 +138,7 @@ export default async function SemesterPage({
             },
             {
               name: facultyName,
-              href: `/faculties/${
-                currentFaculty?.slug ??
-                currentProgram?.faculty ??
-                ""
-              }`,
+              href: `/faculties/${facultySlug}`,
             },
             {
               name: programName,
@@ -249,113 +286,95 @@ export default async function SemesterPage({
                 md:grid-cols-2
               "
             >
-              {semesterCourses.map(
-                (course) => {
+              {semesterCourses.map((course) => {
 
-                  /*
-                   * IMPORTANT
-                   *
-                   * The course slug is used in the URL.
-                   *
-                   * Example:
-                   *
-                   * financial-accounting
-                   *
-                   * The course resources page will then
-                   * receive that exact slug and match it
-                   * against the database course value.
-                   */
+                const courseUrl =
+                  `/programs/${slug}/${year}/${semester}/${course.slug}`;
 
-                  const courseUrl =
-                    `/programs/${slug}/${year}/${semester}/${course.slug}`;
+                return (
+                  <Link
+                    key={course.slug}
+                    href={courseUrl}
+                    className="
+                      group
+                      rounded-[2.5rem]
+                      border
+                      border-[#e8dcc8]
+                      bg-white
+                      p-8
+                      shadow-sm
+                      transition-all
+                      duration-300
+                      hover:-translate-y-2
+                      hover:shadow-xl
+                      dark:border-slate-700
+                      dark:bg-slate-900
+                    "
+                  >
 
-                  return (
-                    <Link
-                      key={course.slug}
-                      href={courseUrl}
+                    {/* COURSE ICON */}
+
+                    <div
                       className="
-                        group
-                        rounded-[2.5rem]
-                        border
-                        border-[#e8dcc8]
-                        bg-white
-                        p-8
-                        shadow-sm
-                        transition-all
-                        duration-300
-                        hover:-translate-y-2
-                        hover:shadow-xl
-                        dark:border-slate-700
-                        dark:bg-slate-900
+                        flex
+                        h-16
+                        w-16
+                        items-center
+                        justify-center
+                        rounded-2xl
+                        bg-[#FAF7F0]
+                        text-[#3B2412]
+                        dark:bg-slate-800
+                        dark:text-white
                       "
                     >
+                      <GraduationCap size={30} />
+                    </div>
 
-                      {/* COURSE ICON */}
+                    {/* COURSE NAME */}
 
-                      <div
+                    <h3
+                      className="
+                        mt-6
+                        text-2xl
+                        font-black
+                      "
+                    >
+                      {course.name}
+                    </h3>
+
+                    {/* OPEN COURSE */}
+
+                    <div
+                      className="
+                        mt-6
+                        flex
+                        items-center
+                        gap-3
+                        font-bold
+                        text-[#C9A96E]
+                        transition-all
+                        duration-300
+                        group-hover:gap-5
+                      "
+                    >
+                      <span>
+                        Open Course
+                      </span>
+
+                      <ChevronRight
+                        size={18}
                         className="
-                          flex
-                          h-16
-                          w-16
-                          items-center
-                          justify-center
-                          rounded-2xl
-                          bg-[#FAF7F0]
-                          text-[#3B2412]
-                          dark:bg-slate-800
-                          dark:text-white
-                        "
-                      >
-                        <GraduationCap
-                          size={30}
-                        />
-                      </div>
-
-                      {/* COURSE NAME */}
-
-                      <h3
-                        className="
-                          mt-6
-                          text-2xl
-                          font-black
-                        "
-                      >
-                        {course.name}
-                      </h3>
-
-                      {/* OPEN COURSE */}
-
-                      <div
-                        className="
-                          mt-6
-                          flex
-                          items-center
-                          gap-3
-                          font-bold
-                          text-[#C9A96E]
-                          transition-all
+                          transition-transform
                           duration-300
-                          group-hover:gap-5
+                          group-hover:translate-x-1
                         "
-                      >
-                        <span>
-                          Open Course
-                        </span>
+                      />
+                    </div>
 
-                        <ChevronRight
-                          size={18}
-                          className="
-                            transition-transform
-                            duration-300
-                            group-hover:translate-x-1
-                          "
-                        />
-                      </div>
-
-                    </Link>
-                  );
-                }
-              )}
+                  </Link>
+                );
+              })}
             </div>
           ) : (
             <div

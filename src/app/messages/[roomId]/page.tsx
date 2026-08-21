@@ -1566,7 +1566,7 @@ export default function MessageRoomPage() {
             </div>
 
             <p className="mt-2 text-center text-[10px] text-slate-400">
-              Press Enter to send
+              7053R
             </p>
           </div>
         </div>

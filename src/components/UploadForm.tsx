@@ -7,6 +7,7 @@ import {
   Film,
   Image as ImageIcon,
   FileArchive,
+  Headphones,
 } from "lucide-react";
 
 import { useState } from "react";
@@ -20,11 +21,9 @@ export default function UploadForm() {
   const [loading, setLoading] = useState(false);
 
   const [selectedFaculty, setSelectedFaculty] = useState("");
-  const [selectedProgramme, setSelectedProgramme] =
-    useState("");
+  const [selectedProgramme, setSelectedProgramme] = useState("");
 
-  const [selectedFile, setSelectedFile] =
-    useState<File | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [form, setForm] = useState({
     title: "",
@@ -35,8 +34,7 @@ export default function UploadForm() {
   });
 
   const currentFaculty = faculties.find(
-    (faculty) =>
-      faculty.slug === selectedFaculty
+    (faculty) => faculty.slug === selectedFaculty
   );
 
   const availableCourses = courses.filter(
@@ -47,17 +45,14 @@ export default function UploadForm() {
   );
 
   function handleChange(
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLSelectElement
-    >
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) {
     const { name, value } = e.target;
 
     setForm((previous) => ({
       ...previous,
       [name]: value,
-      ...(name === "year" ||
-      name === "semester"
+      ...(name === "year" || name === "semester"
         ? { course: "" }
         : {}),
     }));
@@ -73,7 +68,7 @@ export default function UploadForm() {
       );
     }
 
-    const type = selectedFile.type;
+    const type = selectedFile.type.toLowerCase();
 
     if (type.startsWith("video/")) {
       return (
@@ -87,6 +82,15 @@ export default function UploadForm() {
     if (type.startsWith("image/")) {
       return (
         <ImageIcon
+          size={35}
+          className="text-[#C9A96E]"
+        />
+      );
+    }
+
+    if (type.startsWith("audio/")) {
+      return (
+        <Headphones
           size={35}
           className="text-[#C9A96E]"
         />
@@ -113,9 +117,7 @@ export default function UploadForm() {
     );
   }
 
-  async function handleSubmit(
-    e: React.FormEvent
-  ) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     if (!selectedFile) {
@@ -157,54 +159,29 @@ export default function UploadForm() {
       // SAFE FILE NAME
       // -----------------------------------------
 
-      const safeFileName =
-        selectedFile.name
-          .replace(/\s+/g, "-")
-          .replace(
-            /[^a-zA-Z0-9._-]/g,
-            ""
-          );
+      const safeFileName = selectedFile.name
+        .replace(/\s+/g, "-")
+        .replace(/[^a-zA-Z0-9._-]/g, "");
 
-      const storagePath =
-        `${Date.now()}-${safeFileName}`;
+      const storagePath = `${Date.now()}-${safeFileName}`;
 
-      console.log(
-        "Uploading file:",
-        storagePath
-      );
-
-      console.log(
-        "File type:",
-        selectedFile.type
-      );
-
-      console.log(
-        "File size:",
-        selectedFile.size
-      );
+      console.log("Uploading file:", storagePath);
+      console.log("File type:", selectedFile.type);
+      console.log("File size:", selectedFile.size);
 
       // -----------------------------------------
       // UPLOAD TO SUPABASE STORAGE
       // -----------------------------------------
 
-      const {
-        error: uploadError,
-      } = await supabase.storage
+      const { error: uploadError } = await supabase.storage
         .from("resources")
-        .upload(
-          storagePath,
-          selectedFile,
-          {
-            cacheControl: "3600",
-            upsert: false,
-
-            // IMPORTANT:
-            // Preserve the actual MIME type.
-            contentType:
-              selectedFile.type ||
-              "application/octet-stream",
-          }
-        );
+        .upload(storagePath, selectedFile, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType:
+            selectedFile.type ||
+            "application/octet-stream",
+        });
 
       if (uploadError) {
         throw uploadError;
@@ -214,16 +191,12 @@ export default function UploadForm() {
       // GET PUBLIC URL
       // -----------------------------------------
 
-      const {
-        data: publicUrlData,
-      } = supabase.storage
-        .from("resources")
-        .getPublicUrl(
-          storagePath
-        );
+      const { data: publicUrlData } =
+        supabase.storage
+          .from("resources")
+          .getPublicUrl(storagePath);
 
-      const publicUrl =
-        publicUrlData.publicUrl;
+      const publicUrl = publicUrlData.publicUrl;
 
       if (!publicUrl) {
         throw new Error(
@@ -252,26 +225,15 @@ export default function UploadForm() {
 
         file_url: publicUrl,
 
-        /*
-         * Keep the REAL MIME TYPE.
-         *
-         * Example:
-         * video/mp4
-         * application/pdf
-         * image/png
-         */
         file_type:
           selectedFile.type ||
           "application/octet-stream",
 
-        file_name:
-          selectedFile.name,
+        file_name: selectedFile.name,
 
-        storage_path:
-          storagePath,
+        storage_path: storagePath,
 
-        file_size:
-          selectedFile.size,
+        file_size: selectedFile.size,
       };
 
       console.log(
@@ -279,13 +241,9 @@ export default function UploadForm() {
         resourceData
       );
 
-      const {
-        error: databaseError,
-      } = await supabase
+      const { error: databaseError } = await supabase
         .from("resources")
-        .insert(
-          resourceData
-        );
+        .insert(resourceData);
 
       if (databaseError) {
         throw databaseError;
@@ -295,23 +253,20 @@ export default function UploadForm() {
       // GLOBAL NOTIFICATION
       // -----------------------------------------
 
-      const {
-        error: notificationError,
-      } = await supabase
-        .from("notifications")
-        .insert({
-          student_id: null,
+      const { error: notificationError } =
+        await supabase
+          .from("notifications")
+          .insert({
+            student_id: null,
 
-          title:
-            "New Resource Uploaded",
+            title: "New Resource Uploaded",
 
-          message:
-            `${form.title} has been added to the Luqify e-Library.`,
+            message: `${form.title} has been added to the Luqify e-Library.`,
 
-          type: "resource",
+            type: "resource",
 
-          read: false,
-        });
+            read: false,
+          });
 
       if (notificationError) {
         console.error(
@@ -429,6 +384,8 @@ export default function UploadForm() {
             onClick={() => {
               setSubmitted(false);
               setSelectedFile(null);
+              setSelectedFaculty("");
+              setSelectedProgramme("");
 
               setForm({
                 title: "",
@@ -479,10 +436,7 @@ export default function UploadForm() {
             <select
               value={selectedFaculty}
               onChange={(e) => {
-                setSelectedFaculty(
-                  e.target.value
-                );
-
+                setSelectedFaculty(e.target.value);
                 setSelectedProgramme("");
 
                 setForm((previous) => ({
@@ -515,16 +469,14 @@ export default function UploadForm() {
                 Select Faculty
               </option>
 
-              {faculties.map(
-                (faculty) => (
-                  <option
-                    key={faculty.slug}
-                    value={faculty.slug}
-                  >
-                    {faculty.name}
-                  </option>
-                )
-              )}
+              {faculties.map((faculty) => (
+                <option
+                  key={faculty.slug}
+                  value={faculty.slug}
+                >
+                  {faculty.name}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -547,9 +499,7 @@ export default function UploadForm() {
               value={selectedProgramme}
               disabled={!selectedFaculty}
               onChange={(e) => {
-                setSelectedProgramme(
-                  e.target.value
-                );
+                setSelectedProgramme(e.target.value);
 
                 setForm((previous) => ({
                   ...previous,
@@ -772,16 +722,14 @@ export default function UploadForm() {
                   : "Select Course"}
               </option>
 
-              {availableCourses.map(
-                (course) => (
-                  <option
-                    key={course.slug}
-                    value={course.name}
-                  >
-                    {course.name}
-                  </option>
-                )
-              )}
+              {availableCourses.map((course) => (
+                <option
+                  key={course.slug}
+                  value={course.name}
+                >
+                  {course.name}
+                </option>
+              ))}
             </select>
 
             {selectedProgramme &&
@@ -865,6 +813,22 @@ export default function UploadForm() {
               <option value="Study Guides">
                 Study Guides
               </option>
+
+              <option value="Audio Tutorials">
+                Audio Tutorials
+              </option>
+
+              <option value="Recorded Lectures">
+                Recorded Lectures
+              </option>
+
+              <option value="Video Lectures">
+                Video Lectures
+              </option>
+
+              <option value="Other Resources">
+                Other Resources
+              </option>
             </select>
           </div>
 
@@ -923,7 +887,7 @@ export default function UploadForm() {
                 dark:text-slate-100
               "
             >
-              Tutorial / Resource File
+              Resource File
             </label>
 
             <label
@@ -992,8 +956,8 @@ export default function UploadForm() {
                   dark:text-slate-500
                 "
               >
-                Tutorials, notes, assignments,
-                videos and study materials
+                Notes, tutorials, assignments,
+                videos, audio and study materials
               </span>
 
               {selectedFile && (
@@ -1026,17 +990,27 @@ export default function UploadForm() {
                   .pptx,
                   .xls,
                   .xlsx,
+                  .csv,
                   .jpg,
                   .jpeg,
                   .png,
                   .webp,
                   .gif,
+                  .svg,
                   .zip,
+                  .rar,
+                  .7z,
                   .mp4,
                   .webm,
                   .mov,
+                  .m4v,
                   .mp3,
-                  .wav
+                  .wav,
+                  .ogg,
+                  .oga,
+                  .m4a,
+                  .aac,
+                  .flac
                 "
                 onChange={(e) => {
                   const file =

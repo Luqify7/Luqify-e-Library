@@ -34,8 +34,8 @@ interface Resource {
   category: string | null;
   file_url: string;
   file_name: string;
-  file_type: string;
-  file_size: number;
+  file_type: string | null;
+  file_size: number | null;
   created_at: string;
   storage_path?: string | null;
 }
@@ -49,9 +49,7 @@ interface BreadcrumbItem {
    NORMALIZATION
 ========================================================= */
 
-function normalizeValue(
-  value: string | null | undefined
-) {
+function normalizeValue(value: string | null | undefined) {
   if (!value) return "";
 
   return value
@@ -61,18 +59,14 @@ function normalizeValue(
     .replace(/\s+/g, " ");
 }
 
-function formatSlug(
-  value: string | null | undefined
-) {
+function formatSlug(value: string | null | undefined) {
   if (!value) return "";
 
   return value
     .replace(/[_-]+/g, " ")
     .replace(/\s+/g, " ")
     .trim()
-    .replace(/\b\w/g, (letter) =>
-      letter.toUpperCase()
-    );
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
 }
 
 function matchesValue(
@@ -82,8 +76,7 @@ function matchesValue(
   if (!urlValue) return true;
 
   return (
-    normalizeValue(databaseValue) ===
-    normalizeValue(urlValue)
+    normalizeValue(databaseValue) === normalizeValue(urlValue)
   );
 }
 
@@ -91,39 +84,35 @@ function matchesValue(
    FILE HELPERS
 ========================================================= */
 
-function formatFileSize(bytes: number) {
+function formatFileSize(bytes: number | null | undefined) {
   if (!bytes || bytes <= 0) return "0 B";
 
-  const units = [
-    "B",
-    "KB",
-    "MB",
-    "GB",
-    "TB",
-  ];
+  const units = ["B", "KB", "MB", "GB", "TB"];
 
   const exponent = Math.min(
     Math.floor(Math.log(bytes) / Math.log(1024)),
     units.length - 1
   );
 
-  const value =
-    bytes / Math.pow(1024, exponent);
+  const value = bytes / Math.pow(1024, exponent);
 
-  return `${value.toFixed(
-    exponent === 0 ? 0 : 1
-  )} ${units[exponent]}`;
+  return `${value.toFixed(exponent === 0 ? 0 : 1)} ${
+    units[exponent]
+  }`;
 }
 
 function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString(
-    "en-GB",
-    {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    }
-  );
+  const date = new Date(dateString);
+
+  if (Number.isNaN(date.getTime())) {
+    return "Unknown date";
+  }
+
+  return date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 /* =========================================================
@@ -132,74 +121,73 @@ function formatDate(dateString: string) {
 
 function getFileExtension(
   fileName: string,
-  fileType: string
+  fileType: string | null | undefined
 ) {
-  const filenameExtension = fileName
-    ?.split(".")
+  const name = fileName || "";
+
+  const filenameExtension = name
+    .split(".")
     .pop()
     ?.toLowerCase();
 
   if (
     filenameExtension &&
-    filenameExtension !== fileName.toLowerCase()
+    filenameExtension !== name.toLowerCase()
   ) {
     return filenameExtension;
   }
 
-  const mime = (
-    fileType || ""
-  ).toLowerCase();
+  const mime = (fileType || "").toLowerCase();
 
-  if (mime === "application/pdf")
-    return "pdf";
+  if (mime === "application/pdf") return "pdf";
 
-  if (mime === "application/msword")
-    return "doc";
+  if (mime === "application/msword") return "doc";
 
   if (
     mime ===
     "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-  )
+  ) {
     return "docx";
+  }
 
-  if (
-    mime === "application/vnd.ms-powerpoint"
-  )
-    return "ppt";
+  if (mime === "application/vnd.ms-powerpoint") return "ppt";
 
   if (
     mime ===
     "application/vnd.openxmlformats-officedocument.presentationml.presentation"
-  )
+  ) {
     return "pptx";
+  }
 
-  if (
-    mime === "application/vnd.ms-excel"
-  )
-    return "xls";
+  if (mime === "application/vnd.ms-excel") return "xls";
 
   if (
     mime ===
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-  )
+  ) {
     return "xlsx";
+  }
 
-  if (mime === "text/plain")
-    return "txt";
+  if (mime === "text/plain") return "txt";
 
   if (
-    mime === "application/zip"
-  )
+    mime === "application/zip" ||
+    mime === "application/x-zip-compressed"
+  ) {
     return "zip";
+  }
 
-  if (mime.startsWith("image/"))
+  if (mime.startsWith("image/")) {
     return mime.split("/")[1];
+  }
 
-  if (mime.startsWith("video/"))
+  if (mime.startsWith("video/")) {
     return mime.split("/")[1];
+  }
 
-  if (mime.startsWith("audio/"))
+  if (mime.startsWith("audio/")) {
     return mime.split("/")[1];
+  }
 
   return "";
 }
@@ -210,12 +198,9 @@ function getFileExtension(
 
 function isVideo(
   fileName: string,
-  fileType: string
+  fileType: string | null | undefined
 ) {
-  const extension = getFileExtension(
-    fileName,
-    fileType
-  );
+  const extension = getFileExtension(fileName, fileType);
 
   return [
     "mp4",
@@ -229,12 +214,9 @@ function isVideo(
 
 function isAudio(
   fileName: string,
-  fileType: string
+  fileType: string | null | undefined
 ) {
-  const extension = getFileExtension(
-    fileName,
-    fileType
-  );
+  const extension = getFileExtension(fileName, fileType);
 
   return [
     "mp3",
@@ -253,12 +235,9 @@ function isAudio(
 
 function getFileIcon(
   fileName: string,
-  fileType: string
+  fileType: string | null | undefined
 ) {
-  const extension = getFileExtension(
-    fileName,
-    fileType
-  );
+  const extension = getFileExtension(fileName, fileType);
 
   if (
     [
@@ -300,23 +279,13 @@ function getFileIcon(
   }
 
   if (
-    [
-      "xls",
-      "xlsx",
-      "csv",
-    ].includes(extension)
+    ["xls", "xlsx", "csv"].includes(extension)
   ) {
     return FileSpreadsheet;
   }
 
   if (
-    [
-      "zip",
-      "rar",
-      "7z",
-      "tar",
-      "gz",
-    ].includes(extension)
+    ["zip", "rar", "7z", "tar", "gz"].includes(extension)
   ) {
     return FileArchive;
   }
@@ -338,37 +307,28 @@ function getFileIcon(
 }
 
 /* =========================================================
-   FILE BADGE
+   BADGE
 ========================================================= */
 
 function getBadgeColor(
   fileName: string,
-  fileType: string
+  fileType: string | null | undefined
 ) {
-  const extension = getFileExtension(
-    fileName,
-    fileType
-  );
+  const extension = getFileExtension(fileName, fileType);
 
   if (extension === "pdf") {
     return "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300";
   }
 
-  if (
-    ["doc", "docx"].includes(extension)
-  ) {
+  if (["doc", "docx"].includes(extension)) {
     return "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300";
   }
 
-  if (
-    ["ppt", "pptx"].includes(extension)
-  ) {
+  if (["ppt", "pptx"].includes(extension)) {
     return "bg-orange-100 text-orange-700 dark:bg-orange-950 dark:text-orange-300";
   }
 
-  if (
-    ["xls", "xlsx", "csv"].includes(extension)
-  ) {
+  if (["xls", "xlsx", "csv"].includes(extension)) {
     return "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300";
   }
 
@@ -412,13 +372,7 @@ function getBadgeColor(
   }
 
   if (
-    [
-      "zip",
-      "rar",
-      "7z",
-      "tar",
-      "gz",
-    ].includes(extension)
+    ["zip", "rar", "7z", "tar", "gz"].includes(extension)
   ) {
     return "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-300";
   }
@@ -464,27 +418,17 @@ function Breadcrumbs({
       </Link>
 
       {items.map((item, index) => {
-        const isLast =
-          index === items.length - 1;
+        const isLast = index === items.length - 1;
 
         return (
           <span
             key={`${item.label}-${index}`}
-            className="
-              flex
-              items-center
-              gap-2
-            "
+            className="flex items-center gap-2"
           >
             <ChevronRight size={16} />
 
             {isLast || !item.href ? (
-              <span
-                className="
-                  capitalize
-                  text-[#C9A96E]
-                "
-              >
+              <span className="capitalize text-[#C9A96E]">
                 {item.label}
               </span>
             ) : (
@@ -522,8 +466,7 @@ export default async function ResourcesPage({
     category?: string;
   }>;
 }) {
-  const supabase =
-    await createServerSupabase();
+  const params = await searchParams;
 
   const {
     faculty,
@@ -532,10 +475,12 @@ export default async function ResourcesPage({
     semester,
     course,
     category,
-  } = await searchParams;
+  } = params;
+
+  const supabase = await createServerSupabase();
 
   /* =======================================================
-     FETCH RESOURCES
+     FETCH
   ======================================================= */
 
   const {
@@ -548,6 +493,13 @@ export default async function ResourcesPage({
       ascending: false,
     });
 
+  if (error) {
+    console.error(
+      "RESOURCES FETCH ERROR:",
+      error
+    );
+  }
+
   const allResources: Resource[] =
     error || !data
       ? []
@@ -557,68 +509,66 @@ export default async function ResourcesPage({
      FILTER
   ======================================================= */
 
-  const resources =
-    allResources.filter(
-      (resource) => {
-        const facultyMatch =
-          !faculty ||
-          matchesValue(
-            resource.faculty,
-            faculty
-          );
-
-        const programmeMatch =
-          !programme ||
-          matchesValue(
-            resource.programme,
-            programme
-          );
-
-        const yearMatch =
-          !year ||
-          matchesValue(
-            resource.year,
-            year
-          );
-
-        const semesterMatch =
-          !semester ||
-          matchesValue(
-            resource.semester,
-            semester
-          );
-
-        const courseMatch =
-          !course ||
-          matchesValue(
-            resource.course,
-            course
-          );
-
-        const categoryMatch =
-          !category ||
-          matchesValue(
-            resource.category,
-            category
-          );
-
-        return (
-          facultyMatch &&
-          programmeMatch &&
-          yearMatch &&
-          semesterMatch &&
-          courseMatch &&
-          categoryMatch
+  const resources = allResources.filter(
+    (resource) => {
+      const facultyMatch =
+        !faculty ||
+        matchesValue(
+          resource.faculty,
+          faculty
         );
-      }
-    );
+
+      const programmeMatch =
+        !programme ||
+        matchesValue(
+          resource.programme,
+          programme
+        );
+
+      const yearMatch =
+        !year ||
+        matchesValue(
+          resource.year,
+          year
+        );
+
+      const semesterMatch =
+        !semester ||
+        matchesValue(
+          resource.semester,
+          semester
+        );
+
+      const courseMatch =
+        !course ||
+        matchesValue(
+          resource.course,
+          course
+        );
+
+      const categoryMatch =
+        !category ||
+        matchesValue(
+          resource.category,
+          category
+        );
+
+      return (
+        facultyMatch &&
+        programmeMatch &&
+        yearMatch &&
+        semesterMatch &&
+        courseMatch &&
+        categoryMatch
+      );
+    }
+  );
 
   /* =======================================================
      BREADCRUMBS
   ======================================================= */
 
-  const breadcrumbItems: BreadcrumbItem[] =
-    [];
+  const breadcrumbItems: BreadcrumbItem[] = [];
 
   if (faculty) {
     breadcrumbItems.push({
@@ -678,9 +628,7 @@ export default async function ResourcesPage({
     category,
   ]
     .filter(Boolean)
-    .map((item) =>
-      formatSlug(item)
-    );
+    .map((item) => formatSlug(item));
 
   /* =======================================================
      UI
@@ -700,9 +648,7 @@ export default async function ResourcesPage({
     >
       <section className="mx-auto max-w-7xl">
 
-        <Breadcrumbs
-          items={breadcrumbItems}
-        />
+        <Breadcrumbs items={breadcrumbItems} />
 
         {/* HEADER */}
 
@@ -777,8 +723,7 @@ export default async function ResourcesPage({
                   {pageTitle}
                 </h1>
 
-                {activeFilters.length >
-                  0 && (
+                {activeFilters.length > 0 && (
                   <div
                     className="
                       mt-4
@@ -788,10 +733,7 @@ export default async function ResourcesPage({
                     "
                   >
                     {activeFilters.map(
-                      (
-                        filter,
-                        index
-                      ) => (
+                      (filter, index) => (
                         <span
                           key={`${filter}-${index}`}
                           className="
@@ -840,13 +782,7 @@ export default async function ResourcesPage({
               />
 
               <div>
-                <p
-                  className="
-                    text-2xl
-                    font-black
-                    leading-none
-                  "
-                >
+                <p className="text-2xl font-black leading-none">
                   {resources.length}
                 </p>
 
@@ -861,8 +797,7 @@ export default async function ResourcesPage({
                     dark:text-slate-400
                   "
                 >
-                  {resources.length ===
-                  1
+                  {resources.length === 1
                     ? "Resource"
                     : "Resources"}
                 </p>
@@ -874,7 +809,6 @@ export default async function ResourcesPage({
         {/* RESOURCE GRID */}
 
         <div className="mt-14">
-
           {resources.length === 0 ? (
             <div
               className="
@@ -910,13 +844,7 @@ export default async function ResourcesPage({
                 <Inbox size={36} />
               </div>
 
-              <h2
-                className="
-                  mt-8
-                  text-3xl
-                  font-black
-                "
-              >
+              <h2 className="mt-8 text-3xl font-black">
                 No Resources Found
               </h2>
 
@@ -929,10 +857,9 @@ export default async function ResourcesPage({
                   dark:text-slate-400
                 "
               >
-                There are currently no
-                resources available for
-                this selection. Please
-                check another course or
+                There are currently no resources
+                available for this selection.
+                Please check another course or
                 category.
               </p>
             </div>
@@ -945,400 +872,346 @@ export default async function ResourcesPage({
                 xl:grid-cols-3
               "
             >
-              {resources.map(
-                (resource) => {
-                  const FileTypeIcon =
-                    getFileIcon(
-                      resource.file_name,
-                      resource.file_type
-                    );
+              {resources.map((resource) => {
+                const FileTypeIcon =
+                  getFileIcon(
+                    resource.file_name,
+                    resource.file_type
+                  );
 
-                  const badgeColor =
-                    getBadgeColor(
-                      resource.file_name,
-                      resource.file_type
-                    );
+                const badgeColor =
+                  getBadgeColor(
+                    resource.file_name,
+                    resource.file_type
+                  );
 
-                  const extension =
-                    getFileExtension(
-                      resource.file_name,
-                      resource.file_type
-                    );
+                const extension =
+                  getFileExtension(
+                    resource.file_name,
+                    resource.file_type
+                  );
 
-                  const video =
-                    isVideo(
-                      resource.file_name,
-                      resource.file_type
-                    );
+                const video = isVideo(
+                  resource.file_name,
+                  resource.file_type
+                );
 
-                  const audio =
-                    isAudio(
-                      resource.file_name,
-                      resource.file_type
-                    );
+                const audio = isAudio(
+                  resource.file_name,
+                  resource.file_type
+                );
 
-                  return (
+                return (
+                  <div
+                    key={resource.id}
+                    className="
+                      group
+                      flex
+                      flex-col
+                      rounded-3xl
+                      border
+                      border-[#e8dcc8]
+                      bg-white
+                      p-8
+                      shadow-sm
+                      transition-all
+                      duration-300
+                      hover:-translate-y-2
+                      hover:shadow-xl
+                      dark:border-slate-700
+                      dark:bg-slate-900
+                    "
+                  >
+                    {/* FILE HEADER */}
+
                     <div
-                      key={resource.id}
                       className="
-                        group
                         flex
-                        flex-col
-                        rounded-3xl
-                        border
-                        border-[#e8dcc8]
-                        bg-white
-                        p-8
-                        shadow-sm
-                        transition-all
-                        duration-300
-                        hover:-translate-y-2
-                        hover:shadow-xl
-                        dark:border-slate-700
-                        dark:bg-slate-900
+                        items-start
+                        justify-between
+                        gap-4
                       "
                     >
-
-                      {/* FILE HEADER */}
-
                       <div
                         className="
                           flex
-                          items-start
-                          justify-between
-                          gap-4
+                          h-16
+                          w-16
+                          shrink-0
+                          items-center
+                          justify-center
+                          rounded-2xl
+                          bg-[#FAF7F0]
+                          text-[#3B2412]
+                          dark:bg-slate-800
+                          dark:text-white
+                        "
+                      >
+                        <FileTypeIcon size={28} />
+                      </div>
+
+                      <span
+                        className={`
+                          rounded-full
+                          px-3
+                          py-1
+                          text-xs
+                          font-bold
+                          uppercase
+                          tracking-wider
+                          ${badgeColor}
+                        `}
+                      >
+                        {extension || "FILE"}
+                      </span>
+                    </div>
+
+                    {/* TITLE */}
+
+                    <h3
+                      className="
+                        mt-6
+                        line-clamp-2
+                        text-2xl
+                        font-black
+                        leading-tight
+                      "
+                    >
+                      {resource.title}
+                    </h3>
+
+                    <p
+                      className="
+                        mt-2
+                        truncate
+                        text-sm
+                        text-[#6b5845]
+                        dark:text-slate-400
+                      "
+                    >
+                      {resource.file_name}
+                    </p>
+
+                    {/* VIDEO */}
+
+                    {video && (
+                      <div
+                        className="
+                          mt-6
+                          overflow-hidden
+                          rounded-2xl
+                          bg-black
+                        "
+                      >
+                        <video
+                          controls
+                          preload="metadata"
+                          playsInline
+                          className="aspect-video w-full"
+                        >
+                          <source
+                            src={resource.file_url}
+                            type={
+                              resource.file_type ||
+                              undefined
+                            }
+                          />
+
+                          Your browser does not
+                          support video playback.
+                        </video>
+                      </div>
+                    )}
+
+                    {/* AUDIO */}
+
+                    {audio && (
+                      <div
+                        className="
+                          mt-6
+                          rounded-2xl
+                          border
+                          border-[#e8dcc8]
+                          bg-[#FAF7F0]
+                          p-5
+                          dark:border-slate-700
+                          dark:bg-slate-800
                         "
                       >
                         <div
                           className="
+                            mb-3
                             flex
-                            h-16
-                            w-16
-                            shrink-0
                             items-center
-                            justify-center
-                            rounded-2xl
-                            bg-[#FAF7F0]
+                            gap-2
+                            text-sm
+                            font-bold
                             text-[#3B2412]
-                            dark:bg-slate-800
                             dark:text-white
                           "
                         >
-                          <FileTypeIcon
-                            size={28}
+                          <Headphones
+                            size={18}
+                            className="text-[#C9A96E]"
                           />
+
+                          Audio Tutorial
                         </div>
 
-                        <span
-                          className={`
-                            rounded-full
-                            px-3
-                            py-1
-                            text-xs
-                            font-bold
-                            uppercase
-                            tracking-wider
-                            ${badgeColor}
-                          `}
+                        <audio
+                          controls
+                          preload="metadata"
+                          className="w-full"
                         >
-                          {extension ||
-                            "FILE"}
-                        </span>
+                          <source
+                            src={resource.file_url}
+                            type={
+                              resource.file_type ||
+                              undefined
+                            }
+                          />
+
+                          Your browser does not
+                          support audio playback.
+                        </audio>
                       </div>
+                    )}
 
-                      {/* TITLE */}
+                    {/* INFO */}
 
-                      <h3
-                        className="
-                          mt-6
-                          line-clamp-2
-                          text-2xl
-                          font-black
-                          leading-tight
-                        "
-                      >
-                        {resource.title}
-                      </h3>
+                    <div
+                      className="
+                        mt-4
+                        flex
+                        flex-wrap
+                        items-center
+                        gap-4
+                        text-xs
+                        font-semibold
+                        text-[#6b5845]
+                        dark:text-slate-400
+                      "
+                    >
+                      <span className="flex items-center gap-1">
+                        <FileIcon size={14} />
+                        {formatFileSize(
+                          resource.file_size
+                        )}
+                      </span>
 
-                      <p
-                        className="
-                          mt-2
-                          truncate
-                          text-sm
-                          text-[#6b5845]
-                          dark:text-slate-400
-                        "
-                      >
-                        {resource.file_name}
-                      </p>
+                      <span className="flex items-center gap-1">
+                        <CalendarDays size={14} />
+                        {formatDate(
+                          resource.created_at
+                        )}
+                      </span>
+                    </div>
 
-                      {/* VIDEO PREVIEW */}
+                    {/* COURSE */}
 
-                      {video && (
-                        <div
-                          className="
-                            mt-6
-                            overflow-hidden
-                            rounded-2xl
-                            bg-black
-                          "
-                        >
-                          <video
-                            controls
-                            preload="metadata"
-                            playsInline
-                            className="
-                              aspect-video
-                              w-full
-                            "
-                          >
-                            <source
-                              src={
-                                resource.file_url
-                              }
-                              type={
-                                resource.file_type ||
-                                undefined
-                              }
-                            />
-
-                            Your browser does not
-                            support video playback.
-                          </video>
-                        </div>
-                      )}
-
-                      {/* AUDIO PREVIEW */}
-
-                      {audio && (
-                        <div
-                          className="
-                            mt-6
-                            rounded-2xl
-                            border
-                            border-[#e8dcc8]
-                            bg-[#FAF7F0]
-                            p-5
-                            dark:border-slate-700
-                            dark:bg-slate-800
-                          "
-                        >
-                          <div
-                            className="
-                              mb-3
-                              flex
-                              items-center
-                              gap-2
-                              text-sm
-                              font-bold
-                              text-[#3B2412]
-                              dark:text-white
-                            "
-                          >
-                            <Headphones
-                              size={18}
-                              className="text-[#C9A96E]"
-                            />
-
-                            Audio Tutorial
-                          </div>
-
-                          <audio
-                            controls
-                            preload="metadata"
-                            className="w-full"
-                          >
-                            <source
-                              src={
-                                resource.file_url
-                              }
-                              type={
-                                resource.file_type ||
-                                undefined
-                              }
-                            />
-
-                            Your browser does not
-                            support audio playback.
-                          </audio>
-                        </div>
-                      )}
-
-                      {/* RESOURCE INFO */}
-
+                    {resource.course && (
                       <div
                         className="
-                          mt-4
-                          flex
-                          flex-wrap
-                          items-center
-                          gap-4
+                          mt-5
+                          rounded-xl
+                          bg-[#FAF7F0]
+                          px-3
+                          py-2
                           text-xs
                           font-semibold
                           text-[#6b5845]
-                          dark:text-slate-400
+                          dark:bg-slate-800
+                          dark:text-slate-300
                         "
                       >
-                        <span
-                          className="
-                            flex
-                            items-center
-                            gap-1
-                          "
-                        >
-                          <FileIcon
-                            size={14}
-                          />
-
-                          {formatFileSize(
-                            resource.file_size
-                          )}
-                        </span>
-
-                        <span
-                          className="
-                            flex
-                            items-center
-                            gap-1
-                          "
-                        >
-                          <CalendarDays
-                            size={14}
-                          />
-
-                          {formatDate(
-                            resource.created_at
-                          )}
-                        </span>
+                        Course: {resource.course}
                       </div>
+                    )}
 
-                      {/* COURSE */}
+                    {/* ACTIONS */}
 
-                      {resource.course && (
-                        <div
-                          className="
-                            mt-5
-                            rounded-xl
-                            bg-[#FAF7F0]
-                            px-3
-                            py-2
-                            text-xs
-                            font-semibold
-                            text-[#6b5845]
-                            dark:bg-slate-800
-                            dark:text-slate-300
-                          "
-                        >
-                          Course:{" "}
-                          {resource.course}
-                        </div>
-                      )}
-
-                      {/* ACTIONS */}
-
-                      <div
+                    <div
+                      className="
+                        mt-8
+                        flex
+                        items-center
+                        gap-3
+                      "
+                    >
+                      <a
+                        href={resource.file_url}
+                        target="_blank"
+                        rel="noopener noreferrer"
                         className="
-                          mt-8
                           flex
+                          flex-1
                           items-center
-                          gap-3
+                          justify-center
+                          gap-2
+                          rounded-2xl
+                          bg-[#3B2412]
+                          px-5
+                          py-3
+                          text-sm
+                          font-bold
+                          text-white
+                          transition-all
+                          duration-300
+                          hover:-translate-y-0.5
+                          hover:bg-[#2a1a0d]
                         "
                       >
+                        {video ? (
+                          <Play size={16} />
+                        ) : audio ? (
+                          <Headphones size={16} />
+                        ) : (
+                          <ExternalLink size={16} />
+                        )}
 
-                        {/* PLAY / OPEN */}
+                        {video
+                          ? "Play"
+                          : audio
+                          ? "Listen"
+                          : "Open"}
+                      </a>
 
-                        <a
-                          href={
-                            resource.file_url
-                          }
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="
-                            flex
-                            flex-1
-                            items-center
-                            justify-center
-                            gap-2
-                            rounded-2xl
-                            bg-[#3B2412]
-                            px-5
-                            py-3
-                            text-sm
-                            font-bold
-                            text-white
-                            transition-all
-                            duration-300
-                            hover:-translate-y-0.5
-                            hover:bg-[#2a1a0d]
-                          "
-                        >
-                          {video ? (
-                            <Play size={16} />
-                          ) : audio ? (
-                            <Headphones
-                              size={16}
-                            />
-                          ) : (
-                            <ExternalLink
-                              size={16}
-                            />
-                          )}
-
-                          {video
-                            ? "Play"
-                            : audio
-                            ? "Listen"
-                            : "Open"}
-                        </a>
-
-                        {/* DOWNLOAD */}
-
-                        <a
-                          href={
-                            resource.file_url
-                          }
-                          download={
-                            resource.file_name
-                          }
-                          className="
-                            flex
-                            flex-1
-                            items-center
-                            justify-center
-                            gap-2
-                            rounded-2xl
-                            border
-                            border-[#e8dcc8]
-                            bg-[#FAF7F0]
-                            px-5
-                            py-3
-                            text-sm
-                            font-bold
-                            text-[#3B2412]
-                            transition-all
-                            duration-300
-                            hover:border-[#C9A96E]
-                            hover:text-[#C9A96E]
-                            dark:border-slate-700
-                            dark:bg-slate-800
-                            dark:text-white
-                          "
-                        >
-                          <Download
-                            size={16}
-                          />
-
-                          Download
-                        </a>
-                      </div>
-
+                      <a
+                        href={resource.file_url}
+                        download={resource.file_name}
+                        className="
+                          flex
+                          flex-1
+                          items-center
+                          justify-center
+                          gap-2
+                          rounded-2xl
+                          border
+                          border-[#e8dcc8]
+                          bg-[#FAF7F0]
+                          px-5
+                          py-3
+                          text-sm
+                          font-bold
+                          text-[#3B2412]
+                          transition-all
+                          duration-300
+                          hover:border-[#C9A96E]
+                          hover:text-[#C9A96E]
+                          dark:border-slate-700
+                          dark:bg-slate-800
+                          dark:text-white
+                        "
+                      >
+                        <Download size={16} />
+                        Download
+                      </a>
                     </div>
-                  );
-                }
-              )}
+                  </div>
+                );
+              })}
             </div>
           )}
-
         </div>
       </section>
     </main>
