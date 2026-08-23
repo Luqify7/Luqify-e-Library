@@ -442,3 +442,92 @@ body {
 
 
 }
+/* =========================================
+   FOUNDER ↔ LT7 SECRET ANIMATION
+   10 SECOND LOOP — QUICK EXCHANGE
+   ========================================= */
+
+.founder-secret-image {
+  animation: founderImageSecret 10s ease-in-out infinite;
+  transform-origin: center center;
+}
+
+.founder-lt7-logo {
+  animation: founderLogoSecret 10s ease-in-out infinite;
+}
+
+
+@keyframes founderImageSecret {
+
+  /* Founder stays visible */
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  38% {
+    opacity: 1;
+    transform: scale(1.03);
+  }
+
+  /* QUICK DISAPPEAR */
+  44% {
+    opacity: 0;
+    transform: scale(1.07);
+  }
+
+  /* Logo period */
+  67% {
+    opacity: 0;
+    transform: scale(1.07);
+  }
+
+  /* QUICK RETURN */
+  73% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+
+@keyframes founderLogoSecret {
+
+  /* Hidden while founder is visible */
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  40% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  /* QUICK APPEAR */
+  46% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* Enjoy the logo */
+  67% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  /* QUICK DISAPPEAR */
+  73% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+}
