@@ -9,7 +9,6 @@ import {
   FileArchive,
   Headphones,
 } from "lucide-react";
-
 import { useState } from "react";
 
 import { faculties } from "@/data/faculties";
@@ -22,7 +21,6 @@ export default function UploadForm() {
 
   const [selectedFaculty, setSelectedFaculty] = useState("");
   const [selectedProgramme, setSelectedProgramme] = useState("");
-
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
   const [form, setForm] = useState({
@@ -117,7 +115,7 @@ export default function UploadForm() {
     );
   }
 
-  async function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     if (!selectedFile) {
@@ -128,7 +126,7 @@ export default function UploadForm() {
     if (
       !selectedFaculty ||
       !selectedProgramme ||
-      !form.title ||
+      !form.title.trim() ||
       !form.course ||
       !form.year ||
       !form.semester ||
@@ -141,20 +139,6 @@ export default function UploadForm() {
     setLoading(true);
 
     try {
-      // -----------------------------------------
-      // CHECK LOGGED IN USER
-      // -----------------------------------------
-
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-
-      if (!user) {
-        throw new Error(
-          "You must be logged in to upload resources."
-        );
-      }
-
       // -----------------------------------------
       // SAFE FILE NAME
       // -----------------------------------------
@@ -170,7 +154,7 @@ export default function UploadForm() {
       console.log("File size:", selectedFile.size);
 
       // -----------------------------------------
-      // UPLOAD TO SUPABASE STORAGE
+      // UPLOAD FILE TO SUPABASE STORAGE
       // -----------------------------------------
 
       const { error: uploadError } = await supabase.storage
@@ -179,8 +163,7 @@ export default function UploadForm() {
           cacheControl: "3600",
           upsert: false,
           contentType:
-            selectedFile.type ||
-            "application/octet-stream",
+            selectedFile.type || "application/octet-stream",
         });
 
       if (uploadError) {
@@ -191,10 +174,9 @@ export default function UploadForm() {
       // GET PUBLIC URL
       // -----------------------------------------
 
-      const { data: publicUrlData } =
-        supabase.storage
-          .from("resources")
-          .getPublicUrl(storagePath);
+      const { data: publicUrlData } = supabase.storage
+        .from("resources")
+        .getPublicUrl(storagePath);
 
       const publicUrl = publicUrlData.publicUrl;
 
@@ -205,34 +187,22 @@ export default function UploadForm() {
       }
 
       // -----------------------------------------
-      // INSERT RESOURCE
+      // RESOURCE DATABASE RECORD
       // -----------------------------------------
 
       const resourceData = {
         title: form.title.trim(),
-
         faculty: selectedFaculty,
-
         programme: selectedProgramme,
-
         year: form.year,
-
         semester: form.semester,
-
         category: form.category,
-
         course: form.course,
-
         file_url: publicUrl,
-
         file_type:
-          selectedFile.type ||
-          "application/octet-stream",
-
+          selectedFile.type || "application/octet-stream",
         file_name: selectedFile.name,
-
         storage_path: storagePath,
-
         file_size: selectedFile.size,
       };
 
@@ -250,7 +220,7 @@ export default function UploadForm() {
       }
 
       // -----------------------------------------
-      // GLOBAL NOTIFICATION
+      // CREATE GLOBAL NOTIFICATION
       // -----------------------------------------
 
       const { error: notificationError } =
@@ -258,13 +228,9 @@ export default function UploadForm() {
           .from("notifications")
           .insert({
             student_id: null,
-
             title: "New Resource Uploaded",
-
-            message: `${form.title} has been added to the Luqify e-Library.`,
-
+            message: `${form.title.trim()} has been added to the Luqify e-Library.`,
             type: "resource",
-
             read: false,
           });
 
@@ -280,34 +246,33 @@ export default function UploadForm() {
       // -----------------------------------------
 
       setSubmitted(true);
-    } catch (error: any) {
-      console.error(
-        "UPLOAD FAILED:",
-        error
-      );
+    } catch (error: unknown) {
+      console.error("UPLOAD FAILED:", error);
 
-      console.error(
-        "MESSAGE:",
-        error?.message
-      );
+      const message =
+        error instanceof Error
+          ? error.message
+          : "Upload failed.";
 
-      console.error(
-        "CODE:",
-        error?.code
-      );
-
-      console.error(
-        "DETAILS:",
-        error?.details
-      );
-
-      alert(
-        error?.message ||
-          "Upload failed."
-      );
+      alert(message);
     } finally {
       setLoading(false);
     }
+  }
+
+  function resetForm() {
+    setSubmitted(false);
+    setSelectedFile(null);
+    setSelectedFaculty("");
+    setSelectedProgramme("");
+
+    setForm({
+      title: "",
+      course: "",
+      year: "",
+      semester: "",
+      category: "",
+    });
   }
 
   return (
@@ -381,20 +346,7 @@ export default function UploadForm() {
 
           <button
             type="button"
-            onClick={() => {
-              setSubmitted(false);
-              setSelectedFile(null);
-              setSelectedFaculty("");
-              setSelectedProgramme("");
-
-              setForm({
-                title: "",
-                course: "",
-                year: "",
-                semester: "",
-                category: "",
-              });
-            }}
+            onClick={resetForm}
             className="
               mt-8
               rounded-2xl
@@ -1013,8 +965,7 @@ export default function UploadForm() {
                   .flac
                 "
                 onChange={(e) => {
-                  const file =
-                    e.target.files?.[0];
+                  const file = e.target.files?.[0];
 
                   if (file) {
                     setSelectedFile(file);
