@@ -28,23 +28,21 @@ export default function Hero() {
 
 
   const rightImages = [
-    "/images/founder.jpg",
-    "/images/student-1.jpg",
-    "/images/student-2.jpg",
-    "/images/student-3.jpg",
-    "/images/student-4.jpg",
-    "/images/student-5.jpg",
-    "/images/student-6.jpg",
-    "/images/student-7.jpg",
-    "/images/student-8.jpg",
-    "/images/student-9.jpg",
-    "/images/student-10.jpg",
-    "/images/student-11.jpg",
-    "/images/student-12.jpg",
-    "/images/student-13.jpg",
-    "/images/student-14.jpg",
-  ];
-
+  "/images/student-1.jpg",
+  "/images/founder.jpg",
+  "/images/student-3.jpg",
+  "/images/student-4.jpg",
+  "/images/student-5.jpg",
+  "/images/student-6.jpg",
+  "/images/student-7.jpg",
+  "/images/student-8.jpg",
+  "/images/student-9.jpg",
+  "/images/student-10.jpg",
+  "/images/student-11.jpg",
+  "/images/student-12.jpg",
+  "/images/student-13.jpg",
+  "/images/student-14.jpg",
+];
 
 
   const cardShadow =
