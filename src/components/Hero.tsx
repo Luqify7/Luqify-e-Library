@@ -28,7 +28,6 @@ export default function Hero() {
 
 
   const rightImages = [
-  "/images/student-1.jpg",
   "/images/founder.jpg",
   "/images/student-3.jpg",
   "/images/student-4.jpg",
