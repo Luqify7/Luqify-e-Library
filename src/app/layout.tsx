@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import ThemeProvider from "@/components/ThemeProvider";
 import LT7Widget from "@/components/LT7Widget";
+import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,7 +27,7 @@ children,
 }: Readonly<{
 children: React.ReactNode;
 }>) {
-return ( <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth"> <body> <ThemeProvider>
+return ( <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth"> <body> <ThemeProvider> <ServiceWorkerRegistration />
 {children} <LT7Widget /> </ThemeProvider> </body> </html>
 );
 }
