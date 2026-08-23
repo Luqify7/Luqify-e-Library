@@ -9,9 +9,9 @@
 "orientation": "portrait",
 "icons": [
 {
-"src": "/images/luqify-app-icon.jpeg",
+"src": "/images/luqify-app-icon-circle.png",
 "sizes": "512x512",
-"type": "image/jpeg",
+"type": "image/png",
 "purpose": "any maskable"
 }
 ]
