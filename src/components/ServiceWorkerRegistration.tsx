@@ -3,13 +3,35 @@
 import { useEffect } from "react";
 
 export default function ServiceWorkerRegistration() {
-useEffect(() => {
-if ("serviceWorker" in navigator) {
-navigator.serviceWorker.register("/sw.js").catch((error) => {
-console.error("Service worker registration failed:", error);
-});
-}
-}, []);
+  useEffect(() => {
+    if (process.env.NODE_ENV !== "production") {
+      return;
+    }
 
-return null;
+    if (!("serviceWorker" in navigator)) {
+      return;
+    }
+
+    const registerServiceWorker = async () => {
+      try {
+        const registration = await navigator.serviceWorker.register("/sw.js", {
+          scope: "/",
+        });
+
+        console.log(
+          "Luqify Service Worker registered:",
+          registration.scope
+        );
+      } catch (error) {
+        console.error(
+          "Luqify Service Worker registration failed:",
+          error
+        );
+      }
+    };
+
+    void registerServiceWorker();
+  }, []);
+
+  return null;
 }
