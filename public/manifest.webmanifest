@@ -9,10 +9,10 @@
 "orientation": "portrait",
 "icons": [
 {
-"src": "/images/luqify-app-icon-circle.png",
+"src": "/images/luqify-app-icon.jpeg",
 "sizes": "512x512",
-"type": "image/png",
-"purpose": "any maskable"
+"type": "image/jpeg",
+"purpose": "any"
 }
 ]
 }
