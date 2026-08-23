@@ -1,0 +1,20 @@
+```json
+{
+  "name": "Luqify e-Library",
+  "short_name": "Luqify",
+  "description": "Digital academic library",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF7F0",
+  "theme_color": "#3B2412",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/images/lt7-icon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
+```
