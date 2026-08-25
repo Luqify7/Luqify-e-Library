@@ -115,7 +115,9 @@ export default function UploadForm() {
     );
   }
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    e: React.FormEvent<HTMLFormElement>
+  ) {
     e.preventDefault();
 
     if (!selectedFile) {
@@ -152,6 +154,7 @@ export default function UploadForm() {
       console.log("Uploading file:", storagePath);
       console.log("File type:", selectedFile.type);
       console.log("File size:", selectedFile.size);
+      console.log("Resource category:", form.category);
 
       // -----------------------------------------
       // UPLOAD FILE TO SUPABASE STORAGE
@@ -754,32 +757,12 @@ export default function UploadForm() {
                 Tutorials
               </option>
 
-              <option value="Past Papers">
-                Past Papers
+              <option value="Mid-Semester Exam Papers">
+                Mid-Semester Exam Papers
               </option>
 
-              <option value="Presentation Slides">
-                Presentation Slides
-              </option>
-
-              <option value="Study Guides">
-                Study Guides
-              </option>
-
-              <option value="Audio Tutorials">
-                Audio Tutorials
-              </option>
-
-              <option value="Recorded Lectures">
-                Recorded Lectures
-              </option>
-
-              <option value="Video Lectures">
-                Video Lectures
-              </option>
-
-              <option value="Other Resources">
-                Other Resources
+              <option value="End-Semester Exam Papers">
+                End-Semester Exam Papers
               </option>
             </select>
           </div>
