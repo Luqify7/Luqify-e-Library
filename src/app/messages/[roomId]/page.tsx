@@ -33,7 +33,6 @@ type Message = {
   message: string;
   created_at: string;
   message_type: string | null;
-
   resource_id: string | null;
   resource_name: string | null;
   resource_url: string | null;
@@ -183,55 +182,25 @@ export default function MessageRoomPage() {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [showMenu, setShowMenu] = useState(false);
-  const [showDeleteConfirm, setShowDeleteConfirm] =
-    useState(false);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const [showAttachmentMenu, setShowAttachmentMenu] = useState(false);
+  const [showResourcePicker, setShowResourcePicker] = useState(false);
 
-  const [showEmojiPicker, setShowEmojiPicker] =
-    useState(false);
+  const [resources, setResources] = useState<Resource[]>([]);
+  const [resourceSearch, setResourceSearch] = useState("");
+  const [loadingResources, setLoadingResources] = useState(false);
+  const [sharingResource, setSharingResource] = useState(false);
 
-  const [showAttachmentMenu, setShowAttachmentMenu] =
-    useState(false);
+  const [typingStudents, setTypingStudents] = useState<TypingStudent[]>([]);
 
-  const [showResourcePicker, setShowResourcePicker] =
-    useState(false);
-
-  const [resources, setResources] =
-    useState<Resource[]>([]);
-
-  const [resourceSearch, setResourceSearch] =
-    useState("");
-
-  const [loadingResources, setLoadingResources] =
-    useState(false);
-
-  const [sharingResource, setSharingResource] =
-    useState(false);
-
-  const [typingStudents, setTypingStudents] =
-    useState<TypingStudent[]>([]);
-
-  /*
-   * =========================================================
-   * REFS
-   * =========================================================
-   */
-
-  const messagesEndRef =
-    useRef<HTMLDivElement | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const typingChannelRef =
-    useRef<
-      ReturnType<typeof supabase.channel> | null
-    >(null);
+    useRef<ReturnType<typeof supabase.channel> | null>(null);
 
   const typingTimeoutRef =
     useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  /*
-   * =========================================================
-   * MESSAGE SELECT
-   * =========================================================
-   */
 
   const messageSelect =
     "id,room_id,sender_name,message,created_at,message_type,resource_id,resource_name,resource_url,resource_type";
@@ -287,10 +256,7 @@ export default function MessageRoomPage() {
 
       if (!mounted) return;
 
-      if (
-        roomResult.error ||
-        !roomResult.data
-      ) {
+      if (roomResult.error || !roomResult.data) {
         setRoom(null);
 
         setErrorMessage(
@@ -341,19 +307,14 @@ export default function MessageRoomPage() {
           filter: `room_id=eq.${roomId}`,
         },
         (payload) => {
-          const newMessage =
-            payload.new as Message;
+          const newMessage = payload.new as Message;
 
           setMessages((current) =>
             current.some(
-              (item) =>
-                item.id === newMessage.id
+              (item) => item.id === newMessage.id
             )
               ? current
-              : [
-                  ...current,
-                  newMessage,
-                ]
+              : [...current, newMessage]
           );
         }
       )
@@ -397,20 +358,18 @@ export default function MessageRoomPage() {
         ([key, value]) => {
           if (key === senderId) return;
 
-          const entries =
-            Array.isArray(value)
-              ? value
-              : [];
+          const entries = Array.isArray(value)
+            ? value
+            : [];
 
-          const typingEntry =
-            entries.find(
-              (entry) =>
-                (
-                  entry as {
-                    typing?: boolean;
-                  }
-                )?.typing === true
-            );
+          const typingEntry = entries.find(
+            (entry) =>
+              (
+                entry as {
+                  typing?: boolean;
+                }
+              )?.typing === true
+          );
 
           if (typingEntry) {
             list.push({
@@ -463,7 +422,6 @@ export default function MessageRoomPage() {
       typingChannelRef.current = null;
 
       void channel.untrack();
-
       void supabase.removeChannel(channel);
 
       setTypingStudents([]);
@@ -471,10 +429,7 @@ export default function MessageRoomPage() {
   }, [roomId, senderId]);
 
   const typing = async (value: boolean) => {
-    if (
-      !typingChannelRef.current ||
-      !senderId
-    ) {
+    if (!typingChannelRef.current || !senderId) {
       return;
     }
 
@@ -484,9 +439,7 @@ export default function MessageRoomPage() {
         typing: value,
       });
     } catch {
-      /*
-       * Typing indicator is optional.
-       */
+      // Optional feature.
     }
   };
 
@@ -537,9 +490,7 @@ export default function MessageRoomPage() {
   useEffect(() => {
     return () => {
       if (typingTimeoutRef.current) {
-        clearTimeout(
-          typingTimeoutRef.current
-        );
+        clearTimeout(typingTimeoutRef.current);
       }
 
       typingChannelRef.current = null;
@@ -548,7 +499,7 @@ export default function MessageRoomPage() {
 
   /*
    * =========================================================
-   * SEND TEXT MESSAGE
+   * SEND MESSAGE
    * =========================================================
    */
 
@@ -588,8 +539,7 @@ export default function MessageRoomPage() {
       if (result.data) {
         setMessages((current) =>
           current.some(
-            (item) =>
-              item.id === result.data.id
+            (item) => item.id === result.data.id
           )
             ? current
             : [
@@ -693,8 +643,7 @@ export default function MessageRoomPage() {
           resource_name: resource.title,
           resource_url: resource.file_url,
           resource_type:
-            resource.file_type ||
-            "document",
+            resource.file_type || "document",
         })
         .select(messageSelect)
         .single();
@@ -706,8 +655,7 @@ export default function MessageRoomPage() {
       if (result.data) {
         setMessages((current) =>
           current.some(
-            (item) =>
-              item.id === result.data.id
+            (item) => item.id === result.data.id
           )
             ? current
             : [
@@ -847,6 +795,7 @@ export default function MessageRoomPage() {
           </p>
 
           <button
+            type="button"
             onClick={() =>
               router.push("/messages")
             }
@@ -880,6 +829,7 @@ export default function MessageRoomPage() {
         <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-[#e8dcc8] bg-white px-4 py-3 shadow-sm dark:border-slate-800 dark:bg-slate-900">
 
           <button
+            type="button"
             onClick={() =>
               router.push("/messages")
             }
@@ -921,6 +871,7 @@ export default function MessageRoomPage() {
 
           <div className="relative">
             <button
+              type="button"
               onClick={() => {
                 setShowMenu((value) => !value);
                 setShowEmojiPicker(false);
@@ -934,6 +885,8 @@ export default function MessageRoomPage() {
             {showMenu && (
               <>
                 <button
+                  type="button"
+                  aria-label="Close menu"
                   className="fixed inset-0 z-40"
                   onClick={() =>
                     setShowMenu(false)
@@ -942,6 +895,7 @@ export default function MessageRoomPage() {
 
                 <div className="absolute right-0 top-12 z-50 w-56 rounded-2xl border bg-white p-1.5 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
                   <button
+                    type="button"
                     onClick={() => {
                       setShowMenu(false);
                       setShowDeleteConfirm(true);
@@ -1148,6 +1102,7 @@ export default function MessageRoomPage() {
                   {emojis.map(
                     (emoji, index) => (
                       <button
+                        type="button"
                         key={index}
                         onClick={() => {
                           setMessage(
@@ -1173,6 +1128,7 @@ export default function MessageRoomPage() {
               <div className="absolute bottom-16 left-11 z-[70] w-60 rounded-2xl border bg-white p-1.5 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
 
                 <button
+                  type="button"
                   onClick={() =>
                     void openResourcePicker()
                   }
@@ -1197,9 +1153,8 @@ export default function MessageRoomPage() {
 
             <div className="flex items-center gap-1.5 rounded-full border border-[#e8dcc8] bg-[#FAF7F0] p-1.5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
 
-              {/* EMOJI */}
-
               <button
+                type="button"
                 onClick={() => {
                   setShowEmojiPicker(
                     (value) => !value
@@ -1217,8 +1172,6 @@ export default function MessageRoomPage() {
               >
                 <Smile size={21} />
               </button>
-
-              {/* INPUT */}
 
               <input
                 value={message}
@@ -1250,9 +1203,8 @@ export default function MessageRoomPage() {
                 className="h-10 min-w-0 flex-1 bg-transparent px-2 text-sm outline-none dark:text-white"
               />
 
-              {/* ATTACHMENT */}
-
               <button
+                type="button"
                 onClick={() => {
                   setShowAttachmentMenu(
                     (value) => !value
@@ -1269,9 +1221,8 @@ export default function MessageRoomPage() {
                 <Paperclip size={20} />
               </button>
 
-              {/* SEND */}
-
               <button
+                type="button"
                 onClick={() =>
                   void sendMessage()
                 }
@@ -1293,10 +1244,10 @@ export default function MessageRoomPage() {
               </button>
             </div>
 
-            {/* YOUR CHANGED TEXT */}
+            {/* FOOTER */}
 
             <p className="mt-2 text-center text-[10px] text-slate-400">
-              Connect, share and learn together.
+              Luqify Student Messages
             </p>
 
           </div>
@@ -1327,6 +1278,7 @@ export default function MessageRoomPage() {
               </div>
 
               <button
+                type="button"
                 onClick={() =>
                   setShowResourcePicker(false)
                 }
@@ -1337,6 +1289,7 @@ export default function MessageRoomPage() {
 
             <div className="border-b p-4">
               <div className="flex items-center gap-2 rounded-xl border bg-[#FAF7F0] px-3">
+
                 <Search
                   size={18}
                   className="text-slate-400"
@@ -1384,6 +1337,7 @@ export default function MessageRoomPage() {
                   {filtered.map(
                     (resource) => (
                       <button
+                        type="button"
                         key={resource.id}
                         disabled={
                           sharingResource
@@ -1421,10 +1375,9 @@ export default function MessageRoomPage() {
 
                         <span className="rounded-full bg-[#3B2412] px-3 py-2 text-[11px] font-bold text-white">
                           {sharingResource
-                            ? "..."
+                            ? "Sharing..."
                             : "Share"}
                         </span>
-
                       </button>
                     )
                   )}
@@ -1450,6 +1403,7 @@ export default function MessageRoomPage() {
               </div>
 
               <button
+                type="button"
                 onClick={() =>
                   setShowDeleteConfirm(false)
                 }
@@ -1457,7 +1411,6 @@ export default function MessageRoomPage() {
               >
                 <X size={19} />
               </button>
-
             </div>
 
             <h2 className="text-xl font-black">
@@ -1474,6 +1427,7 @@ export default function MessageRoomPage() {
             <div className="mt-6 flex gap-3">
 
               <button
+                type="button"
                 onClick={() =>
                   setShowDeleteConfirm(false)
                 }
@@ -1484,6 +1438,7 @@ export default function MessageRoomPage() {
               </button>
 
               <button
+                type="button"
                 onClick={() =>
                   void deleteDiscussion()
                 }
