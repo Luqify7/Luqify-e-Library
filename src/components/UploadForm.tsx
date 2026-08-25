@@ -19,9 +19,12 @@ export default function UploadForm() {
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const [selectedFaculty, setSelectedFaculty] = useState("");
-  const [selectedProgramme, setSelectedProgramme] = useState("");
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedFaculty, setSelectedFaculty] =
+    useState("");
+  const [selectedProgramme, setSelectedProgramme] =
+    useState("");
+  const [selectedFile, setSelectedFile] =
+    useState<File | null>(null);
 
   const [form, setForm] = useState({
     title: "",
@@ -43,7 +46,9 @@ export default function UploadForm() {
   );
 
   function handleChange(
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement
+    >
   ) {
     const { name, value } = e.target;
 
@@ -151,23 +156,44 @@ export default function UploadForm() {
 
       const storagePath = `${Date.now()}-${safeFileName}`;
 
-      console.log("Uploading file:", storagePath);
-      console.log("File type:", selectedFile.type);
-      console.log("File size:", selectedFile.size);
-      console.log("Resource category:", form.category);
+      console.log(
+        "Uploading file:",
+        storagePath
+      );
+
+      console.log(
+        "File type:",
+        selectedFile.type
+      );
+
+      console.log(
+        "File size:",
+        selectedFile.size
+      );
+
+      console.log(
+        "Resource category:",
+        form.category
+      );
 
       // -----------------------------------------
       // UPLOAD FILE TO SUPABASE STORAGE
       // -----------------------------------------
 
-      const { error: uploadError } = await supabase.storage
-        .from("resources")
-        .upload(storagePath, selectedFile, {
-          cacheControl: "3600",
-          upsert: false,
-          contentType:
-            selectedFile.type || "application/octet-stream",
-        });
+      const { error: uploadError } =
+        await supabase.storage
+          .from("resources")
+          .upload(
+            storagePath,
+            selectedFile,
+            {
+              cacheControl: "3600",
+              upsert: false,
+              contentType:
+                selectedFile.type ||
+                "application/octet-stream",
+            }
+          );
 
       if (uploadError) {
         throw uploadError;
@@ -177,11 +203,13 @@ export default function UploadForm() {
       // GET PUBLIC URL
       // -----------------------------------------
 
-      const { data: publicUrlData } = supabase.storage
-        .from("resources")
-        .getPublicUrl(storagePath);
+      const { data: publicUrlData } =
+        supabase.storage
+          .from("resources")
+          .getPublicUrl(storagePath);
 
-      const publicUrl = publicUrlData.publicUrl;
+      const publicUrl =
+        publicUrlData.publicUrl;
 
       if (!publicUrl) {
         throw new Error(
@@ -203,7 +231,8 @@ export default function UploadForm() {
         course: form.course,
         file_url: publicUrl,
         file_type:
-          selectedFile.type || "application/octet-stream",
+          selectedFile.type ||
+          "application/octet-stream",
         file_name: selectedFile.name,
         storage_path: storagePath,
         file_size: selectedFile.size,
@@ -214,9 +243,10 @@ export default function UploadForm() {
         resourceData
       );
 
-      const { error: databaseError } = await supabase
-        .from("resources")
-        .insert(resourceData);
+      const { error: databaseError } =
+        await supabase
+          .from("resources")
+          .insert(resourceData);
 
       if (databaseError) {
         throw databaseError;
@@ -250,7 +280,10 @@ export default function UploadForm() {
 
       setSubmitted(true);
     } catch (error: unknown) {
-      console.error("UPLOAD FAILED:", error);
+      console.error(
+        "UPLOAD FAILED:",
+        error
+      );
 
       const message =
         error instanceof Error
@@ -391,7 +424,10 @@ export default function UploadForm() {
             <select
               value={selectedFaculty}
               onChange={(e) => {
-                setSelectedFaculty(e.target.value);
+                setSelectedFaculty(
+                  e.target.value
+                );
+
                 setSelectedProgramme("");
 
                 setForm((previous) => ({
@@ -454,7 +490,9 @@ export default function UploadForm() {
               value={selectedProgramme}
               disabled={!selectedFaculty}
               onChange={(e) => {
-                setSelectedProgramme(e.target.value);
+                setSelectedProgramme(
+                  e.target.value
+                );
 
                 setForm((previous) => ({
                   ...previous,
@@ -669,28 +707,31 @@ export default function UploadForm() {
                 {!selectedProgramme
                   ? "Select Programme First"
                   : !form.year
-                  ? "Select Academic Year First"
-                  : !form.semester
-                  ? "Select Semester First"
-                  : availableCourses.length === 0
-                  ? "No courses found"
-                  : "Select Course"}
+                    ? "Select Academic Year First"
+                    : !form.semester
+                      ? "Select Semester First"
+                      : availableCourses.length === 0
+                        ? "No courses found"
+                        : "Select Course"}
               </option>
 
-              {availableCourses.map((course) => (
-                <option
-                  key={course.slug}
-                  value={course.name}
-                >
-                  {course.name}
-                </option>
-              ))}
+              {availableCourses.map(
+                (course) => (
+                  <option
+                    key={course.slug}
+                    value={course.name}
+                  >
+                    {course.name}
+                  </option>
+                )
+              )}
             </select>
 
             {selectedProgramme &&
               form.year &&
               form.semester &&
-              availableCourses.length === 0 && (
+              availableCourses.length ===
+                0 && (
                 <p
                   className="
                     mt-2
@@ -757,8 +798,8 @@ export default function UploadForm() {
                 Tutorials
               </option>
 
-              <option value="Mid-Semester Exam Papers">
-                Mid-Semester Exam Papers
+              <option value="Mid-Semester Exams Papers">
+                Mid-Semester Exams Papers
               </option>
 
               <option value="End-Semester Exam Papers">
@@ -948,7 +989,8 @@ export default function UploadForm() {
                   .flac
                 "
                 onChange={(e) => {
-                  const file = e.target.files?.[0];
+                  const file =
+                    e.target.files?.[0];
 
                   if (file) {
                     setSelectedFile(file);

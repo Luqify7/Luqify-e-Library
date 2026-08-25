@@ -312,9 +312,7 @@ export default function MessageRoomPage() {
 
       if (!mounted) return;
 
-      setRoom(
-        roomResult.data as Room
-      );
+      setRoom(roomResult.data as Room);
 
       setMessages(
         (messageResult.data || []) as Message[]
@@ -331,10 +329,6 @@ export default function MessageRoomPage() {
     };
 
     void load();
-
-    /*
-     * Realtime messages.
-     */
 
     const channel = supabase
       .channel(`messages-room-${roomId}`)
@@ -368,9 +362,7 @@ export default function MessageRoomPage() {
     return () => {
       mounted = false;
 
-      void supabase.removeChannel(
-        channel
-      );
+      void supabase.removeChannel(channel);
     };
   }, [roomId]);
 
@@ -394,15 +386,12 @@ export default function MessageRoomPage() {
       }
     );
 
-    typingChannelRef.current =
-      channel;
+    typingChannelRef.current = channel;
 
     const sync = () => {
-      const state =
-        channel.presenceState();
+      const state = channel.presenceState();
 
-      const list: TypingStudent[] =
-        [];
+      const list: TypingStudent[] = [];
 
       Object.entries(state).forEach(
         ([key, value]) => {
@@ -461,37 +450,27 @@ export default function MessageRoomPage() {
         },
         sync
       )
-      .subscribe(
-        async (status) => {
-          if (
-            status ===
-            "SUBSCRIBED"
-          ) {
-            await channel.track({
-              studentId: senderId,
-              typing: false,
-            });
-          }
+      .subscribe(async (status) => {
+        if (status === "SUBSCRIBED") {
+          await channel.track({
+            studentId: senderId,
+            typing: false,
+          });
         }
-      );
+      });
 
     return () => {
-      typingChannelRef.current =
-        null;
+      typingChannelRef.current = null;
 
       void channel.untrack();
 
-      void supabase.removeChannel(
-        channel
-      );
+      void supabase.removeChannel(channel);
 
       setTypingStudents([]);
     };
   }, [roomId, senderId]);
 
-  const typing = async (
-    value: boolean
-  ) => {
+  const typing = async (value: boolean) => {
     if (
       !typingChannelRef.current ||
       !senderId
@@ -500,59 +479,40 @@ export default function MessageRoomPage() {
     }
 
     try {
-      await typingChannelRef.current.track(
-        {
-          studentId: senderId,
-          typing: value,
-        }
-      );
+      await typingChannelRef.current.track({
+        studentId: senderId,
+        typing: value,
+      });
     } catch {
       /*
-       * Realtime typing is optional.
-       * Never break messaging because
-       * the typing channel fails.
+       * Typing indicator is optional.
        */
     }
   };
 
   const stopTyping = () => {
-    if (
-      typingTimeoutRef.current
-    ) {
-      clearTimeout(
-        typingTimeoutRef.current
-      );
-
-      typingTimeoutRef.current =
-        null;
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
+      typingTimeoutRef.current = null;
     }
 
     void typing(false);
   };
 
-  const handleMessageChange = (
-    value: string
-  ) => {
+  const handleMessageChange = (value: string) => {
     setMessage(value);
 
-    void typing(
-      !!value.trim()
-    );
+    void typing(!!value.trim());
 
-    if (
-      typingTimeoutRef.current
-    ) {
-      clearTimeout(
-        typingTimeoutRef.current
-      );
+    if (typingTimeoutRef.current) {
+      clearTimeout(typingTimeoutRef.current);
     }
 
     if (value.trim()) {
-      typingTimeoutRef.current =
-        setTimeout(
-          () => void typing(false),
-          2500
-        );
+      typingTimeoutRef.current = setTimeout(
+        () => void typing(false),
+        2500
+      );
     }
   };
 
@@ -563,15 +523,10 @@ export default function MessageRoomPage() {
    */
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView(
-      {
-        behavior: "smooth",
-      }
-    );
-  }, [
-    messages,
-    typingStudents,
-  ]);
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+    });
+  }, [messages, typingStudents]);
 
   /*
    * =========================================================
@@ -581,16 +536,13 @@ export default function MessageRoomPage() {
 
   useEffect(() => {
     return () => {
-      if (
-        typingTimeoutRef.current
-      ) {
+      if (typingTimeoutRef.current) {
         clearTimeout(
           typingTimeoutRef.current
         );
       }
 
-      typingChannelRef.current =
-        null;
+      typingChannelRef.current = null;
     };
   }, []);
 
@@ -601,8 +553,7 @@ export default function MessageRoomPage() {
    */
 
   const sendMessage = async () => {
-    const clean =
-      message.trim();
+    const clean = message.trim();
 
     if (
       !clean ||
@@ -619,51 +570,38 @@ export default function MessageRoomPage() {
     stopTyping();
 
     try {
-      const result =
-        await supabase
-          .from("messages")
-          .insert({
-            room_id: roomId,
-            sender_name:
-              senderId,
-            message: clean,
-            message_type:
-              "text",
-          })
-          .select(
-            messageSelect
-          )
-          .single();
+      const result = await supabase
+        .from("messages")
+        .insert({
+          room_id: roomId,
+          sender_name: senderId,
+          message: clean,
+          message_type: "text",
+        })
+        .select(messageSelect)
+        .single();
 
       if (result.error) {
         throw result.error;
       }
 
       if (result.data) {
-        setMessages(
-          (current) =>
-            current.some(
-              (item) =>
-                item.id ===
-                result.data.id
-            )
-              ? current
-              : [
-                  ...current,
-                  result.data as Message,
-                ]
+        setMessages((current) =>
+          current.some(
+            (item) =>
+              item.id === result.data.id
+          )
+            ? current
+            : [
+                ...current,
+                result.data as Message,
+              ]
         );
       }
 
       setMessage("");
-
-      setShowEmojiPicker(
-        false
-      );
-
-      setShowAttachmentMenu(
-        false
-      );
+      setShowEmojiPicker(false);
+      setShowAttachmentMenu(false);
     } catch (error) {
       setErrorMessage(
         error instanceof Error
@@ -681,64 +619,47 @@ export default function MessageRoomPage() {
    * =========================================================
    */
 
-  const openResourcePicker =
-    async () => {
-      setShowAttachmentMenu(
-        false
-      );
+  const openResourcePicker = async () => {
+    setShowAttachmentMenu(false);
+    setShowEmojiPicker(false);
+    setShowResourcePicker(true);
+    setResourceSearch("");
 
-      setShowEmojiPicker(
-        false
-      );
+    if (resources.length) {
+      return;
+    }
 
-      setShowResourcePicker(
-        true
-      );
+    setLoadingResources(true);
+    setErrorMessage("");
 
-      setResourceSearch("");
+    try {
+      const result = await supabase
+        .from("resources")
+        .select(
+          "id,title,faculty,programme,year,semester,category,course,file_url,file_type,file_name"
+        )
+        .order("created_at", {
+          ascending: false,
+        })
+        .limit(200);
 
-      if (resources.length) {
-        return;
+      if (result.error) {
+        throw result.error;
       }
 
-      setLoadingResources(true);
-      setErrorMessage("");
-
-      try {
-        const result =
-          await supabase
-            .from("resources")
-            .select(
-              "id,title,faculty,programme,year,semester,category,course,file_url,file_type,file_name"
-            )
-            .order(
-              "created_at",
-              {
-                ascending: false,
-              }
-            )
-            .limit(200);
-
-        if (result.error) {
-          throw result.error;
-        }
-
-        setResources(
-          (result.data ||
-            []) as Resource[]
-        );
-      } catch (error) {
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Unable to load library resources."
-        );
-      } finally {
-        setLoadingResources(
-          false
-        );
-      }
-    };
+      setResources(
+        (result.data || []) as Resource[]
+      );
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to load library resources."
+      );
+    } finally {
+      setLoadingResources(false);
+    }
+  };
 
   /*
    * =========================================================
@@ -746,88 +667,68 @@ export default function MessageRoomPage() {
    * =========================================================
    */
 
-  const shareResource =
-    async (
-      resource: Resource
-    ) => {
-      if (
-        sharingResource ||
-        !senderId ||
-        !roomId
-      ) {
-        return;
+  const shareResource = async (
+    resource: Resource
+  ) => {
+    if (
+      sharingResource ||
+      !senderId ||
+      !roomId
+    ) {
+      return;
+    }
+
+    setSharingResource(true);
+    setErrorMessage("");
+
+    try {
+      const result = await supabase
+        .from("messages")
+        .insert({
+          room_id: roomId,
+          sender_name: senderId,
+          message: `Shared a resource: ${resource.title}`,
+          message_type: "resource",
+          resource_id: resource.id,
+          resource_name: resource.title,
+          resource_url: resource.file_url,
+          resource_type:
+            resource.file_type ||
+            "document",
+        })
+        .select(messageSelect)
+        .single();
+
+      if (result.error) {
+        throw result.error;
       }
 
-      setSharingResource(
-        true
+      if (result.data) {
+        setMessages((current) =>
+          current.some(
+            (item) =>
+              item.id === result.data.id
+          )
+            ? current
+            : [
+                ...current,
+                result.data as Message,
+              ]
+        );
+      }
+
+      setShowResourcePicker(false);
+      setResourceSearch("");
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to share this resource."
       );
-
-      setErrorMessage("");
-
-      try {
-        const result =
-          await supabase
-            .from("messages")
-            .insert({
-              room_id: roomId,
-              sender_name:
-                senderId,
-              message:
-                `Shared a resource: ${resource.title}`,
-              message_type:
-                "resource",
-              resource_id:
-                resource.id,
-              resource_name:
-                resource.title,
-              resource_url:
-                resource.file_url,
-              resource_type:
-                resource.file_type ||
-                "document",
-            })
-            .select(
-              messageSelect
-            )
-            .single();
-
-        if (result.error) {
-          throw result.error;
-        }
-
-        if (result.data) {
-          setMessages(
-            (current) =>
-              current.some(
-                (item) =>
-                  item.id ===
-                  result.data.id
-              )
-                ? current
-                : [
-                    ...current,
-                    result.data as Message,
-                  ]
-          );
-        }
-
-        setShowResourcePicker(
-          false
-        );
-
-        setResourceSearch("");
-      } catch (error) {
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Unable to share this resource."
-        );
-      } finally {
-        setSharingResource(
-          false
-        );
-      }
-    };
+    } finally {
+      setSharingResource(false);
+    }
+  };
 
   /*
    * =========================================================
@@ -835,45 +736,35 @@ export default function MessageRoomPage() {
    * =========================================================
    */
 
-  const deleteDiscussion =
-    async () => {
-      if (
-        !room ||
-        deleting
-      ) {
-        return;
+  const deleteDiscussion = async () => {
+    if (!room || deleting) {
+      return;
+    }
+
+    setDeleting(true);
+    setErrorMessage("");
+
+    try {
+      const result = await supabase
+        .from("rooms")
+        .delete()
+        .eq("id", room.id);
+
+      if (result.error) {
+        throw result.error;
       }
 
-      setDeleting(true);
-      setErrorMessage("");
+      router.replace("/messages");
+    } catch (error) {
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Unable to delete discussion."
+      );
 
-      try {
-        const result =
-          await supabase
-            .from("rooms")
-            .delete()
-            .eq(
-              "id",
-              room.id
-            );
-
-        if (result.error) {
-          throw result.error;
-        }
-
-        router.replace(
-          "/messages"
-        );
-      } catch (error) {
-        setErrorMessage(
-          error instanceof Error
-            ? error.message
-            : "Unable to delete discussion."
-        );
-
-        setDeleting(false);
-      }
-    };
+      setDeleting(false);
+    }
+  };
 
   /*
    * =========================================================
@@ -881,35 +772,26 @@ export default function MessageRoomPage() {
    * =========================================================
    */
 
-  const filtered =
-    useMemo(() => {
-      const query =
-        resourceSearch
-          .trim()
-          .toLowerCase();
+  const filtered = useMemo(() => {
+    const query = resourceSearch
+      .trim()
+      .toLowerCase();
 
-      if (!query) {
-        return resources;
-      }
+    if (!query) {
+      return resources;
+    }
 
-      return resources.filter(
-        (resource) =>
-          [
-            resource.title,
-            resource.course,
-            resource.category,
-            resource.programme,
-          ].some(
-            (value) =>
-              value
-                ?.toLowerCase()
-                .includes(query)
-          )
-      );
-    }, [
-      resources,
-      resourceSearch,
-    ]);
+    return resources.filter((resource) =>
+      [
+        resource.title,
+        resource.course,
+        resource.category,
+        resource.programme,
+      ].some((value) =>
+        value?.toLowerCase().includes(query)
+      )
+    );
+  }, [resources, resourceSearch]);
 
   /*
    * =========================================================
@@ -966,9 +848,7 @@ export default function MessageRoomPage() {
 
           <button
             onClick={() =>
-              router.push(
-                "/messages"
-              )
+              router.push("/messages")
             }
             className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#3B2412] px-6 py-3 font-semibold text-white"
           >
@@ -1001,9 +881,7 @@ export default function MessageRoomPage() {
 
           <button
             onClick={() =>
-              router.push(
-                "/messages"
-              )
+              router.push("/messages")
             }
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full hover:bg-[#FAF7F0] dark:hover:bg-slate-800"
           >
@@ -1025,9 +903,7 @@ export default function MessageRoomPage() {
 
             {typingStudents.length ? (
               <div className="flex items-center gap-2 text-xs font-semibold text-[#C9A96E]">
-                <span>
-                  {typingText}
-                </span>
+                <span>{typingText}</span>
 
                 <span className="typing-indicator">
                   <i />
@@ -1046,24 +922,13 @@ export default function MessageRoomPage() {
           <div className="relative">
             <button
               onClick={() => {
-                setShowMenu(
-                  (value) =>
-                    !value
-                );
-
-                setShowEmojiPicker(
-                  false
-                );
-
-                setShowAttachmentMenu(
-                  false
-                );
+                setShowMenu((value) => !value);
+                setShowEmojiPicker(false);
+                setShowAttachmentMenu(false);
               }}
               className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-[#FAF7F0] dark:hover:bg-slate-800"
             >
-              <MoreVertical
-                size={20}
-              />
+              <MoreVertical size={20} />
             </button>
 
             {showMenu && (
@@ -1071,29 +936,19 @@ export default function MessageRoomPage() {
                 <button
                   className="fixed inset-0 z-40"
                   onClick={() =>
-                    setShowMenu(
-                      false
-                    )
+                    setShowMenu(false)
                   }
                 />
 
                 <div className="absolute right-0 top-12 z-50 w-56 rounded-2xl border bg-white p-1.5 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
                   <button
                     onClick={() => {
-                      setShowMenu(
-                        false
-                      );
-
-                      setShowDeleteConfirm(
-                        true
-                      );
+                      setShowMenu(false);
+                      setShowDeleteConfirm(true);
                     }}
                     className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-semibold text-red-600 hover:bg-red-50"
                   >
-                    <Trash2
-                      size={17}
-                    />
-
+                    <Trash2 size={17} />
                     Delete Discussion
                   </button>
                 </div>
@@ -1130,208 +985,157 @@ export default function MessageRoomPage() {
           ) : (
             <div className="mx-auto max-w-3xl space-y-3">
 
-              {messages.map(
-                (item) => {
-                  const mine =
-                    item.sender_name ===
-                    senderId;
+              {messages.map((item) => {
+                const mine =
+                  item.sender_name ===
+                  senderId;
 
-                  const resource =
-                    item.message_type ===
-                      "resource" ||
-                    !!item.resource_id;
+                const resource =
+                  item.message_type ===
+                    "resource" ||
+                  !!item.resource_id;
 
-                  const color =
-                    colors[
-                      colorIndex(
-                        item.sender_name
-                      )
-                    ];
+                const color =
+                  colors[
+                    colorIndex(
+                      item.sender_name
+                    )
+                  ];
 
-                  return (
+                return (
+                  <div
+                    key={item.id}
+                    className={`flex ${
+                      mine
+                        ? "justify-end"
+                        : "justify-start"
+                    }`}
+                  >
                     <div
-                      key={
-                        item.id
-                      }
-                      className={`flex ${
+                      className={`max-w-[88%] md:max-w-[68%] ${
                         mine
-                          ? "justify-end"
-                          : "justify-start"
+                          ? "ml-12"
+                          : "mr-12"
                       }`}
                     >
-                      <div
-                        className={`max-w-[88%] md:max-w-[68%] ${
-                          mine
-                            ? "ml-12"
-                            : "mr-12"
-                        }`}
-                      >
 
-                        {!mine && (
-                          <div className="mb-1 ml-2 flex items-center gap-2">
-
-                            <div
-                              className={`flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-black text-white ${color.bg}`}
-                            >
-                              {initial(
-                                item.sender_name
-                              )}
-                            </div>
-
-                            <span className="text-xs font-bold text-[#C9A96E]">
-                              {
-                                item.sender_name
-                              }
-                            </span>
-
-                          </div>
-                        )}
-
-                        {resource ? (
-                          /* =================================================
-                             RESOURCE MESSAGE
-                             ================================================= */
-
+                      {!mine && (
+                        <div className="mb-1 ml-2 flex items-center gap-2">
                           <div
-                            className={`overflow-hidden rounded-2xl shadow-sm ${
-                              mine
-                                ? "rounded-br-md bg-[#3B2412] text-white"
-                                : `rounded-bl-md ${color.bg} text-white`
-                            }`}
+                            className={`flex h-7 w-7 items-center justify-center rounded-full text-[10px] font-black text-white ${color.bg}`}
                           >
-
-                            <div className="flex items-center gap-3 px-4 pt-4">
-
-                              <div
-                                className={`flex h-11 w-11 items-center justify-center rounded-xl ${color.icon}`}
-                              >
-                                <FileText
-                                  size={
-                                    22
-                                  }
-                                />
-                              </div>
-
-                              <div className="min-w-0 flex-1">
-
-                                <p className="text-[10px] font-bold uppercase tracking-wider opacity-60">
-                                  Library Resource
-                                </p>
-
-                                <h3 className="mt-0.5 line-clamp-2 text-sm font-black">
-                                  {
-                                    item.resource_name ||
-                                    item.message.replace(
-                                      "Shared a resource: ",
-                                      ""
-                                    )
-                                  }
-                                </h3>
-
-                              </div>
-
-                            </div>
-
-                            <div className="px-4 pb-2 pt-3">
-                              <div className="rounded-xl bg-black/10 px-3 py-2">
-
-                                <div className="flex items-center gap-2 text-xs opacity-75">
-                                  <BookOpen
-                                    size={
-                                      13
-                                    }
-                                  />
-
-                                  Shared from Luqify e-Library
-                                </div>
-
-                              </div>
-                            </div>
-
-                            {item.resource_url && (
-                              <a
-                                href={
-                                  item.resource_url
-                                }
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="flex items-center justify-between border-t border-white/10 px-4 py-3 text-sm font-bold hover:bg-white/10"
-                              >
-                                Open Resource
-
-                                <ExternalLink
-                                  size={
-                                    16
-                                  }
-                                />
-                              </a>
+                            {initial(
+                              item.sender_name
                             )}
+                          </div>
 
-                            <div className="px-4 pb-2 text-right text-[10px] text-white/50">
-                              {timeText(
-                                item.created_at
-                              )}
+                          <span className="text-xs font-bold text-[#C9A96E]">
+                            {item.sender_name}
+                          </span>
+                        </div>
+                      )}
+
+                      {resource ? (
+                        <div
+                          className={`overflow-hidden rounded-2xl shadow-sm ${
+                            mine
+                              ? "rounded-br-md bg-[#3B2412] text-white"
+                              : `rounded-bl-md ${color.bg} text-white`
+                          }`}
+                        >
+
+                          <div className="flex items-center gap-3 px-4 pt-4">
+                            <div
+                              className={`flex h-11 w-11 items-center justify-center rounded-xl ${color.icon}`}
+                            >
+                              <FileText size={22} />
                             </div>
 
+                            <div className="min-w-0 flex-1">
+                              <p className="text-[10px] font-bold uppercase tracking-wider opacity-60">
+                                Library Resource
+                              </p>
+
+                              <h3 className="mt-0.5 line-clamp-2 text-sm font-black">
+                                {item.resource_name ||
+                                  item.message.replace(
+                                    "Shared a resource: ",
+                                    ""
+                                  )}
+                              </h3>
+                            </div>
                           </div>
-                        ) : (
-                          /* =================================================
-                             TEXT MESSAGE
-                             ================================================= */
+
+                          <div className="px-4 pb-2 pt-3">
+                            <div className="rounded-xl bg-black/10 px-3 py-2">
+                              <div className="flex items-center gap-2 text-xs opacity-75">
+                                <BookOpen size={13} />
+                                Shared from Luqify e-Library
+                              </div>
+                            </div>
+                          </div>
+
+                          {item.resource_url && (
+                            <a
+                              href={
+                                item.resource_url
+                              }
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center justify-between border-t border-white/10 px-4 py-3 text-sm font-bold hover:bg-white/10"
+                            >
+                              Open Resource
+
+                              <ExternalLink
+                                size={16}
+                              />
+                            </a>
+                          )}
+
+                          <div className="px-4 pb-2 text-right text-[10px] text-white/50">
+                            {timeText(
+                              item.created_at
+                            )}
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className={`px-4 py-2.5 shadow-sm ${
+                            mine
+                              ? "rounded-2xl rounded-br-md bg-[#3B2412] text-white"
+                              : `rounded-2xl rounded-bl-md ${color.bg} ${color.text}`
+                          }`}
+                        >
+                          <p className="whitespace-pre-wrap break-words text-sm leading-6">
+                            {item.message}
+                          </p>
 
                           <div
-                            className={`px-4 py-2.5 shadow-sm ${
-                              mine
-                                ? "rounded-2xl rounded-br-md bg-[#3B2412] text-white"
-                                : `rounded-2xl rounded-bl-md ${color.bg} ${color.text}`
-                            }`}
+                            className={`mt-1 text-right text-[10px] ${color.meta}`}
                           >
-
-                            <p className="whitespace-pre-wrap break-words text-sm leading-6">
-                              {
-                                item.message
-                              }
-                            </p>
-
-                            <div
-                              className={`mt-1 text-right text-[10px] ${color.meta}`}
-                            >
-                              {timeText(
-                                item.created_at
-                              )}
-                            </div>
-
+                            {timeText(
+                              item.created_at
+                            )}
                           </div>
-                        )}
-
-                      </div>
+                        </div>
+                      )}
                     </div>
-                  );
-                }
-              )}
+                  </div>
+                );
+              })}
 
-              <div
-                ref={
-                  messagesEndRef
-                }
-              />
-
+              <div ref={messagesEndRef} />
             </div>
           )}
-
         </div>
 
-        {/* =========================================================
-            COMPOSER
-            ========================================================= */}
+        {/* COMPOSER */}
 
         <div className="sticky bottom-0 z-20 border-t border-[#e8dcc8] bg-white/95 p-3 backdrop-blur dark:border-slate-800 dark:bg-slate-900/95 md:p-4">
 
           <div className="relative mx-auto max-w-3xl">
 
-            {/* =====================================================
-                EMOJI PICKER
-               ===================================================== */}
+            {/* EMOJI PICKER */}
 
             {showEmojiPicker && (
               <div className="absolute bottom-16 left-0 z-[70] w-[min(340px,calc(100vw-24px))] rounded-2xl border bg-white shadow-2xl dark:border-slate-700 dark:bg-slate-900">
@@ -1341,45 +1145,29 @@ export default function MessageRoomPage() {
                 </div>
 
                 <div className="grid max-h-56 grid-cols-8 gap-1 overflow-y-auto p-3">
-
                   {emojis.map(
-                    (
-                      emoji,
-                      index
-                    ) => (
+                    (emoji, index) => (
                       <button
-                        key={
-                          index
-                        }
+                        key={index}
                         onClick={() => {
                           setMessage(
-                            (
-                              value
-                            ) =>
-                              value +
-                              emoji
+                            (value) =>
+                              value + emoji
                           );
 
-                          void typing(
-                            true
-                          );
+                          void typing(true);
                         }}
                         className="flex h-9 w-9 items-center justify-center rounded-lg text-xl hover:bg-[#FAF7F0]"
                       >
-                        {
-                          emoji
-                        }
+                        {emoji}
                       </button>
                     )
                   )}
-
                 </div>
               </div>
             )}
 
-            {/* =====================================================
-                ATTACHMENT MENU
-               ===================================================== */}
+            {/* ATTACHMENT MENU */}
 
             {showAttachmentMenu && (
               <div className="absolute bottom-16 left-11 z-[70] w-60 rounded-2xl border bg-white p-1.5 shadow-2xl dark:border-slate-700 dark:bg-slate-900">
@@ -1390,7 +1178,6 @@ export default function MessageRoomPage() {
                   }
                   className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left hover:bg-[#FAF7F0]"
                 >
-
                   <BookOpen className="text-[#C9A96E]" />
 
                   <span>
@@ -1402,15 +1189,11 @@ export default function MessageRoomPage() {
                       Share from e-Library
                     </small>
                   </span>
-
                 </button>
-
               </div>
             )}
 
-            {/* =====================================================
-                NORMAL COMPOSER
-               ===================================================== */}
+            {/* COMPOSER */}
 
             <div className="flex items-center gap-1.5 rounded-full border border-[#e8dcc8] bg-[#FAF7F0] p-1.5 shadow-sm dark:border-slate-700 dark:bg-slate-800">
 
@@ -1419,10 +1202,7 @@ export default function MessageRoomPage() {
               <button
                 onClick={() => {
                   setShowEmojiPicker(
-                    (
-                      value
-                    ) =>
-                      !value
+                    (value) => !value
                   );
 
                   setShowAttachmentMenu(
@@ -1435,53 +1215,34 @@ export default function MessageRoomPage() {
                 }
                 className="flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:bg-white disabled:opacity-40"
               >
-                <Smile
-                  size={21}
-                />
+                <Smile size={21} />
               </button>
 
-              {/* TEXT INPUT */}
+              {/* INPUT */}
 
               <input
-                value={
-                  message
-                }
-                onChange={(
-                  event
-                ) =>
+                value={message}
+                onChange={(event) =>
                   handleMessageChange(
                     event.target.value
                   )
                 }
                 onFocus={() => {
-                  setShowEmojiPicker(
-                    false
-                  );
-
-                  setShowAttachmentMenu(
-                    false
-                  );
+                  setShowEmojiPicker(false);
+                  setShowAttachmentMenu(false);
                 }}
-                onBlur={
-                  stopTyping
-                }
-                onKeyDown={(
-                  event
-                ) => {
+                onBlur={stopTyping}
+                onKeyDown={(event) => {
                   if (
-                    event.key ===
-                      "Enter" &&
+                    event.key === "Enter" &&
                     !event.shiftKey
                   ) {
                     event.preventDefault();
-
                     void sendMessage();
                   }
                 }}
                 placeholder="Type a message"
-                maxLength={
-                  1000
-                }
+                maxLength={1000}
                 disabled={
                   sending ||
                   sharingResource
@@ -1494,15 +1255,10 @@ export default function MessageRoomPage() {
               <button
                 onClick={() => {
                   setShowAttachmentMenu(
-                    (
-                      value
-                    ) =>
-                      !value
+                    (value) => !value
                   );
 
-                  setShowEmojiPicker(
-                    false
-                  );
+                  setShowEmojiPicker(false);
                 }}
                 disabled={
                   sending ||
@@ -1510,9 +1266,7 @@ export default function MessageRoomPage() {
                 }
                 className="flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:bg-white disabled:opacity-40"
               >
-                <Paperclip
-                  size={20}
-                />
+                <Paperclip size={20} />
               </button>
 
               {/* SEND */}
@@ -1534,26 +1288,22 @@ export default function MessageRoomPage() {
                     className="animate-spin"
                   />
                 ) : (
-                  <Send
-                    size={17}
-                  />
+                  <Send size={17} />
                 )}
               </button>
-
             </div>
 
+            {/* YOUR CHANGED TEXT */}
+
             <p className="mt-2 text-center text-[10px] text-slate-400">
-              Luqify Student Messages
+              ......
             </p>
 
           </div>
         </div>
-
       </section>
 
-      {/* =========================================================
-          RESOURCE PICKER
-         ========================================================= */}
+      {/* RESOURCE PICKER */}
 
       {showResourcePicker && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/50 px-4 py-6 backdrop-blur-sm">
@@ -1563,13 +1313,10 @@ export default function MessageRoomPage() {
             <div className="flex items-center gap-3 border-b px-5 py-4">
 
               <div className="flex h-11 w-11 items-center justify-center rounded-full bg-[#C9A96E]/15 text-[#C9A96E]">
-                <BookOpen
-                  size={21}
-                />
+                <BookOpen size={21} />
               </div>
 
               <div className="min-w-0 flex-1">
-
                 <h2 className="font-black">
                   Share Library Resource
                 </h2>
@@ -1577,39 +1324,27 @@ export default function MessageRoomPage() {
                 <p className="text-xs text-slate-500">
                   Choose something from Luqify e-Library
                 </p>
-
               </div>
 
               <button
                 onClick={() =>
-                  setShowResourcePicker(
-                    false
-                  )
+                  setShowResourcePicker(false)
                 }
               >
-                <X
-                  size={19}
-                />
+                <X size={19} />
               </button>
-
             </div>
 
             <div className="border-b p-4">
-
               <div className="flex items-center gap-2 rounded-xl border bg-[#FAF7F0] px-3">
-
                 <Search
                   size={18}
                   className="text-slate-400"
                 />
 
                 <input
-                  value={
-                    resourceSearch
-                  }
-                  onChange={(
-                    event
-                  ) =>
+                  value={resourceSearch}
+                  onChange={(event) =>
                     setResourceSearch(
                       event.target.value
                     )
@@ -1618,9 +1353,7 @@ export default function MessageRoomPage() {
                   autoFocus
                   className="h-11 flex-1 bg-transparent outline-none dark:text-white"
                 />
-
               </div>
-
             </div>
 
             <div className="min-h-0 flex-1 overflow-y-auto p-3">
@@ -1644,19 +1377,14 @@ export default function MessageRoomPage() {
                   <p className="mt-1 text-sm text-slate-500">
                     Try another search.
                   </p>
-
                 </div>
               ) : (
                 <div className="space-y-2">
 
                   {filtered.map(
-                    (
-                      resource
-                    ) => (
+                    (resource) => (
                       <button
-                        key={
-                          resource.id
-                        }
+                        key={resource.id}
                         disabled={
                           sharingResource
                         }
@@ -1669,49 +1397,32 @@ export default function MessageRoomPage() {
                       >
 
                         <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#3B2412] text-white">
-                          <FileText
-                            size={
-                              21
-                            }
-                          />
+                          <FileText size={21} />
                         </div>
 
                         <div className="min-w-0 flex-1">
 
                           <h3 className="line-clamp-2 text-sm font-black">
-                            {
-                              resource.title
-                            }
+                            {resource.title}
                           </h3>
 
                           <p className="mt-1 truncate text-xs text-slate-500">
-                            {
-                              resource.course
-                            }{" "}
+                            {resource.course}{" "}
                             •{" "}
-                            {
-                              resource.semester
-                            }
+                            {resource.semester}
                           </p>
 
                           <p className="mt-0.5 truncate text-[11px] text-[#C9A96E]">
-                            {
-                              resource.category
-                            }{" "}
+                            {resource.category}{" "}
                             •{" "}
-                            {
-                              resource.year
-                            }
+                            {resource.year}
                           </p>
-
                         </div>
 
                         <span className="rounded-full bg-[#3B2412] px-3 py-2 text-[11px] font-bold text-white">
-                          {
-                            sharingResource
-                              ? "..."
-                              : "Share"
-                          }
+                          {sharingResource
+                            ? "..."
+                            : "Share"}
                         </span>
 
                       </button>
@@ -1720,16 +1431,12 @@ export default function MessageRoomPage() {
 
                 </div>
               )}
-
             </div>
-
           </div>
         </div>
       )}
 
-      {/* =========================================================
-          DELETE CONFIRMATION
-         ========================================================= */}
+      {/* DELETE CONFIRMATION */}
 
       {showDeleteConfirm && (
         <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/50 px-5 backdrop-blur-sm">
@@ -1739,24 +1446,16 @@ export default function MessageRoomPage() {
             <div className="mb-5 flex items-start justify-between">
 
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-red-50 text-red-600">
-                <Trash2
-                  size={22}
-                />
+                <Trash2 size={22} />
               </div>
 
               <button
                 onClick={() =>
-                  setShowDeleteConfirm(
-                    false
-                  )
+                  setShowDeleteConfirm(false)
                 }
-                disabled={
-                  deleting
-                }
+                disabled={deleting}
               >
-                <X
-                  size={19}
-                />
+                <X size={19} />
               </button>
 
             </div>
@@ -1767,24 +1466,18 @@ export default function MessageRoomPage() {
 
             <p className="mt-2 text-sm leading-6 text-slate-500">
               This will permanently delete{" "}
-              <b>
-                "{room.name}"
-              </b>{" "}
-              and all messages inside it.
-              This action cannot be undone.
+              <b>"{room.name}"</b> and all
+              messages inside it. This action
+              cannot be undone.
             </p>
 
             <div className="mt-6 flex gap-3">
 
               <button
                 onClick={() =>
-                  setShowDeleteConfirm(
-                    false
-                  )
+                  setShowDeleteConfirm(false)
                 }
-                disabled={
-                  deleting
-                }
+                disabled={deleting}
                 className="flex-1 rounded-xl border px-4 py-3 text-sm font-semibold"
               >
                 Cancel
@@ -1794,27 +1487,20 @@ export default function MessageRoomPage() {
                 onClick={() =>
                   void deleteDiscussion()
                 }
-                disabled={
-                  deleting
-                }
+                disabled={deleting}
                 className="flex-1 rounded-xl bg-red-600 px-4 py-3 text-sm font-semibold text-white"
               >
-                {
-                  deleting
-                    ? "Deleting..."
-                    : "Delete Discussion"
-                }
+                {deleting
+                  ? "Deleting..."
+                  : "Delete Discussion"}
               </button>
 
             </div>
-
           </div>
         </div>
       )}
 
-      {/* =========================================================
-          ANIMATIONS
-         ========================================================= */}
+      {/* ANIMATIONS */}
 
       <style jsx global>{`
         .typing-indicator {
