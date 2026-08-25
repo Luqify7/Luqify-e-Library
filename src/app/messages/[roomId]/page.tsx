@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -1296,7 +1296,7 @@ export default function MessageRoomPage() {
             {/* YOUR CHANGED TEXT */}
 
             <p className="mt-2 text-center text-[10px] text-slate-400">
-              ......
+              Connect, share and learn together.
             </p>
 
           </div>
