@@ -7,28 +7,43 @@ import ServiceWorkerRegistration from "@/components/ServiceWorkerRegistration";
 import "./globals.css";
 
 export const metadata: Metadata = {
-title: "Luqify e-Library",
-description: "Digital academic library",
-applicationName: "Luqify e-Library",
-manifest: "/manifest.webmanifest",
-icons: {
-icon: "/images/lt7-icon.png",
-apple: "/images/lt7-icon.png",
-},
+  title: "Luqify e-Library",
+  description: "Digital academic library",
+  applicationName: "Luqify e-Library",
+  manifest: "/manifest.webmanifest",
+  icons: {
+    icon: "/images/lt7-icon.png",
+    apple: "/images/lt7-icon.png",
+  },
 };
 
 export const viewport: Viewport = {
-width: "device-width",
-initialScale: 1,
-viewportFit: "cover",
-themeColor: "#3B2412",
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#3B2412",
 };
 
 export default function RootLayout({
-children,
+  children,
 }: Readonly<{
-children: React.ReactNode;
+  children: React.ReactNode;
 }>) {
-return ( <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth"><body><ThemeProvider><ServiceWorkerRegistration />{children}<LT7Widget /></ThemeProvider></body></html>
-);
+  return (
+    <html
+      lang="en"
+      suppressHydrationWarning
+      data-scroll-behavior="smooth"
+    >
+      <body>
+        <ThemeProvider>
+          <ServiceWorkerRegistration />
+
+          {children}
+
+          <LT7Widget />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
 }

@@ -6,6 +6,7 @@ import LibraryFlow from "@/components/LibraryFlow";
 import FacultyPreview from "@/components/FacultyPreview";
 import Founder from "@/components/Founder";
 import Footer from "@/components/Footer";
+import GoogleClassroomWidget from "@/components/GoogleClassroomWidget";
 
 export default function Home() {
   return (
@@ -27,6 +28,9 @@ export default function Home() {
       </main>
 
       <Footer />
+
+      {/* FLOATING GOOGLE CLASSROOM WIDGET */}
+      <GoogleClassroomWidget />
     </>
   );
 }

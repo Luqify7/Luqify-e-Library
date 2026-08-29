@@ -531,3 +531,554 @@ body {
     transform: scale(0.9);
   }
 }
+@keyframes classroom-scan {
+  0% {
+    transform: translateY(-100%);
+  }
+
+  100% {
+    transform: translateY(600%);
+  }
+}
+/* =========================================================
+   LUQIFY GOOGLE CLASSROOM FLOATING WIDGET
+   CLEAN TECH EDITION
+   ========================================================= */
+
+.google-classroom-widget {
+  position: fixed;
+  right: 20px;
+  bottom: 92px;
+  z-index: 80;
+
+  width: 62px;
+  height: 62px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-decoration: none;
+
+  isolation: isolate;
+
+  animation:
+    classroom-random-move 13s ease-in-out infinite,
+    classroom-widget-breathe 4.5s ease-in-out infinite;
+
+  transition:
+    transform 0.35s ease,
+    filter 0.35s ease;
+}
+
+/* =========================================================
+   MAIN ICON CONTAINER
+   ========================================================= */
+
+.google-classroom-icon-wrap {
+  position: relative;
+
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  z-index: 4;
+
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+/* =========================================================
+   GOOGLE CLASSROOM IMAGE
+   ========================================================= */
+
+.google-classroom-icon {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: contain;
+
+  border-radius: 50%;
+
+  user-select: none;
+  pointer-events: none;
+
+  /*
+   * Removes the visual heaviness of the white image
+   * background on light mode.
+   */
+  mix-blend-mode: multiply;
+
+  transition:
+    filter 0.4s ease,
+    transform 0.4s ease;
+}
+
+/* =========================================================
+   DARK MODE ICON
+   ========================================================= */
+
+.dark .google-classroom-icon {
+  /*
+   * Keeps the actual Google Classroom image visible
+   * against the dark Luqify interface.
+   */
+  mix-blend-mode: normal;
+
+  filter:
+    brightness(0.92)
+    contrast(1.08)
+    saturate(1.05);
+}
+
+/* =========================================================
+   CLEAN TECH HALO
+   ========================================================= */
+
+.google-classroom-icon-wrap::before {
+  content: "";
+
+  position: absolute;
+  inset: -3px;
+
+  border-radius: 50%;
+
+  background: transparent;
+
+  border: 1px solid
+    rgba(59, 130, 246, 0.22);
+
+  opacity: 0;
+
+  transform: scale(0.75);
+
+  pointer-events: none;
+
+  animation:
+    classroom-halo 3.8s ease-out infinite;
+}
+
+/* =========================================================
+   SCANNING TECH LINE
+   ========================================================= */
+
+.classroom-scan-line {
+  position: absolute;
+
+  left: 8%;
+  right: 8%;
+
+  top: -20%;
+
+  height: 1px;
+
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(59, 130, 246, 0.85),
+    transparent
+  );
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  animation:
+    classroom-scan 4.2s ease-in-out infinite;
+}
+
+/* =========================================================
+   TECH VIBRATION WAVES
+   ========================================================= */
+
+.classroom-tech-wave {
+  position: absolute;
+
+  width: 54px;
+  height: 54px;
+
+  border-radius: 50%;
+
+  border: 1px solid
+    rgba(59, 130, 246, 0.18);
+
+  opacity: 0;
+
+  pointer-events: none;
+
+  z-index: 1;
+}
+
+/* First wave */
+
+.classroom-wave-one {
+  animation:
+    classroom-wave 3.8s ease-out infinite;
+}
+
+/* Second wave */
+
+.classroom-wave-two {
+  animation:
+    classroom-wave 3.8s ease-out infinite;
+
+  animation-delay: 1.25s;
+}
+
+/* Third wave */
+
+.classroom-wave-three {
+  animation:
+    classroom-wave 3.8s ease-out infinite;
+
+  animation-delay: 2.5s;
+}
+
+/* =========================================================
+   ONLINE INDICATOR
+   ========================================================= */
+
+.classroom-online {
+  position: absolute;
+
+  right: 2px;
+  bottom: 3px;
+
+  width: 12px;
+  height: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  z-index: 8;
+
+  pointer-events: none;
+}
+
+/* Outer online pulse */
+
+.classroom-online-pulse {
+  position: absolute;
+
+  inset: -4px;
+
+  border-radius: 50%;
+
+  border: 1px solid
+    rgba(34, 197, 94, 0.65);
+
+  opacity: 0;
+
+  animation:
+    classroom-online-ripple 2.2s ease-out infinite;
+}
+
+/* Actual online dot */
+
+.classroom-online-core {
+  position: relative;
+
+  width: 8px;
+  height: 8px;
+
+  border-radius: 50%;
+
+  background: #22c55e;
+
+  box-shadow:
+    0 0 0 2px
+      rgba(255, 255, 255, 0.9),
+    0 0 8px
+      rgba(34, 197, 94, 0.75),
+    0 0 16px
+      rgba(34, 197, 94, 0.4);
+
+  animation:
+    classroom-online-breathe 2s ease-in-out infinite;
+}
+
+/* =========================================================
+   RANDOM-LOOKING FLOATING MOVEMENT
+   NO ROTATION / NO ANGLES
+   ========================================================= */
+
+@keyframes classroom-random-move {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  12% {
+    transform: translate3d(-5px, 3px, 0);
+  }
+
+  25% {
+    transform: translate3d(4px, -7px, 0);
+  }
+
+  39% {
+    transform: translate3d(-3px, -4px, 0);
+  }
+
+  52% {
+    transform: translate3d(7px, 2px, 0);
+  }
+
+  66% {
+    transform: translate3d(2px, -6px, 0);
+  }
+
+  79% {
+    transform: translate3d(-6px, 4px, 0);
+  }
+
+  91% {
+    transform: translate3d(3px, 1px, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* =========================================================
+   SUBTLE BREATHING
+   ========================================================= */
+
+@keyframes classroom-widget-breathe {
+  0%,
+  100% {
+    filter: brightness(1);
+  }
+
+  50% {
+    filter: brightness(1.04);
+  }
+}
+
+/* =========================================================
+   TECH RADAR WAVES
+   ========================================================= */
+
+@keyframes classroom-wave {
+  0% {
+    opacity: 0;
+
+    transform: scale(0.7);
+  }
+
+  15% {
+    opacity: 0.55;
+  }
+
+  70% {
+    opacity: 0.12;
+  }
+
+  100% {
+    opacity: 0;
+
+    transform: scale(1.9);
+  }
+}
+
+/* =========================================================
+   HALO
+   ========================================================= */
+
+@keyframes classroom-halo {
+  0% {
+    opacity: 0;
+
+    transform: scale(0.75);
+  }
+
+  15% {
+    opacity: 0.7;
+  }
+
+  75% {
+    opacity: 0.08;
+  }
+
+  100% {
+    opacity: 0;
+
+    transform: scale(1.5);
+  }
+}
+
+/* =========================================================
+   SCANNING EFFECT
+   ========================================================= */
+
+@keyframes classroom-scan {
+  0% {
+    top: -20%;
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 0.75;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  85% {
+    opacity: 0.7;
+  }
+
+  100% {
+    top: 120%;
+    opacity: 0;
+  }
+}
+
+/* =========================================================
+   ONLINE DOT ANIMATION
+   ========================================================= */
+
+@keyframes classroom-online-ripple {
+  0% {
+    opacity: 0.75;
+
+    transform: scale(0.65);
+  }
+
+  70% {
+    opacity: 0;
+
+    transform: scale(1.9);
+  }
+
+  100% {
+    opacity: 0;
+
+    transform: scale(1.9);
+  }
+}
+
+@keyframes classroom-online-breathe {
+  0%,
+  100% {
+    transform: scale(0.9);
+
+    opacity: 0.85;
+  }
+
+  50% {
+    transform: scale(1.12);
+
+    opacity: 1;
+  }
+}
+
+/* =========================================================
+   HOVER
+   ========================================================= */
+
+.google-classroom-widget:hover {
+  animation-play-state: paused;
+
+  transform: scale(1.08);
+
+  filter: brightness(1.05);
+}
+
+.google-classroom-widget:hover
+  .google-classroom-icon-wrap {
+  transform: scale(1.06);
+
+  box-shadow:
+    0 0 20px
+      rgba(59, 130, 246, 0.18);
+}
+
+.google-classroom-widget:hover
+  .google-classroom-icon {
+  transform: scale(1.04);
+}
+
+/* =========================================================
+   DARK MODE TECH EFFECT
+   ========================================================= */
+
+.dark .classroom-tech-wave {
+  border-color:
+    rgba(96, 165, 250, 0.22);
+}
+
+.dark
+  .google-classroom-icon-wrap::before {
+  border-color:
+    rgba(96, 165, 250, 0.3);
+}
+
+.dark .classroom-scan-line {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(96, 165, 250, 0.95),
+    transparent
+  );
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 640px) {
+  .google-classroom-widget {
+    right: 14px;
+    bottom: 82px;
+
+    width: 56px;
+    height: 56px;
+  }
+
+  .google-classroom-icon-wrap {
+    width: 48px;
+    height: 48px;
+  }
+
+  .classroom-tech-wave {
+    width: 50px;
+    height: 50px;
+  }
+
+  .classroom-online {
+    right: 1px;
+    bottom: 2px;
+  }
+}
+
+/* =========================================================
+   REDUCED MOTION ACCESSIBILITY
+   ========================================================= */
+
+@media (prefers-reduced-motion: reduce) {
+  .google-classroom-widget,
+  .classroom-tech-wave,
+  .google-classroom-icon-wrap::before,
+  .classroom-scan-line,
+  .classroom-online-pulse,
+  .classroom-online-core {
+    animation: none !important;
+  }
+}
